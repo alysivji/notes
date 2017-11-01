@@ -252,3 +252,133 @@ The web server processes the request and returns a reponse consisting of text di
 1. Status line consisting of an acknowledgement of HTTP protocol, followed by a status request, and its meaning
 1. Subsequent lines contain HTTP header
 1. Optional data block
+
+## [Connection Management in HTTP/1.x](https://developer.mozilla.org/en-US/docs/Web/HTTP/Connection_management_in_HTTP_1.x)
+
+<img src="https://mdn.mozillademos.org/files/13727/HTTP1_x_Connections.png" />
+
+### Short-lived connections
+
+* Each HTTP request is completed in its own connection so a TCP handshake needs to occur before each request
+* Very slow since handshake process takes time
+
+### Persistent connections (keep-alive connection)
+
+* TCP connection adapts to its load and becomes more efficient with sustained (aka warm) connections
+* Persistent connections remain open for a short period of time and can be reused for several requests
+	* Idle connections are closed after some time
+* Drawbacks is that server resources are consumed and under heavy load, [DoS attacks](https://developer.mozilla.org/en-US/docs/Glossary/DoS_attack) can be conducted
+
+### HTTP Pipelining
+
+Note: Not active by default in modern browsers
+
+* Process of sending successive reqeusts over the same persistent connection without waiting for an answer
+* Only idempotent methods (i.e. methods that don't change state of server when sent over and over again) such as ```GET```, ```HEAD```, ```PUT```, and ```DELETE```
+
+### Domain Sharding
+
+Deprecated, use HTTP/2 instead.
+
+## [HTTP Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+
+> HTTP headers allow the client and the server to pass additional information with the request or the response.
+
+#### Types of Headers
+
+By context:
+
+* **General header** - Headers applying to both requests and responses but with no relation to the data eventually transmitted in the body.
+* **Request header** - Headers containing more information about the resource to be fetched or about the client itself.
+* **Response header** - Headers with additional information about the response, like its location or about the server itself (name and version etc.).
+* **Entity header** - Headers containing more information about the body of the entity, like its content length or its MIME-type.
+
+How proxies handle them:
+
+* **End-to-end headers** - These headers must be transmitted to the final recipient of the message; that is, the server for a request or the client for a response. Intermediate proxies must retransmit end-to-end headers unmodified and caches must store them.
+* **Hop-by-hop headers** - These headers are meaningful only for a single transport-level connection and must not be retransmitted by proxies or cached
+
+
+```header: value```
+
+## [HTTP Requests Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+
+### GET
+
+The GET method requests a representation of the specified resource. Requests using GET should only retrieve data.
+
+### HEAD
+
+The HEAD method asks for a response identical to that of a GET request, but without the response body.
+
+### POST
+
+The POST method is used to submit an entity to the specified resource, often causing a change in state or side effects on the server
+
+### PUT
+
+The PUT method replaces all current representations of the target resource with the request payload.
+
+### DELETE
+
+The DELETE method deletes the specified resource.
+
+### CONNECT
+
+The CONNECT method establishes a tunnel to the server identified by the target resource.
+
+### OPTIONS
+
+The OPTIONS method is used to describe the communication options for the target resource.
+
+### TRACE
+
+The TRACE method performs a message loop-back test along the path to the target resource.
+
+### PATCH
+
+The PATCH method is used to apply partial modifications to a resource.
+
+## [HTTP Response Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+100 - Information Responses
+
+200 - Successful Responses
+
+300 - Redirection Messages
+
+400 - Client error reponses
+
+500 - Server error responses
+
+### Additional Resources
+
+* [HTTP Status Codes](https://httpstatuses.com/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
