@@ -4,7 +4,15 @@
 
 * Can hit # before command, do command. It will be repeated x times
 
-## Getting into Insert Mode
+## Insert Mode
+
+Mode where we enter text into the editor. This isn't what we are always supposed to do.
+
+* [Ctrl-w] to delete last word
+* [Ctrl-n] - activate completion
+  * [Ctrl-n] / [Ctrl-p] | arrow keys - to move thru list
+
+### Getting into Insert Mode
 
 * i - insert before cursor
 * I - insert at start of line
@@ -23,17 +31,24 @@
 
 * c - change operator
 
-## Insert Mode
+## Normal Mode
 
-* [Ctrl-w] to delete last word
+This is the mode you are supposed to be in. It's **Normal** operation.
 
-## Navigation Mode
+### Navigation
 
 For performing navigation and cut/paste operations.
 
 * h j k l - navigation keys
 * 0 - beginning of line
+* ^ - first chracater (nonblank character)
+* gm - move to middle of line
 * $ - end of line
+
+* Fx - previous x on line
+* fx - next x on line
+* ; - repeats character jump in same direction
+* , - repeats chracxter jump in other direction
 
 * b - moves back to beginning of word
 * e - moves to end of word
@@ -47,6 +62,11 @@ For performing navigation and cut/paste operations.
 
 * [Ctrl-g] - get line number
 
+### Text Navigation
+
+* { / } - move to start / end of paragrah
+* ( / ) - move to start / end of sentence
+
 ### Page Navigation
 
 * [Ctrl-f] - page down
@@ -58,12 +78,24 @@ For performing navigation and cut/paste operations.
 * [Ctrl-e] - scroll one line down
 * [Ctrl-y] - scroll one line up
 
-### Bookmarks
+### Marks
 
 Disappear when file is close.
 
 * m[letter] - creates bookmark
-* '[letter] - goto bookmark
+* '[ltter] - goto bookmark
+
+* lowercase - local
+* uppercase - global
+
+* Can combine marks with operators so delete till mark: ```d`[char]```
+
+* '0 - goes to last line before vim closed
+* '1 - goes to last line before vim was closed two times ago
+
+* '' - jump back to previous spot
+* ', - jump to last edit
+* :marks - to see a list of marks
 
 ### Operators
 
@@ -87,16 +119,63 @@ Disappear when file is close.
 * u - undo last edit
 * U - reverses changes made on a single line
 
-#### Search
+### Search
 
 * /pat - searches forward for pattern pat
 * ?pat - searches backwards for pattern pat
 * n - repeats search in same direction
 * N - repeats search in opposite direction
 
+* If word is already selected:
+  * ```*``` - search forward
+  * # - search backward
+
 * f[char] - goto char on line going forward
 * F[char] - goto char on line going backward
 * t / T - do the same thing, but stop a character before
+
+* :iab ff Firefox - replace abbreviations with long words
+
+## Folds
+
+TODO look into
+
+* :set foldmethod=
+  * ```indent``` or ```syntax``` is probably best for now
+
+* z[x] - lots of fold commands
+* look into plugins
+
+## Registers
+
+* Specify register you want to use before entering in command you would use anyways
+* "[char] - to access [char] register
+  * a-zA-Z
+
+* "" - unnamed register (contained last deleted text)
+* "0p - always contains contents of last yank
+* "+ - system clipboard register
+
+## Macros
+
+TODO lok into
+
+* qa
+* @a
+
+## Visual Mode
+
+Mode where you can highlight text
+
+* V - Visual line mode, select lines
+* v - visual mode, select parts of text
+
+* ggVG - selects from first to last line
+
+### Miscellaneous Commands
+
+* << / >> - indent / outdent if selected in ```VISUAL``` mode
+* = - format selection
 
 ## Last Line or ex Mode
 
@@ -110,6 +189,8 @@ Disappear when file is close.
   * ```$ fg``` to bring background job to foreground
 
 * :e . - open file tree
+
+* :setpaste - Disables automatic indentation
 
 ## Window Management
 
