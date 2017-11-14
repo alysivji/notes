@@ -75,44 +75,25 @@
 	* BUT YES we should because templates have logic
 	* If you have branches for different templates, make sure you test those too
 
+## [Stop Mocking, Start Testing](https://www.youtube.com/watch?v=Xu5EhKVZdV8)
 
+* dependency injection does not mean this
+
+```python
+def my_func(database=None):
+  if database is None:
+    # construction
+```
+
+## [The Tao of Testing](http://jasonpolites.github.io/tao-of-testing/index-1.1.html)
+
+* talking about how to use dependency injection to get things done 
+
+---
+
+## To Read / Watch
 
 ## Fake It Til You Make It: Unit Testing Patterns With Mocks and Fakes
 
 [YouTube link](https://www.youtube.com/watch?v=hvPYuqzTPIk&t=20s)
-
-
-
-
-
-
-
-
-
-
-
-## To Read
-
-* [The Tao of Testing](http://jasonpolites.github.io/tao-of-testing/index-1.1.html)
-* [Fake It Til You Make It: Unit Testing Patterns With Mocks and Fakes](https://www.youtube.com/watch?v=hvPYuqzTPIk)
-* [Stop Mocking, Start Testing](https://www.youtube.com/watch?v=Xu5EhKVZdV8)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
