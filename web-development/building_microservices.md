@@ -44,10 +44,12 @@ By Sam Newman
     * distributed systems are hard
 * requires specialized expertise
 
+---
+
 ## Chapter 2: The Evolutionary Architect
 
 > For most things we create, we have to accept that once the software gets into the hands of our customers we will have to react and adapt, rather than it being a never-changing artifact. Thus, our architects need to shift their thinking away from creating the perfect end product, and instead focus on helping create a framework in which the right systems can emerge, and continue to grow as we learn more.
-
+>
 > So our architects as town planners need to set direction in broad strokes, and only get involved in being highly specific about implementation detail in limited cases. They need to ensure that the system is fit for purpose now, but also a platform for the future. And they need to ensure that it is a system that makes users and developers equally happy.
 
 * Architect should defining service boundaries and how services can talk to each other
@@ -88,12 +90,14 @@ By Sam Newman
 * Governance
     * Ensure that the system being implemented fits the technical vision
 
+---
+
 ## Chapter 3: How to Model Services
 
 ### Loose Coupling
 
 > When services are loosely coupled, a change to one service should not require a change to another.
-
+>
 > A loosely coupled service knows as little as it needs to about the services with which it collaborates. This also means we probably want to limit the number of different types of calls from one service to another, because beyond the potential performance problem, chatty communication can lead to tight coupling.
 
 ### High Cohesion
@@ -103,18 +107,20 @@ By Sam Newman
 ### Bounded Context
 
 > The idea is that any given domain consists of multiple bounded contexts, and residing within each are thingsthat do not need to be communicated outside as well as things that are shared externally with other bounded contexts. Each bounded context has an explicit interface, where it decides what models to share with other contexts.
-
+>
 > By thinking clearly about what models should be shared, and not sharing our internal representations, we avoid one of the potential pitfalls that can result in tight coupling. We have also identified a boundary within our domain where all like-minded business capabilities should live, giving us the high cohesion we want. These bounded contexts, then, lend themselves extremely well to being compositional boundaries.
-
+>
 > We have the option of using modules within a process boundary to keep related code together and attempt to reduce the coupling to other modules in the system. When you’re starting out on a new codebase, this is probably a good place to begin. So once you have found your bounded contexts in your domain, make sure they are modeled within your codebase as modules, with shared and hidden models. These module boundaries are excellent candidates for microservices.
 
 * Don't decide on service boundaries too soon, we need to let the monolith build out so we can see how the various components interact.
 
 > When considering the boundaries of your microservices, first think in terms of the larger, coarser-grained contexts, and then subdivide along these nested contexts when you’re looking for the benefits of splitting out these seams.
-
+>
 > Another reason to prefer the nested approach could be to chunk up your architecture to simplify testing. For example, when testing services that consume the warehouse, I don’t have to stub each service inside the warehouse context, just the more coarse-grained API. This can also give you a unit of isolation when considering larger-scoped tests. I may, for example, decide to have end-to-end tests where I launch all services inside the warehouse context, but for all other collaborators I might stub them out.
-
+>
 > It’s also important to think of the communication between these microservices in terms of the same business concepts. The modeling of your software after your business domain shouldn’t stop at the idea of bounded contexts. The same terms and ideas that are shared between parts of your organization should be reflected in your interfaces. It can be useful to think of forms being sent between these microservices, much as forms are sent around an organization.
+
+---
 
 ## Chapter 4: Integration
 
@@ -125,7 +131,7 @@ By Sam Newman
 > HTTP itself defines some useful capabilities that play very well with the REST style. For example, the HTTP verbs (e.g., GET, POST, and PUT) already have well-understood meanings in the HTTP specification as to how they should work with resources. The REST architectural style actually tells us that methods should behave the same way on all resources, and the HTTP specification happens to define a bunch of methods we can use. GET retrieves a resource in an idempotent way, and POST creates a new resource. This means we can avoid lots of different createCustomer or editCustomer methods. Instead, we can simply POST a customer representation to request that the server create a new resource, and initiate a GET request to retrieve a representation of a resource. Conceptually, there is one endpoint in the form of a Customer resource in these cases, and the operations we can carry out upon it are baked into the HTTP protocol.
 
 * HATEOAS (Hypermedia As The Engine Of Application State)
-	* look into more
+    * look into more
 
 * keep your middleware dumb, and keep the smarts in the endpoints.
 
@@ -151,26 +157,27 @@ By Sam Newman
 ### Versioning
 
 * Defer as long as possible
-	* Postel's Law: "Be conservative in what you do, be liberal in what you accept from others"
+    * Postel's Law: "Be conservative in what you do, be liberal in what you accept from others"
 * Catch breaking changes early
 * Semantic versioning
-	* MAJOR.MINOR.PATCH
-	* major - breaking changes
-	* minor - no breaking changes, new functionality added
-	* patch - bug fixes made to existing functionality
+    * MAJOR.MINOR.PATCH
+    * major - breaking changes
+    * minor - no breaking changes, new functionality added
+    * patch - bug fixes made to existing functionality
 * Coexist different endpoints
-	* deploy new version with breaking changes to a different endpoint
-	* expand and contract pattern
-		* Expand the capabilities we offer, supporting both old and new ways of doing something. Once the old consumers do things in the new way, we contract our API, removing the old functionality.
+    * deploy new version with breaking changes to a different endpoint
+    * expand and contract pattern
+        * Expand the capabilities we offer, supporting both old and new ways of doing something. Once the old consumers do things in the new way, we contract our API, removing the old functionality.
 * Have multiple concurrent service versions
-	* use this sparingly
+    * use this sparingly
 
 ### User Interfaces
 
 * Constraints
-	* think of how your interface is being presented and used
+    * think of how your interface is being presented and used
 
 * Backends for Frontend Pattern
+
 <img src="https://www.safaribooksonline.com/library/view/building-microservices/9781491950340/assets/bdms_0410.png" />
 
 ### Third Party Software
@@ -180,3 +187,57 @@ By Sam Newman
 * Lack of control
 * Customization
 * Integration Spaghetti
+
+---
+
+## Chapter 5: Splitting the Monolith
+
+> The problem with the monolith is that all too often it is the opposite of both. Rather than tend toward cohesion, and keep things together that tend to change together, we acquire and stick together all sorts of unrelated code. Likewise, loose coupling doesn’t really exist: if I want to make a change to a line of code, I may be able to do that easily enough, but I cannot deploy that change without potentially impacting much of the rest of the monolith, and I’ll certainly have to redeploy the entire system.
+
+* __seam__ - portion of the code that can be treated in isolation and worked on without impacting the rest of the codebase
+    * Make seams into service boundaries
+        * find bounded contexts (boom, all coming together)
+* incremental approach is best (limit impact of things going wrong)
+
+### Refactoring Databases
+
+* When dealing with database seams where one table has a ForeignKey relationship with another table, we can expose the data via an API call
+* Shared static data (countries, states) should be kept in code or configuration files
+* Shared mutable data when two different bounded contexts have access to read from and write to the same table, make the model more concrete and create a bounded context around it that can be exposed via API
+    * can also split tables
+
+#### Best to refactor database in stages
+
+1. Monolith service + monolith schema
+1. Monolith service + split schema
+    * increased number of `SELECT` calls, in-memory `JOIN`s
+    * keep it in this stage for some time to see what happens, can revert if it doesn't work out
+1. Split services + split schema
+
+<img src="https://www.safaribooksonline.com/library/view/building-microservices/9781491950340/assets/bdms_0509.png" />
+
+#### Transactional Boundaries
+
+> Transactions are useful things. They allow us to say these events either all happen together, or none of them happen. They are very useful when we’re inserting data into a database; they let us update multiple tables at once, knowing that if anything fails, everything gets rolled back, ensuring our data doesn’t get into an inconsistent state. Simply put, a transaction allows us to group together multiple different activities that take our system from one consistent state to another—everything works, or nothing changes.
+>
+> With a monolithic schema, all our create or updates will probably be done within a single transactional boundary. When we split apart our databases, we lose the safety afforded to us by having a single transaction.
+
+If transaction is capture in one place, but not the other:
+
+* we can try reinserting it into the second table at a later time via a task queue (eventual consistency)
+* abort entire transaction, might need to unwind operation via a compensating transaction (can also clean up later via batch job)
+* distributed transactions which are governed by a transaction manager that orchestrates various transactions being done by underlying systems (two-phase commit: voting phase where a single no sends rollback to all parties)
+    * lots of things can go wrong here (locks, transaction manager going down, etc)
+
+### Reporting
+
+* We can't break all workflows so we'll need to compromise with the people using the reporting database
+* Have data pushed to reporting system
+* Push to pub-sub where services that care can pull events and put them in the right location
+    * Kafka or RabbitMQ message streams
+
+---
+
+## Chapter 6: Deployment
+
+* 
