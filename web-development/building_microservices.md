@@ -240,4 +240,121 @@ If transaction is capture in one place, but not the other:
 
 ## Chapter 6: Deployment
 
-* 
+### Continuous Integration (CI)
+
+> CI, the core goal is to keep everyone in sync with each other, which we achieve by making sure that newly checked-in code properly integrates with existing code. To do this, a CI server detects that the code has been committed, checks it out, and carries out some verification like making sure the code compiles and that tests pass.
+
+* single CI build per microservice allows us to quickly make and deploy the change into production without affecting other services
+
+### Continuous Delivery (CD)
+
+* create a build pipeline for different stages of the build process; one stage for the faster tests, one for the slower tests.
+
+> In CD, we do this by extending the idea of the multistage build pipeline to model each and every stage our software has to go through, both manual and automated.
+
+<img src="https://www.safaribooksonline.com/library/view/building-microservices/9781491950340/assets/bdms_0604.png" />
+
+> As a version of our code moves through the pipeline, if it passes one of these automated verification steps it moves to the next stage. Other stages may be manual. For example, if we have a manual user acceptance testing (UAT) process I should be able to use a CD tool to model it. I can see the next available build ready to be deployed into our UAT environment, deploy it, and if it passes our manual checks, mark that stage as being successful so it can move to the next.
+>
+> In a microservices world, where we want to ensure we can release our services independently of each other, it follows that as with CI, we’ll want one pipeline per service. In our pipelines, it is an artifact that we want to create and move through our path to production. As always, it turns out our artifacts can come in lots of sizes and shapes. We’ll look at some of the most common options available to us in a moment.
+
+* Material is a little dated, but basically have a setup so you can push and have things build and deploy for you
+    * Make servers immutable and disable SSH
+        * Only way to change is by deploying a new image 
+    Kubernetes brah
+
+> As you move from your laptop to build server to UAT environment all the way to production, you’ll want to ensure that your environments are more and more production-like to catch any problems associated with these environmental differences sooner. This will be a constant balance. Sometimes the time and cost to reproduce production-like environments can be prohibitive, so you have to make compromises.
+
+* Configuring services, properties file for each environment / different parameter passed into install process
+
+---
+
+## Chapter 7: Testing
+
+### Types of Tests
+
+<img src="https://www.safaribooksonline.com/library/view/building-microservices/9781491950340/assets/bdms_0701.png" />
+(credit Brian Marick’s testing quadrant)
+
+* __technology-facing__ - tests that aid the developers in creating a systemm
+
+### Testing Pyramid
+
+* __unit test__ - tests that typically test a single function or method cal. Lots of these. Should catch our mistakes as we refactor
+* __service tests__ - tests that go just underneath the user interface and test services directly. Test a single service by itself, stub out external collaborators so we are only testing the service in isolation
+* __end-to-end tests__ - aka functional tests. Tests run against the entire system that can be automated thru a framework like Selenium
+
+* Be aware of tradeoffs:
+     * As we go up the pyramid, test scope increases but so does test time and complexity so if something breaks we might not be sure where
+     * Going down the pyramid means we are testing less, but tests are faster and we can pinpoint exactly where something broke (if our unit tests are good)
+
+* If we find a bug, fix it, and write a unit test to confirm so we can make sure we never regress
+
+### Implementing Service Tests
+
+> Our service tests want to test a slice of functionality across the whole service, but to isolate ourselves from other services we need to find some way to stub out all of our collaborators.
+>
+> Our service test suite needs to launch stub services for any downstream collaborators (or ensure they are running), and configure the service under test to connect to the stub services. We then need to configure the stubs to send responses back to mimic the real-world services. For example, we might configure the stub for the loyalty points bank to return known points balances for certain customers.
+
+* stub just returns a known quanity, doesn't care how many times it's called
+* mock returns a value and we can check to see how it was invoked
+    * leads to more brittle tests
+
+* stub service (Mountebank) which listens for requests and sends back information it was programmed to send back
+    * can also use as a mock
+
+### Implementing End-to-End Tests
+
+> To implement an end-to-end test we need to deploy multiple services together, then run a test against all of them. Obviously, this test has much more scope, resulting in more confidence that our system works! On the other hand, these tests are liable to be slower and make it harder to diagnose failure.
+
+* get rid of flaky tests, tests shouldn't sometimes work. Anti-pattern
+* test suite should run fast or nobody will run tests
+
+* Microservices require a shift in thinking, we want small changes we can deploy quickly; so make sure tests are fast and the end-to-end pipeline doesn't get jammed
+
+* (Very) Small number of core "journeys" (not stories, but stories... consultant speak) that test the whole system; if functionality is not covered in the above tests, we should do service level tests in isolation to ensure that piece is covered
+
+### Consumer-Driven Contract (CDC)
+
+* do not need to test against real service
+
+> With CDCs, we are defining the expectations of a consumer on a service (or producer). The expectations of the consumers are captured in code form as tests, which are then run against the producer. If done right, these CDCs should be run as part of the CI build of the producer, ensuring that it never gets deployed if it breaks one of these contracts. Very importantly from a test feedback point of view, these tests need to be run only against a single producer in isolation, so can be faster and more reliable than the end-to-end tests they might replace.
+>
+> As an example, let’s revisit our customer service scenario. The customer service has two separate consumers: the helpdesk and web shop. Both these consuming services have expectations for how the customer service will behave. In this example, you create two sets of tests: one for each consumer representing the helpdesk’s and web shop’s use of the customer service. A good practice here is to have someone from the producer and consumer teams collaborate on creating the tests, so perhaps people from the web shop and helpdesk teams pair with people from the customer service team.
+>
+> Because these CDCs are expectations on how the customer service should behave, they can be run against the customer service by itself with any of its downstream dependencies stubbed out. From a scope point of view, they sit at the same level in the test pyramid as service tests, albeit with a very different focus. These tests are focused on how a consumer will use the service, and the trigger if they break is very different when compared with service tests. If one of these CDCs breaks during a build of the customer service, it becomes obvious which consumer would be impacted. At this point, you can either fix the problem or else start the discussion about introducing a breaking change in the manner
+
+* Use CDCs to identify breaking change without having to run a slow and expensive end-to-end test
+* microservices testing has moved from end-to-end to something like CDC
+
+* to catch bugs which happen in production and write tests against them to make sure they don't run again, we can create a _smoke test suite_ which will run against newly deployed software to make sure the deployment worked as expected
+
+* testing closer to production
+    * blue / green deployment is what k8s takes care of
+    * canary releasing allows you to A/B test your deployment only send a portion to the new site, we can fully rollout into production if we meet certain metrics
+
+* microservices mean more calls across the network so we should also look into _peformance testing_ (aka load testing) to make sure we are hitting the latency and responsiveness metrics we are aiming for
+
+## Chapter 8: Monitoring
+
+> We now have multiple servers to monitor, multiple logfiles to sift through, and multiple places where network latency could cause problems.
+>
+> The answer here is pretty straightforward: monitor the small things, and use aggregation to see the bigger picture.
+>
+> The secret to knowing when to panic and when to relax is to gather metrics about how your system behaves over a long-enough period of time that clear patterns emerge.
+
+* collect metrics that make sense and can help us make decisions down the line, maybe we'll look at how many times a service was used; if it's not used we can remove it or if it's being used a lot, we can improve it
+* use synthetic transactions to conduct semantic monitoring ("uses tests to continuously evaluate your application, combining test-execution and realtime monitoring") to make sure things are behaving in a manner that is expected
+    * use end-to-end tests as a basis for implementing semantic monitoring
+
+* generate UUID for the first call and pass this information in all calls so we can trace messages in the logs
+    * can we attach with middleware, propagate uuid in headers?
+
+* monitor integration points between systems, each service instance should track and expose the health of its downstream dependencies
+
+* standardizing monitoring across all services is important (standard format, naming convention, metrics, etc)
+    * when designing monitoring features, figure out what kind of data is needed right now, what kind of data is needed later, and how data will be consumed (alerts, formats, etc)
+
+> Many organizations are moving in a fundamentally different direction: away from having specialized tool chains for different types of metrics and toward more generic event routing systems capable of significant scale. These systems manage to provide much more flexibility, while at the same time actually simplifying our architecture.
+
+## Chapter 9: Security
