@@ -4,39 +4,39 @@
   * Application layer => abstraction layer containing communication protocols and interface methods
 
 * Follows [client-server model](https://en.wikipedia.org/wiki/Client%E2%80%93server_model)
-	* client opens a connection to make a request
-	* waits until it recieves a response
+    * client opens a connection to make a request
+    * waits until it recieves a response
 
 * HTTP is [stateless](https://en.wikipedia.org/wiki/Stateless_protocol)
-	* no information about the communication that occured is retained by either sender or reciver
-	* Pros: No need to keep track of what happened, lost connections are not a problem
-	* Cons: Sending extra information in each request that needs to be interpreted by the server
+    * no information about the communication that occured is retained by either sender or reciver
+    * Pros: No need to keep track of what happened, lost connections are not a problem
+    * Cons: Sending extra information in each request that needs to be interpreted by the server
 
 ## [An Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 
 * Basic idea:
-	* a web document is made up of many different sub-documents
-	* when a web browser goes to a page, it starts to fetch all the resources needed
-	* once all the information is downloaded, the web browser can render the document as described
+    * a web document is made up of many different sub-documents
+    * when a web browser goes to a page, it starts to fetch all the resources needed
+    * once all the information is downloaded, the web browser can render the document as described
 
 **requests** - messages sent by the client
 **response** - messages sent by the server as an answer
 
 * Workflow:
-	* *user-agent* sends a <u>request</u>
-	* server processes request, sends back a <u>response</u>
+    * *user-agent* sends a <u>request</u>
+    * server processes request, sends back a <u>response</u>
 
 > To present a Web page, the browser sends an original request to fetch the HTML document from the page. It then parses this file, fetching additional requests corresponding to execution scripts, layout information (CSS) to display, and sub-resources contained within the page (usually images and videos). The Web browser then mixes these resources to present to the user a complete document, the Web page. Scripts executed by the browser can fetch more resources in later phases and the browser updates the Web page accordingly.
 
 * To the client, the server looks like a single machine. It "may actually be a collection of servers, sharing the load (load balancing) or a complex piece of software interrogating other computers (like cache, a DB server, e-commerce servers, …), totally or partially generating the document on demand."
-	* Abstration is cool!
+    * Abstration is cool!
 
 * Proxies relay the HTTP messages between the client and server. Proxies can perform several functions such as:
-	* caching (the cache can be public or private, like the browser cache)
-	* filtering (like an antivirus scan, parental controls, …)
-	* load balancing (to allow multiple servers to serve the different requests)
-	* authentication (to control access to different resources)
-	* logging (allowing the storage of historical information)
+    * caching (the cache can be public or private, like the browser cache)
+    * filtering (like an antivirus scan, parental controls, …)
+    * load balancing (to allow multiple servers to serve the different requests)
+    * authentication (to control access to different resources)
+    * logging (allowing the storage of historical information)
 
 * Note: Proxies must not alter requests methods, but they have the ability to change some headers. [More info](https://stackoverflow.com/questions/10369679/do-http-proxy-servers-modify-request-packets).
 
@@ -101,7 +101,7 @@ Content-Type: text/html
 > * **Tracking** - Recording and analyzing user behavior
 
 * Cookies used to be used for storing client data, but now the recommended practice is to use [Web Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API) or [IndexedDB API](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
-	* TODO
+    * TODO
 
 * HttpOnly cookie attribute can help to mitigate cross-site scripting attacks by preventing access to cookie value through JavaScript
 
@@ -266,7 +266,7 @@ The web server processes the request and returns a reponse consisting of text di
 
 * TCP connection adapts to its load and becomes more efficient with sustained (aka warm) connections
 * Persistent connections remain open for a short period of time and can be reused for several requests
-	* Idle connections are closed after some time
+    * Idle connections are closed after some time
 * Drawbacks is that server resources are consumed and under heavy load, [DoS attacks](https://developer.mozilla.org/en-US/docs/Glossary/DoS_attack) can be conducted
 
 ### HTTP Pipelining

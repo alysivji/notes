@@ -44,13 +44,13 @@ $ python manage.py startapp polls
 * Uses [```ManyToManyField```](https://docs.djangoproject.com/en/1.11/ref/models/fields/#django.db.models.ManyToManyField)
 * Doesn't matter which model you put it in
 * If we need to have this relationship hold extra information (Players and Teams is many-to-many, but we want to know when players were on a team), we can create another Model to hold the details on the relationship ([docs](https://docs.djangoproject.com/en/1.11/topics/db/models/#extra-fields-on-many-to-many-relationships))
-	* Use ```through``` argument to associate
+    * Use ```through``` argument to associate
 
 #### One-to-one relationships
 
 * Uses [```OneToOneField```](https://docs.djangoproject.com/en/1.11/ref/models/fields/#django.db.models.OneToOneField)
 * Useful on the primary key of an object when one object "extends" another object
-	* Have a Place model (Phone nubmer, address, etc) and a Resturant model. Restaurant is a Place (extends Place), so we can make a 1-1 relationship
+    * Have a Place model (Phone nubmer, address, etc) and a Resturant model. Restaurant is a Place (extends Place), so we can make a 1-1 relationship
 
 ### Meta options
 
@@ -147,7 +147,7 @@ Change object attribute. ```object.save()```
 ## Views
 
 * [```django.urls``` docs](https://docs.djangoproject.com/en/1.11/ref/urlresolvers/#module-django.urls)
-	* [dynamic urls in templates](https://docs.djangoproject.com/en/1.11/intro/tutorial03/#removing-hardcoded-urls-in-templates)
+    * [dynamic urls in templates](https://docs.djangoproject.com/en/1.11/intro/tutorial03/#removing-hardcoded-urls-in-templates)
 
 * [namespacing URL names](https://docs.djangoproject.com/en/1.11/intro/tutorial03/#namespacing-url-names)
 

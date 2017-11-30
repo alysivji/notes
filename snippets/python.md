@@ -38,7 +38,7 @@ Created an Bash Function
 # connect to q log file for python debugging
 q ()
 {
-	if [ -z $TMPDIR ]; then tail -f \tmp\q; else tail -f $TMPDIR\q; fi
+    if [ -z $TMPDIR ]; then tail -f \tmp\q; else tail -f $TMPDIR\q; fi
 }
 ```
 
