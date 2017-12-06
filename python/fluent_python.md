@@ -15,6 +15,7 @@ We can use Python's Data Model to design "Pythonic" APIs for our classes and lib
 * [Python Data Model](https://docs.python.org/3/reference/datamodel.html)
 
 ---
+---
 
 ## Part 2: Data Structures
 
@@ -72,3 +73,79 @@ __sequence__ - ordered set of objects; all sequences support iteration
 * **`queue`** - regular queue
 * **`asyncio`** - asynchronous programming queues
 * **`heapq`** - heap-based queue
+
+---
+
+### Chapter 3: Dictionaries and Sets
+
+#### Dictionaries
+
+* hash tables power Python dict
+* tuples are only hashable if all its itemss are hashable
+    * tuples with lists are not hashable
+
+* dictionary comprehensions build `dict` instances from any iterable
+
+* `my_dic.setdefault(key, []).append(value)` is a quick way to append a `value` to a dict of `key: list` pairs
+* can also use a `defaultdict` to create items on demand whenever a key is missing    : `my_dict[key].append(value)`
+* `__mising__` is called when key is not found instead of raising a `KeyError`
+    * cutomize what happens when a key is not found
+    * use to design intuitive APIs
+
+* `collections.OrderedDict` maintains keys in insertion order, allowing iteration over items in predictable order
+* `collections.ChainMap` holds a list of mappings that can be searched as one, successful if key is found in any one of them
+* `collections.Counter` holds an integer count for each key
+* `collections.UserDict` mapping we should sub-class; `dict` has a lot of implementation shortcuts that we have to override
+* `types.MappingProxyType` can be used to create an immutable mapping
+
+#### Sets
+
+* collection of unique objects
+* empty set: `set()`
+* syntax: `foo = {1, 2, 3}` also `foo = set([1, 2, 3])` (but this is slower)
+
+* `frozenset` is immutable
+* syntax: `foo = frozenset(range(10))`
+
+* set comprehensions are a thing
+
+#### Hashing
+
+* Python uses a hash table behind the scenes for dictionaries (and sets)
+* dict keys need to be hashable objects
+* dicts have significant memory overhead
+* key searches are fast
+
+#### Further Reading
+
+* [`collections`](https://docs.python.org/3/library/collections.html)
+* [Raymond Hettinger - Modern Dictionaries](https://www.youtube.com/watch?v=npw4s1QTmPg) (PyCon 2017)
+* [Brandon Rhodes - The Mighty Dictionary](https://www.youtube.com/watch?v=oMyy4Sm0uBs) (PyCon 2016)
+* [Brandon Rhodes - The Dictionary Even Mighter](https://www.youtube.com/watch?v=66P5FMkWoVU) (PyCon 2017)
+
+---
+
+### Chapter 4: Text versus Bytes
+
+What is a character? In Python 3, a __character__ is a unicode character.
+
+Characters can be stored as __bytes__. Bytes are stored with a specific _encoding_, we _decode_ bytes to get human readable text.
+
+* [`memoryview`](https://docs.python.org/3/c-api/memoryview.html)
+    * [more](http://python-reference.readthedocs.io/en/latest/docs/memoryview/)
+* [`struct`](https://docs.python.org/3/library/struct.html)
+
+* when converting text to bytes, if a character is not defined in the target encoding, will raise a `UnicodeEncodeError`
+* when you assume an encoding while converting a binary sequence to text, unexpected bytes can trigger a `UnicodeDecodeError`
+
+> The best practice for handling text is the "Unicode sandwich". This means that bytes should be decode to __str__ as early as possible on input. The "meat" of the sandiwch is the business logic of your program, where text handling is done exclusive on __str__ objects. You should never be encoding or decoding in the middle of other processing. On output, the __str__ are encoded to __bytes__ as late as possible.
+
+* text comparisons are complicated because Unicode can have multiple ways of representing some characters
+    * normalizing is a prerequesite to text matching
+
+---
+---
+
+## Part 3: Functions as Objects
+
+### Chapter 5: First-Class Functions
