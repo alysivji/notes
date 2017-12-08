@@ -31,6 +31,8 @@ logging.basicConfig(
 * Can also set logging level via a command-line option `--log=LEVEL`
     * Access via `getattr(logging, loglevel.upper())`
 
+---
+
 ## [Advanced Logging Tutorial](https://docs.python.org/3/howto/logging.html#logging-advanced-tutorial)
 
 ### Logging from Mutiple Modules
@@ -56,8 +58,9 @@ We pass information between loggers, handlers, and formatters in a `LogRecord` i
 
 * expose methods that application can use to log
 * determine which log messages to act on based upon severity
+    * [logging level](https://docs.python.org/3/howto/logging.html#logging-levels)
     * default is `WARNING`
-* pass relevant log messages to log 
+* pass relevant log messages to log
 * configure handlers for top level logger and create child loggers as needed
 
 * `.setLevel()` specifies the lowest severity message logger will handle
@@ -81,5 +84,21 @@ We pass information between loggers, handlers, and formatters in a `LogRecord` i
 > 1. Creating loggers, handlers, and formatters explicitly using Python code that calls the configuration methods listed above.
 > 1. Creating a logging config file and reading it using the `fileConfig()` function.
 > 1. Creating a dictionary of configuration information and passing it to the `dictConfig()` function.
+
+#### [Optimization](https://docs.python.org/3/howto/logging.html#optimization)
+
+* `logger.isEnabledFor(logging.LEVEL)` is a useful check to make sure we don't have to do expensive strip interpolations
+
+---
+
+## [Logging Cookbook](https://docs.python.org/3/howto/logging-cookbook.html)
+
+* Lots of great recipes
+* [Adding Contextual Information to Logging Output](https://docs.python.org/3/howto/logging-cookbook.html#adding-contextual-information-to-your-logging-output)
+* 
+
+---
+
+## [`logging`](https://docs.python.org/3/library/logging.html#module-logging)
 
 
