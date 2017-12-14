@@ -95,10 +95,33 @@ We pass information between loggers, handlers, and formatters in a `LogRecord` i
 
 * Lots of great recipes
 * [Adding Contextual Information to Logging Output](https://docs.python.org/3/howto/logging-cookbook.html#adding-contextual-information-to-your-logging-output)
-* 
 
 ---
 
 ## [`logging`](https://docs.python.org/3/library/logging.html#module-logging)
 
+* [`LogRecord`](https://docs.python.org/3/library/logging.html#logrecord-objects)
+* [Configuration dictionary schema](https://docs.python.org/3/library/logging.config.html#configuration-dictionary-schema)
+* [Handlers](https://docs.python.org/3/library/logging.handlers.html)
 
+---
+
+## [PEP 282 -- A Logging System](https://www.python.org/dev/peps/pep-0282/)
+
+* A registery of [singleton](https://en.wikipedia.org/wiki/Singleton_pattern) logger object holds references to all initialized loggers
+
+### Control Flow
+
+> Applications make logging calls on Logger objects. Loggers are organized in a hierarchical namespace and child Loggers inherit some logging properties from their parents in the namespace.
+>
+> These Logger objects create __LogRecord__ objects which are passed to __Handler__ objects for output. Both Loggers and Handlers may use logging __levels__ and (optionally) __Filters__ to decide if they are interested in a particular LogRecord. When it is necessary to output a LogRecord externally, a Handler can (optionally) use a __Formatter__ to localize and format the message before sending it to an I/O stream.
+>
+> The main benefit of a logging system like this is that one can control how much and what logging output one gets from an application without changing that application's source code. Therefore, although configuration can be performed through the logging API, it must also be possible to change the logging configuration without changing an application at all. For long-running programs like Zope, it should be possible to change the logging configuration while the program is running.
+
+Does this go against the principles of 12 factor?
+
+> The most simple configuration is that of a single handler, writing to stderr, attached to the root logger. This configuration is set up by calling the basicConfig() function once the logging module has been imported.
+>
+> To support use of the logging mechanism in short scripts and small applications, module-level functions debug(), info(), warn(), error(), critical() and exception() are provided. These work in the same way as the correspondingly named methods of Logger - in fact they delegate to the corresponding methods on the root logger. A further convenience provided by these functions is that if no configuration has been done, basicConfig() is automatically called.
+
+* At application exit we can flush all hanlers using `shutdown()`
