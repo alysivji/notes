@@ -149,3 +149,49 @@ Characters can be stored as __bytes__. Bytes are stored with a specific _encodin
 ## Part 3: Functions as Objects
 
 ### Chapter 5: First-Class Functions
+
+Python functions are "first-class objects"
+* created at runtime
+* assigned to a variable or element in a data structure
+* passed as an argument to a function
+* returned as the result of a function
+
+* __higher order functions__ take a function as argument or returns a function as the result
+* __anonymous functions__ are functions without a name, written using `lambda`
+
+#### Seven Flavors of Callable Objects
+
+1. User-defined functions - `def` or `lambda`
+1. Built-in functions - function implemented in C
+1. Built-in methods - methods implemented in C
+1. Methods - functions in the body of a class
+1. Classes - using as a function invokes `__new__` and `__init__`  then returns back to caller
+1. Class instances - if class has `__call__`, its instance may be invoked as a function
+1. Generator functions - use `yield` to return generator objects
+
+#### Interesting Use Cases of Functions
+
+* use `callable()` to determine if something is callable
+* class implementing `__call__` is an easy way to create function-like object that can have internal state across invocations (i.e. memoization decorator)
+
+* can assign attribute to `__dict__` of function
+* pass iterables and mappings into function argument using `*args` and `**kwargs` respectively
+* we can use the [`inspect` module](https://docs.python.org/3/library/inspect.html) to introspect functions
+* functions support type annotations that we can access via `inspect` module, useful for IDEs and linters
+
+#### Functional Programming
+
+* [`operator` module](https://docs.python.org/3/library/operator.html)
+* `functools.partials` is a way of freezing some of the keyword arguments to produce a simpler API
+
+---
+
+## Chapter 6: Design Patterns with First-Class Functions
+
+Design patterns have intricies that make their implementation into various langauges slightly different. We can take advantage of functions being first-class objects and implement some of the patterns using functions instead of classes.
+
+---
+
+## Chapter 7: Function Decorators and Closures
+
+blah
