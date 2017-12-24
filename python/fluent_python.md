@@ -192,6 +192,69 @@ Design patterns have intricies that make their implementation into various langa
 
 ---
 
-## Chapter 7: Function Decorators and Closures
+### Chapter 7: Function Decorators and Closures
 
-blah
+#### Decorators
+
+```python
+def decorate(func):
+    def inner():
+        print('running inner')
+    return inner()
+
+# decorator
+@decorate
+def target():
+    print('running target')
+
+# is equivalent to
+def target():
+    print('running target')
+
+target = decorate(target)
+```
+
+* Decorators have the power to replace decorated functions with different functions
+* Executed immediately when a module is loaded, i.e. at import time
+* Usually defined in one module and applied to functions in another module
+* Most decorators define an inner function and return it
+
+#### Closures
+
+* Python does not require you to declare variables but assumes that a variable assigned in the body of a function is local
+
+* __closure__ - a function that retains the bindings of the free variable that exist when the function is defined so it can be used later when the function is invoked and the defining scope is no longer available
+
+* __free variable__ - variable not bound to local scope
+* flag a free variable when it is assigned to a new value using `nonlocal`
+
+#### Decorators in Depth
+
+* When you decorate a function, it's signature and reference refers to the decorator. Use `functools.wraps` to copy the relevant attributes so the original function looks as we expect it to
+
+* [`functools.lru_cache`](https://docs.python.org/3/library/functools.html#functools.lru_cache) (Least Recntly Used) is a memoization decorator that can save results of previous invocations of an expensive function
+    * `maxsize` sould be a power of 2
+
+* [`functools.singledispatch`](https://docs.python.org/3/library/functools.html#functools.singledispatch) was added via [PEP443](https://www.python.org/dev/peps/pep-0443/) allows us to define a generic function that allows us to have the same operation for different types
+
+* Decorators with parameters requires use to use decorator factories that takes arguments and returns a decorator that is then applied to the function we are decorating
+    * every problem in computer since can be solved by another layer of abstraction
+
+```python
+def decorator_factory(param1='a', param2=True):
+    def decorator(func):  # the decorator we are returning
+        def new_func(*args, **kwargs):  # args and kwargs of fn we are decorating
+            result = func(args, kwargs)
+            return do_something_else(result)
+        return new_func
+    return decorator
+```
+
+---
+---
+
+## Part IV: Object-Oriented Idioms
+
+### Chapter 8: Object References, Mutability, and Recyling
+
+* blah
