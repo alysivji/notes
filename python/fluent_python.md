@@ -255,6 +255,24 @@ def decorator_factory(param1='a', param2=True):
 
 ## Part IV: Object-Oriented Idioms
 
-### Chapter 8: Object References, Mutability, and Recyling
+### Chapter 8: Object References, Mutability, and Recycling
 
-* blah
+* every Python object has an address (`id`), a type, and a value
+
+* variables are labels attached to objects
+* variables are assigned to objects, objects are not assigned to variables
+* an object can have several variables that reference it
+* `==` compares values of objects (data they hold)
+    * define custom `__eq__` method to specify how your objects deal with the `==` operator
+* `is` compares identity (do they refer to the same object?)
+    * used to compare value to singleton. i.e. `x is None`
+
+* think about how to copy deeply nested objects, do we copy everything?
+    * by default, copies are shallow
+* [`copy`](https://docs.python.org/3/library/copy.html) module has `copy.copy()` and `copy.deepcopy()` which implement the `__copy__` and `__deepcopy__` protocols
+
+* function parameters are passed by value, but the values are references
+
+---
+
+### Chapter 9: blah
