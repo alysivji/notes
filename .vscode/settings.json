@@ -1,9 +1,11 @@
 {
     "markdownlint.config": {
+        "default": false,
         "MD007": false,
         "MD024": false,
         "MD028": false,
         "MD032": false,
     },
     "editor.detectIndentation": false,
+    // "editor.fontSize": 12,
 }

@@ -181,7 +181,7 @@ Python functions are "first-class objects"
 
 #### Functional Programming
 
-* [`operator` module](https://docs.python.org/3/library/operator.html)
+* [`operator` module](https://docs.python.org/3/library/operator.html) provides the functionality of all Python infix operators in functional form to reduce the use of anonymous `lambda` functions
 * `functools.partials` is a way of freezing some of the keyword arguments to produce a simpler API
 
 ---
@@ -275,4 +275,87 @@ def decorator_factory(param1='a', param2=True):
 
 ---
 
-### Chapter 9: blah
+### Chapter 9: A Pythonic Object
+
+(from [Michael Foord](http://www.voidspace.org.uk/python/articles/duck_typing.shtml))
+* Python is strongly typed because object types __don't change type__
+* Python is dynamically typed because we can pass references around and we don't check type until the last possible minute
+* duck typing - it doesn't matter what type my data is, just that it can do what I want with it
+    * i.e. if it has a quack method, it doesn't matter it's a duck. We can treat it like a duck.
+    * this is a consequence of the object defining what it can or can't do
+    * "The principle of duck typing says that you shouldn't care what type of object you have - just whether or not you can do the required action with your object"
+
+* user-dfined types can implement the methods needed for objects to behave as expected
+
+* `__repr__` returns object representation developer wants to see
+* `__str__` returns object user wants to see
+
+* `@classmethod` receives the class as the first argument and is used to create alternative constructor
+
+```python
+@classmethod
+def from_date_string(cls, *args, **kwargs):
+    return cls(*args, **kwargs)
+```
+
+* `@staticmethod` receives no special first argument and is keep functions that are related to the class within the class
+* [further reading](https://julien.danjou.info/blog/2013/guide-python-static-class-abstract-methods) on static and class methods
+
+* `__format__(formatspec)` can take in [format specification](https://docs.python.org/3/library/string.html#formatspec)
+    * we can create custom format specifications, but make sure to not overlap current syntax or we might confuse users
+
+* implement `__hash__` to make method hashable ([more information](https://docs.python.org/3/reference/datamodel.html#object.__hash__))
+    * might have to make instances immutable which we can do using the `@property` decorator on attributes (making them read-only)
+
+* class attributes and methods that start with `__` (double underscore) get name mangled, i.e. `_Class.__method`
+
+#### `__slots__`
+
+* Python stores instance attributes in each instance's `__dict__`
+* This takes a lot of memory so we can use the `__slots__` class attribute to store the instance attributes in a tuple instead of a dict
+* if we add `__dict__` to slots, we can also support dynamically created attributes which will be stored in `__dict__`, but use this feature with caution
+* useful when we have millions of instances (not just thousands)
+
+#### Overriding Class Attribute
+
+```python
+class Foo(object):
+    my_attribute = 'value'
+
+    def bar(self, x):
+        self.my_attribute
+        # this is slower because it has to go to instance and then class because this is not in the instance
+        # BUT we can override Foo just to write a different class attribute
+
+class SpecializedFoo(Foo):
+    my_attribute = 'value2'
+    # that's it, that's all that is needed
+```
+
+---
+
+### Chapter 10: Sequence Hacking, Hashing, and Slicing
+
+* sequence protocol: `__len__` & `__getitem__`
+* [`reprlib`](https://docs.python.org/3/library/reprlib.html) module can be used to produce safe representations of large or recursive structures by limiting the length of the output string (i.e. not showing all elements of a vector)
+
+#### Protocol
+
+* in OOP, a **protocol** is an informal interface that is defined in documentation but not in code
+* if a object implements certain dunder methods, it can support a protocol which means that we can use that object wherever an object following that protocol is required (aka *duck typing*)
+
+* Just need to implement `__getitem__` to support iteration
+
+#### Slices
+
+* slices have an `indices` method that produces a 'normalized' tuple of nonnegative `start`, `stop`, and `stride` integers adjusted to fit the bounds of a sequence of a given length
+
+#### Dynamic Attribute Access
+
+* `__getattr__` is invoked by the interpreter whenever the attribute lookup fails
+* This can cause inconsistencies if we set an attribute on the instance, but expect it to fail back to the `__getattr__` method
+* very often we will implement `__setattr__` along with `__getattr__` to keep object behavior consistent
+
+#### Hashing
+
+* Not really a protocol, but implementing `__hash__` and `__eq__` make our instances hashable
