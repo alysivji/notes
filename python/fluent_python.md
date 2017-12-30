@@ -279,7 +279,9 @@ def decorator_factory(param1='a', param2=True):
 
 (from [Michael Foord](http://www.voidspace.org.uk/python/articles/duck_typing.shtml))
 * Python is strongly typed because object types __don't change type__
+    * if the language rarely performs implicit conversions of types, it is strongly typed
 * Python is dynamically typed because we can pass references around and we don't check type until the last possible minute
+    * type checking performed at runtime means dynamically typed
 * duck typing - it doesn't matter what type my data is, just that it can do what I want with it
     * i.e. if it has a quack method, it doesn't matter it's a duck. We can treat it like a duck.
     * this is a consequence of the object defining what it can or can't do
@@ -359,3 +361,59 @@ class SpecializedFoo(Foo):
 #### Hashing
 
 * Not really a protocol, but implementing `__hash__` and `__eq__` make our instances hashable
+
+---
+
+### Chapter 11: Interfaces: From Protocols to ABCs
+
+* Languages with dynamic typing use **protocols** to define informal interfaces
+* An **interface** is the subset of methods that enable it to play a specific role in the system
+* A class may implement several protocols which allows instaces to fulfill several roles
+* Protocols can be partially implemented as required
+
+* Python will fall back to using `__getitem__` to implement the behavior of a sequence if `__iter__` and `__contains__` are not defined
+    * starts at 0 and goes up by integer indices
+* mutable sequences implement the `__setitem__` method
+
+* protocols are related to the explicit interfaces that are documented in abstract base classes (ABCs)
+
+* **monkeypatching** refers to changing a class or module at runtime without touching the source code
+
+#### Abstract Base Classes (ABC)
+
+* goosetyping: `isinstance(obj, cls)` with `cls` being an abstract base class
+* whenever you are implementing a class embodying any of the concepts represented in the ABCs, be sure to subclass from it or register it into the corresponding ABC
+* excessive `isinstance` checks are a symptom of bad OO design unless we are explicitly checking against an ABC
+* ABCs are useful for plugin architectures
+
+* if we subclass an ABC, we have to implement required methods
+
+* [`collections.abc`](https://docs.python.org/3/library/collections.abc.html)
+* [`numbers` base class](https://docs.python.org/3/library/numbers.html)
+* [`abc` - Abstract Base Class](https://docs.python.org/3/library/abc.html)
+    * use to define custom abstract base classes (ABCs)
+
+We would define a custom ABC when we have classes that implement methods with the same name which represent different things, i.e. `artist.draw()` vs `gunslinger.draw()`
+
+Note: Re-read this chapter if I ever have to do any work with custom ABCs
+
+* [`@abstractmethod`](https://docs.python.org/3/library/abc.html#abc.abstractmethod) can be use to mark a method in an ABC that needs to be implemented by the class inheriting the custom ABC (i.e. the *concrete class*)
+    * can stack `@property`, `@staticmethod`, `@classmethod` decorators on top
+* We can have *concrete methods* in the interface as long as they depend on other methods in the interface
+    * our *concrete subclasses* can overwrite these methods as needed (better implementation)
+
+* we can register a class as a virtual subclass of ABC, even though it doesn't inherit from it
+    * done using `@register` on the class
+
+```python
+from tombola import Tombola
+
+@Tombola.register
+class TomboList(list):
+    pass
+```
+
+#### Other Resources
+
+* [PEP 3119 -- Introducing Abstract Base Classes](https://www.python.org/dev/peps/pep-3119/)
+* [PEP 3141 -- A Type Hierarchy for Numbers](https://www.python.org/dev/peps/pep-3141/)
