@@ -392,6 +392,7 @@ class SpecializedFoo(Foo):
 * [`numbers` base class](https://docs.python.org/3/library/numbers.html)
 * [`abc` - Abstract Base Class](https://docs.python.org/3/library/abc.html)
     * use to define custom abstract base classes (ABCs)
+    * ABCs are interface declarations that may optionally provide concrete method implementations
 
 We would define a custom ABC when we have classes that implement methods with the same name which represent different things, i.e. `artist.draw()` vs `gunslinger.draw()`
 
@@ -401,6 +402,7 @@ Note: Re-read this chapter if I ever have to do any work with custom ABCs
     * can stack `@property`, `@staticmethod`, `@classmethod` decorators on top
 * We can have *concrete methods* in the interface as long as they depend on other methods in the interface
     * our *concrete subclasses* can overwrite these methods as needed (better implementation)
+    * concrete methods implemented in an ABC should only collaborate with methods of the same ABC and its superclasses
 
 * we can register a class as a virtual subclass of ABC, even though it doesn't inherit from it
     * done using `@register` on the class
@@ -413,7 +415,69 @@ class TomboList(list):
     pass
 ```
 
+* **Polymorphism** is the ability to leverage the same interface for different underlying forms such as data types or classes. This permits functions to use entities of different types at different times ([source](https://www.digitalocean.com/community/tutorials/how-to-apply-polymorphism-to-classes-in-python-3))
+
 #### Other Resources
 
 * [PEP 3119 -- Introducing Abstract Base Classes](https://www.python.org/dev/peps/pep-3119/)
 * [PEP 3141 -- A Type Hierarchy for Numbers](https://www.python.org/dev/peps/pep-3141/)
+
+---
+
+### Chapter 12: Inheritance: For Good or For Worse
+
+* subclassing built-in types is error prone because the built-in methods mostly ignore user-defined overrides; to do it properly we need to subclass from the [`collections`](https://docs.python.org/3/library/collections.html) module
+    * The reason for this is because we want the built-in types to be fast so they are optimized via CPython
+
+#### Method Resolution Order (MRO)
+
+* Multiple inheritance can result in ["the dimaond problem"](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem) where we have to deal with potential naming conflicts due to unrelated ancestor classes implementing a method by the same name
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Diamond_inheritance.svg/440px-Diamond_inheritance.svg.png" />
+
+* Python follows a specific order, **method resolution order**, when traversing the inheritance graph
+    * takes into account the inheritance graph as well as the order in which superclasses are listed in subclass declaration
+    * encoded in the `__mro__` attribute
+
+* The recommended way of delgating calls to superclasses is the `super()` uiltin funtion, but we can also bypass the MRO and invoke a method on the superclass directly
+    * [Raymond Hettinger on `super()`](https://rhettinger.wordpress.com/2011/05/26/super-considered-super/)
+
+```python
+x = A()
+x.method()
+
+# is the same ass
+x = A()
+A.method(x)
+```
+
+#### Strategies of Coping with Multiple Inheritance
+
+> "Inheritance is used for different reasons, and multiple inheritance adds alternatives and complexity" - Alan Kay
+
+1. Distinguish Interface Inheritance from Implemtation Inheritance
+    * Inheritance of interface creates a subtype, "is-a"
+    * Inheritance of implementation avoids code duplication by reuse
+    * Inheritance for code reuse is an implemntation detail and it can be replaced by composition and delegation
+    * Interface inheritance is the backbone of a framework
+
+1. Make Interfaces Explicit with ABCs
+
+1. Use Mixins for Code Reuse
+    * If a class is designed to provide method implementations for reuse by multiple unrelated subclasses without implying an "is-a" relationships, it should be an explicit **mixin** class
+    * Mixins do not define a new type, they merely bundle methods for reuse
+    * Each mixin should provide a single specific behavior, implementing a few *very* closely related methods
+
+1. Make Mixins Explicit by Naming them (`...Mixin`)
+
+1. An ABC may also be a Mixin; the Reverse is not True
+
+1. Don't Subclass from More Than One Concrete Class
+    * [more info](http://www.cems.uwe.ac.uk/~jsa/UMLJavaShortCourse09/CGOutput/Unit9/unit9%280809%29/page_03.htm)
+
+1. Provide Aggregate Classes to Users
+    * Give users classes that are a combination of ABCs and/or mixins
+
+1. Favor Object Composition Over Class Inheritance
+    * Leads to more flexible designs
+    * Composition and Delegation can replace the use of mixins to make behaviors available to different classes, but cannot replace the use of interface inheritance to define a hierarchy of types
