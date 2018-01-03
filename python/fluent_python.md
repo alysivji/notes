@@ -481,3 +481,47 @@ A.method(x)
 1. Favor Object Composition Over Class Inheritance
     * Leads to more flexible designs
     * Composition and Delegation can replace the use of mixins to make behaviors available to different classes, but cannot replace the use of interface inheritance to define a hierarchy of types
+
+---
+
+### Chapter 13: Operator Overloading: Doing It Right
+
+* operator overloading allows user-defined objects to iteroperate with infix operators or unary operators
+* Python does impose some limitations
+    * cannot overload operators for the built-in types
+    * cannot create new operators
+    * a few operators cannot be overloaded (`is`, `and`, `or`, `not`)
+* Fundamental rule of operators: always return a new object
+    * Do not modify `self`, create a new instance of a suitable type
+
+* Think about what operators mean in the problem domain, ex. `~` could represent a negation of an `SQL WHERE` clause
+* Look at what the [Python Data Model](https://docs.python.org/3/reference/datamodel.html) recommends for container types (i.e. sequences should support `+` for concatenation and `*` for repetition)
+
+#### Reverse Methods
+
+* If a + b does not work, i.e. `a.__add__(b)`, python tries `b.__radd__(a)`
+    * If not implemented, should return a `NotImplemented` singleton
+
+* If an operator special method cannot return a valid result because of type incompatibility, it should return `NotImplemented` and not raise `TypeError`
+    * This leaves the door open for the implementor of the other operand type to perform the operation when Python tries the reversed method call
+
+* duck typing :If an infix operator method raises an exception it aborts the operator dispatch algorithm
+    * best to return `NotImplemented`
+* goose typing: `isinstance(obj, cls)` with `cls` being an abstract base class
+
+#### Rich Comparison Operators
+
+* `==` both forward and reverse invoke `__eq__`
+* forward call to `__gt__` is followed by a reverse call to `__lt__` with reversed arguments
+* when `__eq__` is defined and does not return `NotImplemented`, `__ne__` returns that result negated
+* special fallback for `==` and `!=`: compare object IDs as last resort
+* [`@functools.total_ordering`](https://docs.python.org/3/library/functools.html#functools.total_ordering) automatically generates methods for all rich comparison operators in any class that defines at least a couple of them
+
+#### Augmented Assignment Operators
+
+* If a class does not implement the inplace operator methods, the augmented assignment operators are just syntactic sugar, i.e. `a += b` is treated as `a = a + b`
+* If we implement an inplace operator method for a mutable type, we should not create a new object and return it; the user expects us to modify it *inplace*
+    * must return `self`
+* if a forward infix operator method is designed to work with operands of the same type as `self`, it's useless to implement the corresponding reverse method because that will be invoked only when dealing with an operand of a different type
+* `+` usually requires that both operands are of the same type
+* `+=` often accepts any iterable as the righthand operand
