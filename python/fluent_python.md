@@ -15,7 +15,6 @@ We can use Python's Data Model to design "Pythonic" APIs for our classes and lib
 * [Python Data Model](https://docs.python.org/3/reference/datamodel.html)
 
 ---
----
 
 ## Part 2: Data Structures
 
@@ -74,8 +73,6 @@ __sequence__ - ordered set of objects; all sequences support iteration
 * **`asyncio`** - asynchronous programming queues
 * **`heapq`** - heap-based queue
 
----
-
 ### Chapter 3: Dictionaries and Sets
 
 #### Dictionaries
@@ -123,8 +120,6 @@ __sequence__ - ordered set of objects; all sequences support iteration
 * [Brandon Rhodes - The Mighty Dictionary](https://www.youtube.com/watch?v=oMyy4Sm0uBs) (PyCon 2016)
 * [Brandon Rhodes - The Dictionary Even Mighter](https://www.youtube.com/watch?v=66P5FMkWoVU) (PyCon 2017)
 
----
-
 ### Chapter 4: Text versus Bytes
 
 What is a character? In Python 3, a __character__ is a unicode character.
@@ -143,7 +138,6 @@ Characters can be stored as __bytes__. Bytes are stored with a specific _encodin
 * text comparisons are complicated because Unicode can have multiple ways of representing some characters
     * normalizing is a prerequesite to text matching
 
----
 ---
 
 ## Part 3: Functions as Objects
@@ -184,13 +178,9 @@ Python functions are "first-class objects"
 * [`operator` module](https://docs.python.org/3/library/operator.html) provides the functionality of all Python infix operators in functional form to reduce the use of anonymous `lambda` functions
 * `functools.partials` is a way of freezing some of the keyword arguments to produce a simpler API
 
----
-
 ## Chapter 6: Design Patterns with First-Class Functions
 
 Design patterns have intricies that make their implementation into various langauges slightly different. We can take advantage of functions being first-class objects and implement some of the patterns using functions instead of classes.
-
----
 
 ### Chapter 7: Function Decorators and Closures
 
@@ -251,7 +241,6 @@ def decorator_factory(param1='a', param2=True):
 ```
 
 ---
----
 
 ## Part IV: Object-Oriented Idioms
 
@@ -272,8 +261,6 @@ def decorator_factory(param1='a', param2=True):
 * [`copy`](https://docs.python.org/3/library/copy.html) module has `copy.copy()` and `copy.deepcopy()` which implement the `__copy__` and `__deepcopy__` protocols
 
 * function parameters are passed by value, but the values are references
-
----
 
 ### Chapter 9: A Pythonic Object
 
@@ -334,8 +321,6 @@ class SpecializedFoo(Foo):
     # that's it, that's all that is needed
 ```
 
----
-
 ### Chapter 10: Sequence Hacking, Hashing, and Slicing
 
 * sequence protocol: `__len__` & `__getitem__`
@@ -361,8 +346,6 @@ class SpecializedFoo(Foo):
 #### Hashing
 
 * Not really a protocol, but implementing `__hash__` and `__eq__` make our instances hashable
-
----
 
 ### Chapter 11: Interfaces: From Protocols to ABCs
 
@@ -422,8 +405,6 @@ class TomboList(list):
 * [PEP 3119 -- Introducing Abstract Base Classes](https://www.python.org/dev/peps/pep-3119/)
 * [PEP 3141 -- A Type Hierarchy for Numbers](https://www.python.org/dev/peps/pep-3141/)
 
----
-
 ### Chapter 12: Inheritance: For Good or For Worse
 
 * subclassing built-in types is error prone because the built-in methods mostly ignore user-defined overrides; to do it properly we need to subclass from the [`collections`](https://docs.python.org/3/library/collections.html) module
@@ -482,8 +463,6 @@ A.method(x)
     * Leads to more flexible designs
     * Composition and Delegation can replace the use of mixins to make behaviors available to different classes, but cannot replace the use of interface inheritance to define a hierarchy of types
 
----
-
 ### Chapter 13: Operator Overloading: Doing It Right
 
 * operator overloading allows user-defined objects to iteroperate with infix operators or unary operators
@@ -525,3 +504,7 @@ A.method(x)
 * if a forward infix operator method is designed to work with operands of the same type as `self`, it's useless to implement the corresponding reverse method because that will be invoked only when dealing with an operand of a different type
 * `+` usually requires that both operands are of the same type
 * `+=` often accepts any iterable as the righthand operand
+
+---
+
+## Part V:
