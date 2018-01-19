@@ -7,5 +7,5 @@
         "MD032": false,
     },
     "editor.detectIndentation": false,
-    // "editor.fontSize": 12,
+    "editor.rulers": [],
 }
