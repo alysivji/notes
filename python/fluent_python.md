@@ -2,15 +2,42 @@
 
 by Luciano Ramalho
 
+<!-- TOC -->
+
+- [Part 1: Prologue](#part-1-prologue)
+    - [Chapter 1: The Python Data Model](#chapter-1-the-python-data-model)
+- [Part 2: Data Structures](#part-2-data-structures)
+    - [Chapter 2: An Array of Sequences](#chapter-2-an-array-of-sequences)
+    - [Chapter 3: Dictionaries and Sets](#chapter-3-dictionaries-and-sets)
+    - [Chapter 4: Text versus Bytes](#chapter-4-text-versus-bytes)
+- [Part 3: Functions as Objects](#part-3-functions-as-objects)
+    - [Chapter 5: First-Class Functions](#chapter-5-first-class-functions)
+    - [Chapter 6: Design Patterns with First-Class Functions](#chapter-6-design-patterns-with-first-class-functions)
+    - [Chapter 7: Function Decorators and Closures](#chapter-7-function-decorators-and-closures)
+- [Part IV: Object-Oriented Idioms](#part-iv-object-oriented-idioms)
+    - [Chapter 8: Object References, Mutability, and Recycling](#chapter-8-object-references-mutability-and-recycling)
+    - [Chapter 9: A Pythonic Object](#chapter-9-a-pythonic-object)
+    - [Chapter 10: Sequence Hacking, Hashing, and Slicing](#chapter-10-sequence-hacking-hashing-and-slicing)
+    - [Chapter 11: Interfaces: From Protocols to ABCs](#chapter-11-interfaces-from-protocols-to-abcs)
+    - [Chapter 12: Inheritance: For Good or For Worse](#chapter-12-inheritance-for-good-or-for-worse)
+    - [Chapter 13: Operator Overloading: Doing It Right](#chapter-13-operator-overloading-doing-it-right)
+- [Part V: Control Flow](#part-v-control-flow)
+    - [Chapter 14: Iterables, Iterators, and Generators](#chapter-14-iterables-iterators-and-generators)
+
+<!-- /TOC -->
+
+---
+---
+
 ## Part 1: Prologue
 
-## Chapter 1: The Python Data Model
+### Chapter 1: The Python Data Model
 
 Python uses special (`__dunder__`) methods which can help make our custom created objects behave like built-in objects.
 
 We can use Python's Data Model to design "Pythonic" APIs for our classes and libraries.
 
-### Further Reading
+#### Further Reading
 
 * [Python Data Model](https://docs.python.org/3/reference/datamodel.html)
 
@@ -178,7 +205,9 @@ Python functions are "first-class objects"
 * [`operator` module](https://docs.python.org/3/library/operator.html) provides the functionality of all Python infix operators in functional form to reduce the use of anonymous `lambda` functions
 * `functools.partials` is a way of freezing some of the keyword arguments to produce a simpler API
 
-## Chapter 6: Design Patterns with First-Class Functions
+---
+
+### Chapter 6: Design Patterns with First-Class Functions
 
 Design patterns have intricies that make their implementation into various langauges slightly different. We can take advantage of functions being first-class objects and implement some of the patterns using functions instead of classes.
 
@@ -506,5 +535,341 @@ A.method(x)
 * `+=` often accepts any iterable as the righthand operand
 
 ---
+---
 
-## Part V:
+## Part V: Control Flow
+
+### Chapter 14: Iterables, Iterators, and Generators
+
+* every collection is an *iterable*
+* all sequences are *iterable*
+
+#### `iter` Function
+
+Whenever the iterpreter needs to iterate over an object, it calls `iter(x)`
+
+Function checks:
+* if `__iter__` method is implemented
+* if not, is `__getitem__` implemented?
+* if not, `TypeError`
+
+**iterable** is any object in which `iter()` can obtain an *iterator*.
+
+* Object is iterable if it returns an iterator
+* Calling `next()` on iterator gives next item
+    * if the iterator is exhausted, raises `StopIteration` exception
+
+* once exhausted, iterator becomes useless
+* not possible to reset an iterator
+
+* `iter` can be called with two arguments to create an iterator from a function or a callable. First argument must be a callable to be invoked repeatedly (with no arguments) to yield values, and the second argument is a sentinel which, when returned by the calalble, causes the iterator to raise `StopIteration` instead of yielding the sentinel
+
+#### Iterator Interface
+
+Standard interface for an iterator has two methods:
+* `__next__` returns next available item; raises `StopIterator` when exhausted
+* `__iter__` returns self
+
+* Iterator is not a type, but a protocol so we will need to check if it has certain methods to say it's an iterator
+    * `isinstance(x, abc.Iterator)`
+
+* **iterator** any object that implements `__next__` that returns the next item in the series or raises a `StopIteration`
+    * iterators also implement `__iter__` so iterators are also **iterable**
+
+#### Classic Iterator
+
+* iterables have an `__iter__` method that instantiates a enw iterator every time. Iterators implement a `__next__` method that returns individual items, and an `__iter__` method that returns `self`
+
+> Iterators are also iterable, but iterables are not iterators
+
+#### Generator Function
+
+* any Python function that has a `yield` keyword in its body is a *generator function* which returns a *generator object* when its called
+* generators are iterators that produce the values of the expressions passed to yield
+
+> A generator function builds a generator object that wraps the body of the function. When we invoke `next(...)` on the generator object, execution advances to the next `yield` in the function body, and the `next(...)` call evaluates to the value yielded when the function body is suspended. Finally when the function body returns, the enclosing generator object raises `StopIteration`, in accorance with the `Iterator` protocol
+
+#### Lazy Implementation
+
+* lazy implementation postpones producing values to the last possible moment
+* saves memory and may avoid useless processing
+* Python 3 has lots of lazy implementations, look into this
+
+#### Generator Expression
+
+* syntactic sugar for generator functions
+* lazy version of a list comprehension
+* instead of eagerly building a list, it returns a genrator that will produce items on demands
+
+#### Generator Functions in the Standard Library
+
+*Filtering Generator Functions* - `yield` items from input iterator without changing it
+
+* [`itertools.compress`](https://docs.python.org/3/library/itertools.html#itertools.compress)(data, selectors)
+
+Consumes two iterables in parallel, yields items from data when selector is truthy
+
+```console
+list(itertools.compress('ABCDEF', [1,0,1,0,1,1]))
+['A', 'C', 'E', 'F']
+```
+
+* [`itertools.dropwhile`](https://docs.python.org/3/library/itertools.html#itertools.dropwhile)(predicate, iterable)
+
+Drops elements from iterable as long as predicate is true, then returns every element
+
+```console
+>>> list(itertools.dropwhile(lambda x: x < 5, range(10)))
+[5, 6, 7, 8, 9]
+```
+
+* [`filter`](https://docs.python.org/3/library/functions.html#filter)(predicate, iterable)
+
+Returns elements from iterable when predicate is `True`
+
+```console
+>>> list(filter(lambda x: x < 5, range(10)))
+[0, 1, 2, 3, 4]
+```
+
+* [`itertools.filterfalse`](https://docs.python.org/3/library/itertools.html#itertools.filterfalse)(predicate, iterable)
+
+Returns elements from iterable when predicate is `False`
+
+```console
+>>> list(itertools.filterfalse(lambda x: x < 5 or x > 8, range(10)))
+[5, 6, 7, 8]
+```
+
+* [`itertools.islice`](https://docs.python.org/3/library/itertools.html#itertools.islice)(iterable, stop)
+
+Yields selected elements from the iterable
+
+* [`itertools.takewhile`](https://docs.python.org/3/library/itertools.html#itertools.takewhile)(predicate, iterable)
+
+Takes elements from iterable as long as predicate is true, then drops every element after
+
+```console
+>>> list(itertools.takewhile(lambda x: x < 5, range(10)))
+[0, 1, 2, 3, 4]
+```
+
+*Mapping Generator Functions* - `yield` items computed from each item in the input iterable
+
+* [`itertools.accumulate`](https://docs.python.org/3/library/itertools.html#itertools.accumulate)(iterable[, func])
+
+Yields accumulated sums; if `func` is supplied, it will perform the binary accumulate of the operator
+
+```console
+>>> list(itertools.accumulate(range(10)))
+[0, 1, 3, 6, 10, 15, 21, 28, 36, 45]
+
+>>> list(itertools.accumulate(range(1, 10), operator.mul))
+[1, 2, 6, 24, 120, 720, 5040, 40320, 362880]
+
+>>> list(itertools.accumulate(range(10), min))
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+```
+
+* [`enumerate`](https://docs.python.org/3/library/functions.html#enumerate)(iterable, start=0)
+
+Yields a 2-tuple of the form `(index, item)` where `index` is counted from `start` and `item` is taken from the `iterable`
+
+```console
+>>> seasons = ['Spring', 'Summer', 'Fall', 'Winter']
+>>> list(enumerate(seasons))
+[(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
+```
+
+* [`map`](https://docs.python.org/3/library/functions.html#enumerate)(function, iterable, ...)
+
+Applies `function` to every item of `iterable`, yielding the result
+
+```console
+>>> list(map(lambda x, y: x + y, range(5), range(1, 6)))
+[1, 3, 5, 7, 9]
+```
+
+* [`itertools.starmap`](https://docs.python.org/3/library/itertools.html#itertools.starmap)(function, iterable)
+
+If arguments parameteres are grouped into tuples, starmap is function to use.
+
+The primary advantage to using starmap is that it’s [trivial to make parallel](http://n-s-f.github.io/2016/12/23/starmap-pattern.html.
+
+```console
+>>> list(itertools.starmap(lambda x, y: x + y, [(2,5), (3,2), (10,3)]))
+[7, 5, 13]
+```
+
+*Merging Generator Functions* - yield items from multiple input iterables
+
+* [`itertools.chain`](https://docs.python.org/3/library/itertools.html#itertools.chain)(*iterables)
+
+Makes an iterator that returns elements from first iterable until its exhausted, then moves onto the next iterable, until all iterables are exhausted
+
+```console
+list(itertools.chain('ABC', 'DEF'))
+>>> ['A', 'B', 'C', 'D', 'E', 'F']
+```
+
+* [`itertools.chain.from_iterable](https://docs.python.org/3/library/itertools.html#itertools.chain.from_iterable)(iterable)
+
+Alternative constructor, takes a list.
+
+```console
+list(itertools.chain.from_iterable(['ABC', 'DEF']))
+>>> ['A', 'B', 'C', 'D', 'E', 'F']
+```
+
+* [`itertools.product`](https://docs.python.org/3/library/itertools.html#itertools.product)(*iterable, repeat=1)
+
+Cartesian product of input iterables
+
+```console
+>>> list(itertools.product('AB', 'ab'))
+[('A', 'a'), ('A', 'b'), ('B', 'a'), ('B', 'b')]
+```
+
+* [`zip`](https://docs.python.org/3/library/functions.html#zip)(*iterables)
+
+Yields n-tuples built from items taken from the iterables, silently stoppping when the first iterable is exhausted
+
+```console
+>>> list(zip('ABCD', 'abc'))
+[('A', 'a'), ('B', 'b'), ('C', 'c')]
+```
+
+* [`itertools.zip_longest`](https://docs.python.org/3/library/itertools.html#itertools.zip_longest)(*iterables, fillvalue=None)
+
+Yields n-tuples built from items taken from the iterables, stopping only when the last iterable is exhausted, filling blanks with `fillvalue`
+
+```console
+>>> list(itertools.zip_longest('ABCD', 'abc', fillvalue=None))
+[('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', None)]
+```
+
+*Expansion Generator Functions* - yield more than one value per input item
+
+* [`itertools.combination`](https://docs.python.org/3/library/itertools.html#itertools.combinations)(iterable, r)
+
+Yield combinations of `r` length items from the items yielded by the `iterable`
+
+```console
+>>> list(itertools.combinations('ABCD', 2))
+[('A', 'B'), ('A', 'C'), ('A', 'D'), ('B', 'C'), ('B', 'D'), ('C', 'D')]
+
+>>> list(itertools.combinations(range(4), 3))
+[(0, 1, 2), (0, 1, 3), (0, 2, 3), (1, 2, 3)]
+```
+
+* [`itertools.combination_with_replacement`](https://docs.python.org/3/library/itertools.html#itertools.combinations_with_replacement)(iterable, r)
+
+Yield combinations of `r` length items from the items yielded by the `iterable`
+
+```console
+>>> list(itertools.combinations_with_replacement('ABC', 2))
+[('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')]
+
+>>> list(itertools.combinations_with_replacement(range(2), 3))
+[(0, 0, 0), (0, 0, 1), (0, 1, 1), (1, 1, 1)]
+```
+
+* [`itertools.count`](https://docs.python.org/3/library/itertools.html#itertools.count)(start=0, step=1)
+
+Yield numbers start at `start` and incrementing by `step`
+
+```console
+>>> list(itertools.count(5))
+[5, 6, 7, 8, 9, ...]
+```
+
+* [`itertools.cycle`](https://docs.python.org/3/library/itertools.html#itertools.cycle)(iterable)
+
+Yield items from iterable storing a copy of each, then yield the entire sequence repeatedly, indefinitely
+
+```console
+>>> itertools.cycle('ABCD')
+A B C D A B C D A B C D ...
+```
+
+* [`itertools.permutations`](https://docs.python.org/3/library/itertools.html#itertools.permutations)(iterable, r=None)
+
+Yield successive r length permutations of elements in the iterable
+
+```console
+>>> list(itertools.permutations('ABC', 2))
+[('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
+```
+
+* [`itertools.repeat`](https://docs.python.org/3/library/itertools.html#itertools.repeat)(object[, times])
+
+Yield the given object repeatedly, indefinitely unless a number of times is given
+
+Common use: providing a fixed argument in map
+
+```console
+list(itertools.repeat(10, 3))
+>>> [10, 10, 10]
+```
+
+*Rearranging Generator Functions* - yield all items in the input iterables, but rearranged in some way
+
+* [`itertools.groupby`](https://docs.python.org/3/library/itertools.html#itertools.groupby)(iterable, key=None)
+
+Yields 2-tuples of the form `(key, group)` where `key` is the grouping criterion and `group` is a generator yielding items in the group
+
+```console
+>>> [k for k, g in itertools.groupby('AAAABBBCCDAABBB')]
+['A', 'B', 'C', 'D', 'A', 'B']
+```
+
+* [`reversed`](https://docs.python.org/3/library/functions.html#reversed)(seq)
+
+Yields items from `seq` in reverse order, from last to first; `seq` must be a sequence or implement the `__reversed__` special method
+
+```console
+>>> list(reversed('ABC'))
+['C', 'B', 'A']
+```
+
+* [`itertools.tee`](https://docs.python.org/3/library/itertools.html#itertools.tee)(iterable, n=2)
+
+Yields a tupe of `n` generators, each yielding the items of the input iterable independently
+
+```console
+>>> list(itertools.tee('ABC', 5))
+[<itertools._tee at 0x104cdc948>,
+ <itertools._tee at 0x104cdc188>,
+ <itertools._tee at 0x104ae99c8>,
+ <itertools._tee at 0x104ae9708>,
+ <itertools._tee at 0x104ae9a08>]
+```
+
+[More info](http://code.activestate.com/recipes/305588-simple-example-to-show-off-itertoolstee/)
+
+*Iterable Reducing Functions* - all take an iterable and return a single result
+
+* [`all`](https://docs.python.org/3/library/functions.html#all)(iterable)
+
+Returns `True` if all items in iterable are truthy, otherwise `False`
+
+* [`any`](https://docs.python.org/3/library/functions.html#any)(iterable)
+
+Returns `True` if any item in the iterable is truthy, otherwise `False`
+
+* [`max`](https://docs.python.org/3/library/functions.html#max)(iterable[, key=[, default=]])
+* [`min`](https://docs.python.org/3/library/functions.html#min)(iterable[, key=[, default=]])
+
+Returns the largest / smallest item in an iterable
+
+* [`functools.reduce`](https://docs.python.org/3/library/functools.html#functools.reduce)(function, iterable[, initializer])
+
+Returns the result of applying `function` to the first pair of itmes, then to that result and the third item and so on; if given, initial forms the initial pair with the first item
+
+* [`sum`](https://docs.python.org/3/library/functions.html#sum)(iterable[, start])
+
+Returns the sum of all items in iterable
+
+#### Further Reading
+
+* [`Itertools` Recipes](https://docs.python.org/3/library/itertools.html#itertools-recipes)
