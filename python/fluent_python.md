@@ -23,6 +23,8 @@ by Luciano Ramalho
     - [Chapter 13: Operator Overloading: Doing It Right](#chapter-13-operator-overloading-doing-it-right)
 - [Part V: Control Flow](#part-v-control-flow)
     - [Chapter 14: Iterables, Iterators, and Generators](#chapter-14-iterables-iterators-and-generators)
+    - [Chapter 15: Context Managers and `else` Blocks](#chapter-15-context-managers-and-else-blocks)
+    - [Chapter 16: Coroutines](#chapter-16-coroutines)
 
 <!-- /TOC -->
 
@@ -903,4 +905,9 @@ what makes python awesome kenote
 * Split into two parts: code before `yield` (`__enter__`) and code after `yield` (`__exit__`)
 * You must explicitly re-reaise an exception in the decorated function if you don't want `@contextmanager` to supress it
 
-## Chapter 16: Coroutines
+#### Additional Resources
+
+* [Python `with` Statement by Example](http://preshing.com/20110920/the-python-with-statement-by-example/)
+* Raymond Hettinger keynote at PyCon2013 on [What Makes Python Awesome](https://youtu.be/NfngrdLv9ZQ). He gets into context managers around 23 minutes in
+
+### Chapter 16: Coroutines
