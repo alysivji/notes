@@ -205,8 +205,6 @@ Python functions are "first-class objects"
 * [`operator` module](https://docs.python.org/3/library/operator.html) provides the functionality of all Python infix operators in functional form to reduce the use of anonymous `lambda` functions
 * `functools.partials` is a way of freezing some of the keyword arguments to produce a simpler API
 
----
-
 ### Chapter 6: Design Patterns with First-Class Functions
 
 Design patterns have intricies that make their implementation into various langauges slightly different. We can take advantage of functions being first-class objects and implement some of the patterns using functions instead of classes.
@@ -534,7 +532,6 @@ A.method(x)
 * `+` usually requires that both operands are of the same type
 * `+=` often accepts any iterable as the righthand operand
 
----
 ---
 
 ## Part V: Control Flow
@@ -873,3 +870,37 @@ Returns the sum of all items in iterable
 #### Further Reading
 
 * [`Itertools` Recipes](https://docs.python.org/3/library/itertools.html#itertools-recipes)
+* [Loop Better: A Deeper Look at Iteration in Python](https://www.youtube.com/watch?v=V2PkkMS2Ack)
+
+### Chapter 15: Context Managers and `else` Blocks
+
+what makes python awesome kenote
+
+#### `else` Blocks Beyond `if`
+
+|block|rules|
+|-|-|
+|`for`|Will run once the `for` loop runs to completion|
+|`while`|Will run once the `while` loop exists because condition becomes *falsey*|
+|`try`|Will run if no exception is raised in `try`|
+
+* `else` blocks make code easier to read and saves us from having to use extra `if` statements
+
+#### `with` Statement
+
+[A Gentle Introduction to Context Managers](https://alysivji.github.io/managing-resources-with-context-managers-pythonic.html). My blog post on Context Managers covers a lot of the same topics.
+
+##### Examples from the Standard Library
+
+* managing transacions in the `sqlite3` module
+* holding locks, conditions, and semaphores in `threading` code
+* setting up environments for arithmetic operations with `Decimal` objects
+* Applying temporary patches to objects for testing
+
+##### [`@contextmanager`](https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager) decorator
+
+* Can be used in conjunction with a function generator to create a context manager
+* Split into two parts: code before `yield` (`__enter__`) and code after `yield` (`__exit__`)
+* You must explicitly re-reaise an exception in the decorated function if you don't want `@contextmanager` to supress it
+
+## Chapter 16: Coroutines
