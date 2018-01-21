@@ -911,3 +911,77 @@ what makes python awesome kenote
 * Raymond Hettinger keynote at PyCon2013 on [What Makes Python Awesome](https://youtu.be/NfngrdLv9ZQ). He gets into context managers around 23 minutes in
 
 ### Chapter 16: Coroutines
+
+[PEP 342](https://www.python.org/dev/peps/pep-0342/) -- Coroutines via Enhanced Generators
+
+> A **coroutine** is syntactically like a generator: just a function with the `yield` keyword in its body. However, in a coroutine, `yield` usually appears on the right side of an expression (e.g. `datum = yield`), and it may or may not produce a value - if there is no expression after the `yield` keyword, the generator yields `None`.
+
+* `yield` is a control flow device that can be used to yield control to a centralized scheduler or that other coroutines may be activated
+
+* Coroutine:
+    * may receive data from the caller, `.send(data)`
+    * can throw exception, `.throw(...)`
+    * can terminate, `.close(...)`
+
+* Coroutine can be in one of four states:
+    * Waiting to start execution, `GEN_CREATED`
+    * Currently being exectued by the interpreter, `GEN_RUNNING`
+    * Currently suspended at a yield expression, `GEN_SUSPENDED`
+    * Execution has completed, `GEN_CLOSED`
+
+* need to activate a coroutine via `next(my_coro)` or `my_coro.send(None)`
+    * initial call primes the coroutine, i.e. advances it to the first `yield`
+    * yields first item and then waits for values to be passed in via `.send()`
+
+* execution of the coroutine is suspended exactly at the `yield` keyword. The code to the right of the `=` is evaluated before the actual assignment happens
+
+* we can't do anything with a coroutine until we prime it, `next()`, this is the perfect usecase for a decorator!
+
+#### Coroutine Termination and Exception Handling
+
+* An unhandled exception within a coroutine propagates it to the caller of the `next` or `send` that triggered it
+
+`generator.throw(exc_type[, exc_value[, traceback]])`
+
+> Causes the yield express where the generator was paused to raise the exception given. If the exception is handled by the generator, flow advances to the next `yield`, and the value yielded because the value of the `generator.throw` call. If the exception is not handled by the generator, it propagates to the context of the caller.
+
+`generator.close()`
+
+> Causes the `yield` expression where the generator was paused to raise a `GeneratorExit` exception. No error is reported to the caller if the generator does not handle that exception or raises `StopIteration`. When receiving `GeneratorExit`, the generator must not yield a value, otherwise a `RuntimeError` is raised. If any other exception is raised by the generator, it propagates to the caller.
+
+* if it is necessary that some cleanup code is run no matter how the coroutine ends, you need to wrap the relevant part of the coroutine body in a `try/finally` block
+
+#### Returning a Value from a Coroutine
+
+* can `return` but you have to deal with `StopIteration` exceptions... but the `yield from` keyword introduced in [PEP 380](https://www.python.org/dev/peps/pep-0380/) fixes this
+
+* there are a lot of moving pieces but the basic idea is that you can have a caller which calls a generator that calls a subgenerator using `yield from`
+
+* `yield from` opens a bidirectional channel from the outermost caller to the innermost subgenerator so that values can be sent and yielded back and forth directly from them, and exceptions can be thrown all the way in without adding a lot of exception handling boilerplate code in the intermediate corouties
+
+* `yield from` assumes subgenerators are primed
+
+#### Coroutine Use Case
+
+* coroutines provide natural way of expression many algorithsm such as simulations, games, asynchronous I/O, event-driven programming, or co-operative multitasking
+
+#### `async` and `await` in Python 3.5
+
+* `yield from` syntax is clunky
+* [PEP 492](https://www.python.org/dev/peps/pep-0492/) -- Coroutines with async and await syntax, tries to fix this
+* [Raymond Hettinger - Keynote on Concurrency](https://www.youtube.com/watch?v=9zinZmE3Ogk)
+* [The State of Python Coroutines: Python 3.5 -- async and await](http://www.andy-pearce.com/blog/posts/2016/Jul/the-state-of-python-coroutines-python-35/)
+
+#### Further Reading
+
+* David Beazley has [tons of talks](http://www.dabeaz.com/talks.html) on generators and coroutines
+    * [Generator Tricks for Systems Programmers](http://www.dabeaz.com/generators/)
+    * [A Curious Course on Coroutines and Concurrency](http://www.dabeaz.com/coroutines/)
+    * [Generators: The Final Frontier](http://www.dabeaz.com/finalgenerator/)
+    * [Python Concurrency From the Ground Up:](http://pyvideo.org/pycon-us-2015/python-concurrency-from-the-ground-up-live.html)
+    * [Keynote: Topics of Interest (Asyncio)](https://www.youtube.com/watch?v=ZzfHjytDceU)
+    * [Fear and Awaiting in Async: A Savage Journey to the Heart of the Coroutine Dream](https://www.youtube.com/watch?v=E-1Y4kSsAFc)
+    * [The Other Async (Threads + Asyncio = Love)](https://www.youtube.com/watch?v=x1ndXuw7S0s)
+* [The State of Python Coroutine](http://www.andy-pearce.com/blog/posts/2016/Jun/the-state-of-python-coroutines-yield-from/)
+* [Greedy algorithms with coroutines](http://seriously.dontusethiscode.com/2013/05/01/greedy-coroutine.html)
+* [Iterables, Iterators and Generators](http://nbviewer.jupyter.org/github/wardi/iterables-iterators-generators/blob/master/Iterables,%20Iterators,%20Generators.ipynb)
