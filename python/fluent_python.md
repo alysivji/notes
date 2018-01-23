@@ -25,6 +25,7 @@ by Luciano Ramalho
     - [Chapter 14: Iterables, Iterators, and Generators](#chapter-14-iterables-iterators-and-generators)
     - [Chapter 15: Context Managers and `else` Blocks](#chapter-15-context-managers-and-else-blocks)
     - [Chapter 16: Coroutines](#chapter-16-coroutines)
+    - [Chapter 17: Concurrency with Futures](#chapter-17-concurrency-with-futures)
 
 <!-- /TOC -->
 
@@ -985,3 +986,49 @@ what makes python awesome kenote
 * [The State of Python Coroutine](http://www.andy-pearce.com/blog/posts/2016/Jun/the-state-of-python-coroutines-yield-from/)
 * [Greedy algorithms with coroutines](http://seriously.dontusethiscode.com/2013/05/01/greedy-coroutine.html)
 * [Iterables, Iterators and Generators](http://nbviewer.jupyter.org/github/wardi/iterables-iterators-generators/blob/master/Iterables,%20Iterators,%20Generators.ipynb)
+
+### Chapter 17: Concurrency with Futures
+
+[PEP 3148 -- futures - execute computations asynchronously](https://www.python.org/dev/peps/pep-3148/)
+
+> Both processes and threads are independent sequences of execution. The typical difference is that threads (of the same process) run in a shared memory space, while processes run in separate memory spaces.
+(via [StackOverflow](https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread))
+
+* **futures** are objects representing the asynchronous execution of an operation
+    * represent deferred computation that may or may not have completed
+    * encapsulate pending operations so that they can be put in queues, their state of completion can be queried, and their results (or exceptions) can be retrieved when available
+    * this package treats threads, processes, and queues as infrastructure not something we have to deal with directly
+
+* to handle network I/O efficiently, you need concurrency
+    * it involves high latency so instead of wasting CPU cycles waiting, we can do something else until a response comes back from the network
+    * [Threads, processes and concurrency in Python: some thoughts](http://www.artima.com/weblogs/viewpost.jsp?thread=299551)
+
+* every blocking I/O call in the standard library releases the GIL!
+    * this makes Python threads perfect for I/O bound systems
+
+* the main features of the `concurrent.futures` package are teh `ThreadPoolExecutor` and `ProcessPoolExecutor` classes which implement an interface that allows you to submit callables for execution in different threads or processes, respectively. The classes manage an internal pool of worker threads or process and a queue of tasks to be executed
+
+* Write concurrent code by refactoring the body of a sequential `for` loop into a function to be called concurrently
+
+|`concurrent.futures.Future`|`asyncio.Future`|
+|-|-|
+|nonblocking `.done()`|nonblocking `.done()`|
+|`.add_done_callback()`|`.add_done_callback()`|
+|`.result()` blocks caller's thread until result is ready; can accept timeout|`.result()` doesn't support timeout; need to use `yield from` / `await`|
+|`.as_completed(futures_iterable)` results iterator that yields futures as they are done|-|
+
+* `Executor.map` function returns results in the exact same order as the calls are started
+
+* if we want results as they are ready, we need to use the `Executor.submit` method and the `futures.as_completed` function
+
+#### Threading and Multiprocessing Alternatives
+
+* futures are a higher level abstraction
+* for lower level wonks, we can dig into [`threading`](https://docs.python.org/3/library/threading.html) and [`multiprocessing`](https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing) modules in Python's Standard Libray
+
+* [PEP 371](https://www.python.org/dev/peps/pep-0371/) -- Addition of the multiprocessing package to the standard library
+
+#### Futher Reading
+
+* [The Future is Soon](http://pyvideo.org/pycon-au-2010/pyconau-2010--the-future-is-soon.html)
+* Distributed task queues: celery!
