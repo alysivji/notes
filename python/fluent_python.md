@@ -26,6 +26,9 @@ by Luciano Ramalho
     - [Chapter 15: Context Managers and `else` Blocks](#chapter-15-context-managers-and-else-blocks)
     - [Chapter 16: Coroutines](#chapter-16-coroutines)
     - [Chapter 17: Concurrency with Futures](#chapter-17-concurrency-with-futures)
+    - [Chapter 18: Concurrency with `asyncio`](#chapter-18-concurrency-with-asyncio)
+- [Part 4: Metaprogramming](#part-4-metaprogramming)
+    - [Chapter 19: Dynamic Attributes and Properties](#chapter-19-dynamic-attributes-and-properties)
 
 <!-- /TOC -->
 
@@ -989,10 +992,11 @@ what makes python awesome kenote
 
 ### Chapter 17: Concurrency with Futures
 
-[PEP 3148 -- futures - execute computations asynchronously](https://www.python.org/dev/peps/pep-3148/)
-
 > Both processes and threads are independent sequences of execution. The typical difference is that threads (of the same process) run in a shared memory space, while processes run in separate memory spaces.
+
 (via [StackOverflow](https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread))
+
+[PEP 3148 -- futures - execute computations asynchronously](https://www.python.org/dev/peps/pep-3148/)
 
 * **futures** are objects representing the asynchronous execution of an operation
     * represent deferred computation that may or may not have completed
@@ -1032,3 +1036,77 @@ what makes python awesome kenote
 
 * [The Future is Soon](http://pyvideo.org/pycon-au-2010/pyconau-2010--the-future-is-soon.html)
 * Distributed task queues: celery!
+
+### Chapter 18: Concurrency with `asyncio`
+
+[Docs](https://docs.python.org/3/library/asyncio.html)
+
+> Concurrency is about dealing with lots of things at once.
+>
+> Parallelism is about doing lots of things at once.
+> - [Rob Pike _Concurrency Is Not Parallelism_](https://www.youtube.com/watch?v=cN_DpYBzKso)
+
+* There are two ways to prevent blocking calls from halting the progress of the entire application:
+    * Run each blocking operation in a separate thread
+    * Turn every blocking operation into a nonblocking asynchronous call
+
+#### `asyncio`
+
+* package that implements concurrency with coroutines driven by an event loop
+* uses a stricter definition of *coroutine*
+    * needs to use `yield from` not `yield`
+    * driven by caller invoking it thru `yield from` or by passing the coroutine to one of the `asyncio` functions
+    * add `@asyncio.coroutine` decorate to coroutine
+        * not required, but makes it stand out and improves debugging
+
+* with coroutines, everything is protected against interruption by default, you must explicitly yield to let the rest of the program run
+    * can only cancel a coroutine when it's suspended at a `yield` point
+
+* Advantage of coroutines: functions can be suspended and resumed
+
+* blocking operations are implemented as coroutines, code delegates to them via `yield from` so they can run asynchronously
+* always need to use asychronous version of functions because they will ceed control back to the event loop. When the coroutine is done, it returns a result to the suspended coroutine, resuming it
+
+> **TIP**: quint and pretend the `yield from` keywords are not there. Code will read like sequential code
+
+#### [`asyncio.Task`](https://docs.python.org/3/library/asyncio-task.html#asyncio.Task)
+
+* like a [green thread](https://en.wikipedia.org/wiki/Green_threads) in libraries that implement cooperative multitasking
+* don't instantiate `Task` objects yourself, you get them by passing a coroutine to `asyncio.aync(...)` or `loop.create_task(...)`
+* when you get a `Task` object, it is already scheduled to run
+* `Task.cancel()` instance method raises a `CancelledError` inside the coroutine
+    * can deal with this by catching exception in `yield` where its suspended
+
+#### [`asyncio.Future`](https://docs.python.org/3/library/asyncio-task.html#asyncio.Future)
+
+* Using `yield from` with a future automaticlly takes care of waiting for it to finish
+    * `yield from` is used to give control back to the event loop
+    * `result = yield from my_future`
+
+#### Yielding from Futures, Tasks, and Coroutines
+
+* in order to execute, a coroutine must be scheduled and then it's wrapped in an `asyncio.Task`. Two main ways of obtaining a `Task`:
+    * [`asyncio.ensure_future()`](https://docs.python.org/3/library/asyncio-task.html#asyncio.ensure_future)
+    * [`BaseEventLoop.create_task(coro)`](https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.AbstractEventLoop.create_task)
+
+* several `asyncio` functions accept coroutines and wrap them in `asyncio.Task` objects automatically, using `asyncio.async`
+
+* can pass an iterable of coroutines to [`asyncio.wait`](https://docs.python.org/3/library/asyncio-task.html#asyncio.wait), which when driven by `loop.run_until_complete`, would return results when **all** are complete
+
+* __semaphore__ is a variable or abstract data type used to control access to a common resource by multiple processes in a concurrent system such as a multiprogramming operating system (source: [wikipedia](https://en.wikipedia.org/wiki/Semaphore_(programming)))
+    * ['asyncio.Semaphore`](https://docs.python.org/3/library/asyncio-sync.html#asyncio.Semaphore)
+    * used to control how many concurrent "downloads" occur at any given time
+
+* [`asyncio.as_completed(fs, timeout=None)`](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.as_completed) takes in a list of futures and returns an iterator of futures as they are completed
+
+* can use [`EventLoop.run_in_executor`](https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.AbstractEventLoop.run_in_executor) to avoid blocking the event loop for I/O
+
+* coroutines are a lot cleaner than callbacks
+* coroutines only do things when driven
+    * drive coroutine using either `yield from` or pass it to `asyncio`
+
+---
+
+## Part 4: Metaprogramming
+
+### Chapter 19: Dynamic Attributes and Properties
