@@ -29,6 +29,7 @@ by Luciano Ramalho
     - [Chapter 18: Concurrency with `asyncio`](#chapter-18-concurrency-with-asyncio)
 - [Part 4: Metaprogramming](#part-4-metaprogramming)
     - [Chapter 19: Dynamic Attributes and Properties](#chapter-19-dynamic-attributes-and-properties)
+- [Todo](#todo)
 
 <!-- /TOC -->
 
@@ -263,6 +264,8 @@ target = decorate(target)
 * Decorators with parameters requires use to use decorator factories that takes arguments and returns a decorator that is then applied to the function we are decorating
     * every problem in computer since can be solved by another layer of abstraction
 
+#### Decocrator with Arguments
+
 ```python
 def decorator_factory(param1='a', param2=True):
     def decorator(func):  # the decorator we are returning
@@ -271,6 +274,20 @@ def decorator_factory(param1='a', param2=True):
             return do_something_else(result)
         return new_func
     return decorator
+```
+
+[Example from StackOverflow](https://stackoverflow.com/questions/5929107/decorators-with-parameters):
+
+```python
+def decorator(argument):
+    def real_decorator(function):
+        def wrapper(*args, **kwargs):
+            funny_stuff()
+            something_with_argument(argument)
+            function(*args, **kwargs)
+            more_funny_stuff()
+        return wrapper
+    return real_decorator
 ```
 
 ---
@@ -1110,3 +1127,17 @@ what makes python awesome kenote
 ## Part 4: Metaprogramming
 
 ### Chapter 19: Dynamic Attributes and Properties
+
+
+---
+
+## Todo
+
+questions
+
+* combining thread and process. figure out use cases for both and figure out how to do what you want
+
+3 approaches.. sequential, threaded and asynchronous
+ have an example for the blog... count to 10
+
+ work with asyncio. pep
