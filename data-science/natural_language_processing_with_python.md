@@ -141,3 +141,25 @@ lancaster = nltk.LancasterStemmer()
 * Texts found on the web may contain unwanted material (such as headers, footers, markup), that need to be removed before we do any linguistic processing.
 * Tokenization is the segmentation of a text into basic units — or tokens — such as words and punctuation. Tokenization based on whitespace is inadequate for many applications because it bundles punctuation together with words. NLTK provides an off-the-shelf tokenizer nltk.word_tokenize().
 * Lemmatization is a process that maps the various forms of a word (such as appeared, appears) to the canonical or citation form of the word, also known as the lexeme or lemma (e.g. appear).
+
+## Chapter 4: Writing Structured Programs
+
+> To copy the items from a list foo to a new list bar, you can write `bar = foo[:]`. This copies the object references inside the list. To copy a structure without copying any object references, use `copy.deepcopy()`.
+
+* `is` verfies object identity
+* `==` verfies object value
+
+> In the condition part of an `if` statement, a nonempty string or list is evaluated as true, while an empty string or list evaluates as false.
+
+> lists are **mutable**, while tuples are **immutable**. In other words, lists can be modified, while tuples cannot.
+
+* _procedural_ - dictating the machine operations step by step
+* _declarative_ - describe a result and get it via a black box
+(via [StackOverflow](https://stackoverflow.com/questions/1619834/difference-between-declarative-and-procedural-programming))
+
+* __LGB rule__ of name resolution
+    * local
+    * global
+    * built-in
+
+Note: A function can enable access to a global variable using the global declaration.
