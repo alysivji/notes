@@ -29,6 +29,7 @@ by Luciano Ramalho
     - [Chapter 18: Concurrency with `asyncio`](#chapter-18-concurrency-with-asyncio)
 - [Part 4: Metaprogramming](#part-4-metaprogramming)
     - [Chapter 19: Dynamic Attributes and Properties](#chapter-19-dynamic-attributes-and-properties)
+    - [Chapter 20: Attribute Descriptors](#chapter-20-attribute-descriptors)
 - [Todo](#todo)
 
 <!-- /TOC -->
@@ -339,6 +340,7 @@ def from_date_string(cls, *args, **kwargs):
 
 * `@staticmethod` receives no special first argument and is keep functions that are related to the class within the class
 * [further reading](https://julien.danjou.info/blog/2013/guide-python-static-class-abstract-methods) on static and class methods
+* functions with static effects
 
 * `__format__(formatspec)` can take in [format specification](https://docs.python.org/3/library/string.html#formatspec)
     * we can create custom format specifications, but make sure to not overlap current syntax or we might confuse users
@@ -1128,6 +1130,74 @@ what makes python awesome kenote
 
 ### Chapter 19: Dynamic Attributes and Properties
 
+* Data attributes and methods are collectively known as **attributes**; method is just a callable attribute
+* `__getattr__` and `__setattr__` are used to evaluate attribute access using dot notation
+    * can use `__getattr__` to compute values on the fly whenever somebody tries to call a nonexistent attribute
+    * `__getattr__` is only called when there's no attribute with that name
+
+* Dynamic attributes can make objects that have great APIs
+    * check invalid attribute name problem with [`keyword` module](https://docs.python.org/3/library/keyword.html)
+    * `s.isidentifier()` tells you if `s` is a valid Python identifier
+
+> Custom exceptions are usually marker classes with no body. A docstring explaining the usage of the exception is better than a mere pass statement
+
+```python
+class MissingDatabaseError(RuntimeError):
+    """Raised when a database is required but was not set."""
+```
+
+#### `__new__` Method
+
+* `__init__` does not construct an instance, it just initializes it
+* `__new__` is what actually creates the instance before it is initialized
+    * instance is the `self` argument in `__init__`
+    * `__new__` is a `@classmethod` so its first argument is `cls`
+
+#### Properties
+
+* properties are class attributes designed to manage instance attributes
+* properties are frequently used to enforce business rules by changing a public attribute into an attributed managed by a getter and a setter without affecting client code
+
+* we can use `@property.setter` to do validation on input
+
+* `property` built-in is actually a class, signature is as follows
+
+```python
+property(fget=None, fset=None, fdel=None, doc=None)
+```
+
+* if we are using decorators, the function with the `@property` doctsring will be used
+
+* `obj.attr` does not search for `attr` starting with `obj`, search actually starts at `obj.__class__` and if it is not found, then Python looks in `obj` instance
+
+#### Essential Attributes, Functions, and Special Methods for Attribute Handling
+
+|Attribute|Description|
+|---|---|
+|`__class__`|Reference to the object's class. Python looks for special methods such as `__getattr__` only in the object's class|
+|`__dict__`|Mapping that stores the writeable attributes of ana object or class|
+|`__slots__`|Used to limit the number of attributes instances have|
+
+|Functions|Description|
+|---|---|
+|`dir([object])`|Lists most attributes of the object|
+|`getattr(object, name[, default])`|Gets attribute identified by the name string from the object, otherwise returns `default` or raises `AttributeError`|
+|`hasattr(object, name)`|Does named attribute exist in object|
+|`setattr(object, name, value)`|Assigns the value to the named attribute of the object|
+|`vars([object])`|Returns `__dict__` of of object|
+
+* Attribute access using the dot notation or built-ins trigger the appropriate special method below
+* Will be retrieved on the class itself vs the instance, i.e. `obj.attr` and `getattr(obj, 'attr', 42)` will trigger `Class.__getattribute__(obj, 'attr')`
+
+|Special Methods|Descriptions|
+|---|---|
+|`__delattr__(self, name)`|Called when there is an attempt to delete an attribute using `del`|
+|`__dir__(self)`|Called when `dir` is invoked|
+|`__getattr__(self, name)`|Called when an attempt to retrieved the named attribute fails after the `obj`, `Class`, and superclasses are searched|
+|`__getattribute__(self, name)`|Always called when there is an attempt to retrieve the named attribute. If `AttributeError` is raised, then it will go onto `__getattr__`|
+|`__setattr__(self, name, value)`|Called when there is an attempt to set the named attribute|
+
+### Chapter 20: Attribute Descriptors
 
 ---
 
@@ -1141,3 +1211,5 @@ questions
  have an example for the blog... count to 10
 
  work with asyncio. pep
+
+* AttributeDict data structure
