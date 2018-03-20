@@ -30,6 +30,7 @@ by Luciano Ramalho
 - [Part 4: Metaprogramming](#part-4-metaprogramming)
     - [Chapter 19: Dynamic Attributes and Properties](#chapter-19-dynamic-attributes-and-properties)
     - [Chapter 20: Attribute Descriptors](#chapter-20-attribute-descriptors)
+    - [Chapter 21: Class Metaprogramming](#chapter-21-class-metaprogramming)
 - [Todo](#todo)
 
 <!-- /TOC -->
@@ -1160,7 +1161,7 @@ class MissingDatabaseError(RuntimeError):
 
 * we can use `@property.setter` to do validation on input
 
-* `property` built-in is actually a class, signature is as follows
+* `property` built-in function is actually a class, signature is as follows
 
 ```python
 property(fget=None, fset=None, fdel=None, doc=None)
@@ -1199,6 +1200,145 @@ property(fget=None, fset=None, fdel=None, doc=None)
 
 ### Chapter 20: Attribute Descriptors
 
+* **Descriptors** are a way of reusing the same access logic in multiple attribues
+* Descriptor protocol implements one of the `__get__`, `__set__`, and `__delete__` method
+* property factory is the functional programming way of adding getters and setters, descriptors is the OOP way
+
+|Item|Description|
+|---|---|
+|Descriptor class|Class implementing the descriptor protocol
+|Managed class|Class where the descriptor instance is declared as a class attribute
+|Descriptor instance|Each instance of the descriptor class, declared as a class attribute of the managed class
+|Managed instance|Single instance of the managed class
+|Storage attribute|Attribute of the managed instance that will hold the value of the managed attribute for that particular instance
+|Managed attribute|Public attribute in the managed class that will be handled by a descriptor instance, with values stored in the storage attribute
+
+* Descriptor instance and storage attribute provide infrastructure of managed attribute
+
+```python
+def __set__(self, instance, value):
+    if value > 0:
+        instance.__dict__[self.storage_name] = value
+    else:
+        raise ValueError('Value must be > 0')
+```
+
+* `self` revers to descriptor instance
+* `instance` is the managed instance
+def __get__(self, instance, owner):
+
+* descriptors managing instance attributes should store values in the managed instances
+
+* it is good pratice to make `__get__` return the descriptor instance when the managed attribute is accessed thru the class
+
+```python
+    if instance is None:
+        return self
+    else:
+        return getattr(instance, self.storage_name)
+```
+
+* we can subclass descriptors and write less code, i.e. different kinds of validations on our inputs.
+* Descriptors not so useful for regular folks, but more for framework creators
+
+#### Overriding Versus Nonoverriding Descriptors
+
+* Reading an attribute through an instance normally returns the attribute defined in the instance, but if there is no such attribute in the instance, a class attribute will be retrieved. On the other hand, assigning to an attribute in an instance normally creates the attribute in the instance, without affecting the class at all.
+
+##### Overriding Descriptor
+
+If the descriptor implements `__set__` because it will override attempts to assign to instance attributes, if no setter function will raise `AttributeError`
+
+##### Nonoverriding Descriptor
+
+Instance attribute shadows the descriptor
+
+#### Methods are Descriptors
+
+* all user-defined functions have a `__get__`, but no `__set__`
+    * nonoverriding descriptor
+
+* `__get__` returns a bound method, a callable that wraps the function and binds the manged instance to the first argument of the function
+
+#### Descriptor Tips
+
+* User property to keep it simple
+* Read-only descriptors require `__set__`
+* Validation descriptors can work with `__set__` only
+* Caching can be done efficiently with `__get__` only
+* Nonspecial methods can be shadowed by instance attributes
+
+#### Further Reading
+
+* [Python Data Model](https://docs.python.org/3/reference/datamodel.html)
+* [Descriptors How-To](https://docs.python.org/3/howto/descriptor.html)
+* [Alex Martelli - Python Data Model](https://www.youtube.com/watch?v=VOzvpHoYQoo)
+* [`Python Descriptors` Google results](https://www.google.com/search?q=descriptor+howto&oq=descriptor+howto)
+* [PEP 487 -- Simplified Customization of Class Creation](https://www.python.org/dev/peps/pep-0487/). Python 3.6 has a new [descriptor protocol](https://docs.python.org/3/reference/datamodel.html#object.__set_name__)
+* [Ned Batchelder Descriptor Links](https://nedbatchelder.com/blog/201306/explaining_descriptors.html)
+
+### Chapter 21: Class Metaprogramming
+
+* art of creating or customizing classes at runtime
+
+#### Class Factory
+
+* `type` behaves like a class when it is invoked with three arguments
+
+```python
+MyClass = type('MyClass', (MySuperClass, MyMixin),
+               {'x': 42, 'x2': lambda self: self.x * 2})
+
+# is the same ass
+
+class MyClass(MySuperClass, MyMixin):
+    x = 42
+
+    def x2(self):
+        return self.x * 2
+```
+
+* good practice to avoid using `exec` and `eval` for metaprogramming in Python
+
+#### Class Decorator
+
+* similar to a function decorator, function that gets a class object and returns the same class or a modified one
+* A significant drawback of class decorators is that they act only on the class where they are directly applied. This means subclasses of the decorated class may or may not inherit the changes made by the decorator, depending on what those changes are
+
+#### Import Time versus Runtime
+
+> The interpreter executes a `def` statement on the top level of the module when the module is imported. The interpreter compiles the function body and binds the function object to its global name, but it does not execute the body of the function, obviously. In the usual case, this means that the interpreter defines top-level functions at import time, but executes their bodies only when, and if, the functions are invoked at runtime.
+>
+> For classes, the story is different: at import time, the interpreter executes the body of every class, even the body of classes nested in other classes. Execution of a class body means that the attributes and methods of the class are defined, and then the class object itself is built.
+
+#### Metaclasses
+
+* A class that builds classes
+* all classes are of instance `type` but only metaclasses are subclassed from `type`
+* metaclasses customize its instances by implementing `__init__`
+
+```python
+class EntityMeta(type):
+
+    def __init__(cls, name, bases, attr_dict):
+        pass
+```
+
+* `name`, `bases`, `attr_dict` are the same arguments passed to `type` to build a class
+
+#### Metaclasses in the Real World
+
+* Attributed validation
+* Applying decorators to many methods at once
+* Object serialization or data conversion
+* Object-relational mapping
+* Object-based persistency
+* Dynamic translation of class structures from other languages
+
+#### Further Reading
+
+* [David Beazley - Metaprogramming](https://www.youtube.com/watch?v=sPiWg5jSoZI)
+
 ---
 
 ## Todo
@@ -1211,5 +1351,3 @@ questions
  have an example for the blog... count to 10
 
  work with asyncio. pep
-
-* AttributeDict data structure
