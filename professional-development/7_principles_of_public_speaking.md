@@ -39,7 +39,7 @@ By Richard Zeoli
 
 > If you can see it, you can speak it
 
-* We might b porn with a natural potential for a talent, but it takes a lot of training to bring this potential front and center
+* We might be born with a natural potential for a talent, but it takes a lot of training to bring this potential front and center
 * Practice in your mind, visualize yourself succeeding and you will
 * If you picture with intensity the scenarios you want,  your mind has a funny way of making them happen
 
