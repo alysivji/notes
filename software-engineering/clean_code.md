@@ -8,6 +8,8 @@ By Robert C. Martin (aka "Uncle Bob")
 - [Chapter 1: Clean Code](#chapter-1-clean-code)
     - [Boy Scout Rule](#boy-scout-rule)
 - [Chapter 2: Meaningful Names](#chapter-2-meaningful-names)
+- [Chapter 3: Functions](#chapter-3-functions)
+    - [Function Goals](#function-goals)
 
 <!-- /TOC -->
 
@@ -65,3 +67,31 @@ Leave the campground cleaner than you found it
     * class names should never be verbs
 * Method names
     * method should have verb or verb phrase names like `postPayment`, `deletePage`, or `save`
+
+## Chapter 3: Functions
+
+> Functions are the first line of organization in any program
+
+> * Functions should do one thing. They should do it well. They should do it only.
+
+### Function Goals
+
+* small
+* should not be large enough to hold nested structures
+* Statements within our function should be at same level of abstraction
+* want code to have a top down narrative
+* avoid switch statements
+    * if you have to use switch, do it somewhere and abstract it away with polymorphic classes
+* use descriptive names, be consistent
+* don't use too many function arguments
+* flag arguments are ugly (eh, debatable. I like sane defaults)
+* good names can go a long way towards explaining the intent of a function and order and intent of arguments
+* have no side effects
+* avoid temporal coupling
+* if your functions must change the state of something, have it change the state of its owning object
+* should either do something or answer something, but not both
+* prefer exceptions to returning error codes
+    * new exceptions are derivatives of the exception class
+* extract try/catch blocks into functions of their own
+* duplication is the root of all evil
+* write your code, write tests, clean your code with tests in place
