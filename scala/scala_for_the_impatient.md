@@ -1,6 +1,6 @@
-# Fluent Python
+# Scala for the Impatient (2nd Edition)
 
-by Luciano Ramalho
+by Cay S. Horstmann
 
 <!-- TOC -->
 
