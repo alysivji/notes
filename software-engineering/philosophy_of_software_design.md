@@ -23,6 +23,16 @@ by John Ousterhout
     - [Temporal Decomposition](#temporal-decomposition)
     - [Other Topics](#other-topics)
 - [Chapter 6: General-Purpose Modules are Deeper](#chapter-6-general-purpose-modules-are-deeper)
+    - [Questions to Ask](#questions-to-ask)
+- [Chapter 7: Different Layer, Different Abstraction](#chapter-7-different-layer-different-abstraction)
+    - [Pass-through Methods](#pass-through-methods)
+    - [When is interface duplication OK?](#when-is-interface-duplication-ok)
+    - [Decorators](#decorators)
+    - [Interface versus Implementation](#interface-versus-implementation)
+    - [Pass-through Variables](#pass-through-variables)
+- [Chapter 8: Pull Complexity Downwards](#chapter-8-pull-complexity-downwards)
+    - [Configuration Parameters](#configuration-parameters)
+    - [Rule of Thumb](#rule-of-thumb)
 
 <!-- /TOC -->
 
@@ -138,7 +148,7 @@ Eliminating Complexity
 * goal of modular design is to minimize the dependencies between modules
 * module has two parts:
     1. **interface** consists of everything that a developer working in a different module must know in order to use the given module
-    2. **implementation** consists of code that carries out the promises made by the interface
+    1. **implementation** consists of code that carries out the promises made by the interface
 * best modules are those whose interfaces are much simplier than their implementation
     * simple interface minimizes complexity that a module imposes on the rest of the system
     * modifying a module without changing its interface means no other module is affected by the change
@@ -180,7 +190,7 @@ Eliminating Complexity
 
 * information hiding reduces complexity in two ways:
     1. Simplier interface to a module reduces cognitive load
-    2. Easier to evolve system as design change related to information will only affect one module
+    1. Easier to evolve system as design change related to information will only affect one module
 * always think about the information hidden in a module
 * `private` declarations are not hiding anything
 * partial information hiding can also have value
@@ -213,3 +223,93 @@ Eliminating Complexity
 ---
 
 ## Chapter 6: General-Purpose Modules are Deeper
+
+* generalize-purpose solution might include facilities that are never actually needed
+* special-purpose approach is consistent with an incremental approach to software development
+* general-purpose approach results in simpler and deeper interfaces than special-purpose approach
+* general-purpose interfaces reduce cognitive load
+
+### Questions to Ask
+
+1. What is the simplierst interface that will cover all my current needs?
+    * reducing number of methods in an API without reducing its overall capabilities makes it more general. Make sure you are not increasing number of method arguments
+1. In how many situations will this method be used?
+    * can you replace several special-purpose methods with a single general-purpose method
+1. Is this API easy to use for my current needs?
+    * if you have to write a lot of additional code to use a class for your current purpose, it probably doesn't have the right functionality
+
+---
+
+## Chapter 7: Different Layer, Different Abstraction
+
+> Software systems are composed in layers, where higher layers use the facilities provided by lower layers. In a well-designed system, each layer provides a different abstraction from the layers above and below it. If adjacent layers have similar abstractions, we signals that we could have a problem with class decomposition
+
+### Pass-through Methods
+
+* method that does little except invoke another method, whose signature is similar or identical to that of the calling method
+* make classes shallower: increase interface complexity, but do not increase total functionality
+* create dependencies between classes
+* indicate confusion over the division of responsiblities
+* How to eliminate pass-thru methods:
+    1. Expose lower level class directly to the callers of the higher level class
+    1. Remove all responsibility for feature from higher level class
+    1. Redistribute functionality between classes
+    1. If classes can't be disentangled, merge them
+
+### When is interface duplication OK?
+
+* each new method should contribute significant functionality
+* dispatcher method that uses arguments to figure out which method to invoke
+* when several methods provide different implemtnations of the same interface, it reduces cognitive load
+
+### Decorators
+
+> take an existing object and extend its functionality by providing an API similar to the underlying object
+
+* create a special-purpose extension of a class from a more generic core
+* decorators classes tend to be shallow
+* before creating a decorator, ask:
+    * Can we add the new functionality directly to the underlying class?
+    * If the new functionality is specialized, would it make sense to merge it with the use case?
+    * Could the functionality be merged with an existing decorator?
+    * Does new functionality need to wrap existing functionality?
+
+### Interface versus Implementation
+
+> The interface of a class should normally be different from its implementation: the representations used internally should be different from the abstractions that appear in the interface
+
+### Pass-through Variables
+
+* variable that is passed down thru a long chain of methods
+* adds complexity because all intermediate methods must be aware of existence
+* How to eliminate pass-through variables:
+    1. Is there an object shared between the topmost and bottommost methods?
+    1. Store information in a global variable, but has its own problems
+    1. Context object that stores application's global state
+        * allows multiple instances of the system to coexist in a single process, each with its own context
+        * context will be needed many places so try to save it in system's major objects (include in constructors)
+        * makes it easy to identify and manage global state of system
+        * simplifies testing
+        * make context variable immutable to make threadsafe
+
+---
+
+## Chapter 8: Pull Complexity Downwards
+
+> More important for a module to have a simple interface than a simple implementation
+
+* as a module developer, you should strive to make life as easy as possible for the users of your module, even that means extra work fo ryou
+* if you solve the easy problems and punt the hard ones to somebody else, you amplify the complexity so that more people have to deal with the problem rather than just you
+
+### Configuration Parameters
+
+* rather than determining a particular behavior internally, a class can pull in a few parameters that control its behavior
+* ask yourself if users are better able to find a value than what you can determine by yourself
+    * if you still need a config value, try to infer sane a sane default
+
+### Rule of Thumb
+
+* Pull down complexity if it:
+    1. is closely related to the class' existing functionality
+    1. will result in many simplifications elsewhere in the applciation
+    1. simplifies the class' interface
