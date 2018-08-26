@@ -11,6 +11,13 @@ by John Ousterhout
     - [Causes of Complexity](#causes-of-complexity)
     - [Complexity is Incremental](#complexity-is-incremental)
 - [Chapter 3: Working Code Isn't Enough](#chapter-3-working-code-isnt-enough)
+- [Chapter 4: Modules Should Be Deep](#chapter-4-modules-should-be-deep)
+    - [Modular Design](#modular-design)
+    - [Interface](#interface)
+    - [Abstractions](#abstractions)
+    - [Deep Modules](#deep-modules)
+    - [Classitis](#classitis)
+- [Chapter 5: Information Hiding (and Leakage)](#chapter-5-information-hiding-and-leakage)
 
 <!-- /TOC -->
 
@@ -99,3 +106,66 @@ Eliminating Complexity
 ---
 
 ## Chapter 3: Working Code Isn't Enough
+
+> Many organizations encourage a tactical mindset, focused on getting features working as quickly as possible. However if you want a good design, you must take a more strategic approach when you invest time to produce clean designs and fix problems
+
+* tactical programming is short-sighted as you are rushing to get work done
+* most import thing is the long-term structure of the system
+* strategic programming requires an investment mindset
+    * invest time to improve the design of the system
+* it's worth taking a little extra time to find a simple design for each new class; rather than implementing the first idea that comes to mind, try a couple of alternative designs and pick the cleanest one
+* make lots of small investments on a continual basis, adding up to about 10-20% of your total development time
+* best way to lower development costs is to hire great engineers
+    * they are much more productive than medicore engineers
+* if your code base is a wreck, word will get out and this will make it harder to recruit
+* it's a lot more fun to work in a company that cares about software design and has a clean code base
+
+---
+
+## Chapter 4: Modules Should Be Deep
+
+> Design systems so that developers only need to face a small fraction of the overall compelxity at any given time
+
+### Modular Design
+
+* decomposing a software system into a collection of modules that are relatively independent
+* modules must work together by calling each other's functions or methods, which results in modules having to know something about each other
+* goal of modular design is to minimize the dependencies between modules
+
+* module has two parts:
+    * **interface** consists of everything that a developer working in a different module must know in order to use the given module
+    * **implementation** consists of code that carries out the promises made by the interface
+* best modules are those whose interfaces are much simplier than their implementation
+    * simple interface minimizes complexity that a module imposes on the rest of the system
+    * modifying a module without changing its interface means no other module is affected by the change
+
+### Interface
+
+* consists of two kinds of imformation: formal and informal
+* formal parts of an interface are specified explicitly in the code
+* informal parts are not specified in a way that can be understood or enforced by the programming language; these can only be described in the comments
+* clearly specified interfaces indicate exactly what developers need to know in order to use the associated module
+
+### Abstractions
+
+* simplified view of an entity, which omits important details
+* in modular programming, each module provides an abstraction in form of its interface
+* can go wrong in two ways:
+    * include details that are not really important, making the abstraction more complicated than necessary
+    * omit important details which results in obscurity
+
+### Deep Modules
+
+> The best modules are deep: they have a lot of functionality behind a smiple interface
+
+* think about depth as cost vs benefit; cost is interface, benefit is functionality
+
+### Classitis
+
+* conventional wisdom says that classes should be small, not deep
+* results in classes that are individually simple, but produce tremendous complexity from the accumulated interfaces
+* if an interface has many features, most developers will only be aware of a few of them
+
+---
+
+## Chapter 5: Information Hiding (and Leakage)
