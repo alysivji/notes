@@ -136,10 +136,9 @@ Eliminating Complexity
 * decomposing a software system into a collection of modules that are relatively independent
 * modules must work together by calling each other's functions or methods, which results in modules having to know something about each other
 * goal of modular design is to minimize the dependencies between modules
-
 * module has two parts:
-    * **interface** consists of everything that a developer working in a different module must know in order to use the given module
-    * **implementation** consists of code that carries out the promises made by the interface
+    1. **interface** consists of everything that a developer working in a different module must know in order to use the given module
+    2. **implementation** consists of code that carries out the promises made by the interface
 * best modules are those whose interfaces are much simplier than their implementation
     * simple interface minimizes complexity that a module imposes on the rest of the system
     * modifying a module without changing its interface means no other module is affected by the change
@@ -194,7 +193,6 @@ Eliminating Complexity
 * creates dependencies where changes require touching many different modules
 * information can be leaked even if it's not in the interface
     * two functions expect the same file format
-
 * if classes are small and closely tied to leak information, merge into single class
 * pull shared information out of all affected classes and encapsulate in a new class
 
