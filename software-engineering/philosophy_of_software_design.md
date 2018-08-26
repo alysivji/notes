@@ -18,6 +18,11 @@ by John Ousterhout
     - [Deep Modules](#deep-modules)
     - [Classitis](#classitis)
 - [Chapter 5: Information Hiding (and Leakage)](#chapter-5-information-hiding-and-leakage)
+    - [Information Hiding](#information-hiding)
+    - [Information Leakage](#information-leakage)
+    - [Temporal Decomposition](#temporal-decomposition)
+    - [Other Topics](#other-topics)
+- [Chapter 6: General-Purpose Modules are Deeper](#chapter-6-general-purpose-modules-are-deeper)
 
 <!-- /TOC -->
 
@@ -169,3 +174,44 @@ Eliminating Complexity
 ---
 
 ## Chapter 5: Information Hiding (and Leakage)
+
+> Technique for achieving deep modules where the implementation is hidden and not exposed in the interface
+
+### Information Hiding
+
+* information hiding reduces complexity in two ways:
+    1. Simplier interface to a module reduces cognitive load
+    2. Easier to evolve system as design change related to information will only affect one module
+* always think about the information hidden in a module
+* `private` declarations are not hiding anything
+* partial information hiding can also have value
+
+### Information Leakage
+
+> Same knowledge used in multiple places
+
+* occurs when a design decision is reflected in multiple modules
+* creates dependencies where changes require touching many different modules
+* information can be leaked even if it's not in the interface
+    * two functions expect the same file format
+
+* if classes are small and closely tied to leak information, merge into single class
+* pull shared information out of all affected classes and encapsulate in a new class
+
+### Temporal Decomposition
+
+* structure of system corresponds to the time order in which operations will occur
+* when designing modules focus on the knowledge that's needed to perform each task, not the order in which tasks occur
+
+### Other Topics
+
+* interfaces should be designed to make the common case as simple as possible
+    * best featuers are ones you get without even knowing they exist
+* design private methods within a class so that each method encapsulates some information or capability and hides it from the rest of the class
+* don't hiding information that is needed outside the module
+    * goal is to minimize the amount of information that is needed outside of a module
+    * recognize what is required and make sure it is exposed
+
+---
+
+## Chapter 6: General-Purpose Modules are Deeper
