@@ -33,6 +33,22 @@ by John Ousterhout
 - [Chapter 8: Pull Complexity Downwards](#chapter-8-pull-complexity-downwards)
     - [Configuration Parameters](#configuration-parameters)
     - [Rule of Thumb](#rule-of-thumb)
+- [Chapter 9: Better Together Or Better Apart?](#chapter-9-better-together-or-better-apart)
+    - [Bring Together: Simplify the Interface](#bring-together-simplify-the-interface)
+    - [Bring Together: Eliminate Duplication](#bring-together-eliminate-duplication)
+    - [Separate General-Purpose and Special-Purpose Code](#separate-general-purpose-and-special-purpose-code)
+    - [Splitting and Joining Methods](#splitting-and-joining-methods)
+- [Chapter 10: Define Errors Out of Existence](#chapter-10-define-errors-out-of-existence)
+    - [Why exceptions add complexity](#why-exceptions-add-complexity)
+    - [Too many exceptions](#too-many-exceptions)
+    - [Define errors out of existence](#define-errors-out-of-existence)
+    - [Mask Exceptions](#mask-exceptions)
+    - [Exception aggregation](#exception-aggregation)
+    - [Crash Application](#crash-application)
+    - [Design special cases out of existence](#design-special-cases-out-of-existence)
+    - [Taking it too far](#taking-it-too-far)
+- [Chapter 11: Design it Twice](#chapter-11-design-it-twice)
+    - [Ego](#ego)
 
 <!-- /TOC -->
 
@@ -313,3 +329,148 @@ Eliminating Complexity
     1. is closely related to the class' existing functionality
     1. will result in many simplifications elsewhere in the applciation
     1. simplifies the class' interface
+
+---
+
+## Chapter 9: Better Together Or Better Apart?
+
+> Given two pieces of functionality, should they be implemented together in the same place, or should their implemtnations be separated?
+
+* the goal is to reduce complexity of the system as a whole and improve its modularity
+* beware of dividing system into large number of smaller components
+    * more interfaces and every new interface adds complexity
+    * additional code to manage components
+    * separation between components might make it hard to be aware of existence
+    * code duplication
+* it is beneficial to bring together pieces of code that are closely related
+* indications that two pieces of code are closely related
+    * share information
+    * used together
+    * overlap conceptually (share higher-level category)
+    * hard to understand one piece of code without looking at other
+
+### Bring Together: Simplify the Interface
+
+* may be possible to define an interface for the new module that is simpler or easier to use than the origin interfaces.
+* may be possible to perform functions automatically so that users are not aware of the difference
+
+### Bring Together: Eliminate Duplication
+
+* reorganize code to eliminate reptition
+* this is effective if the repeated snippet is long and the replacement method has a simple signature
+* another way to eliminate duplication is to refactor so the snippet is only excited in one place (goto aren't always harmful)
+
+### Separate General-Purpose and Special-Purpose Code
+
+* if a module contains a mechanism that can be used for several different purposes than it should provide one general-purpose method and allow other modules to contain special-purpose code, as required
+* in general, lower layers of system tend to be more general-purpose and upper layers more special-purpose
+* separate by pulling special-purpose code upwards into higher layers, leaving the lower layers general-purpose
+
+### Splitting and Joining Methods
+
+> When designing methods, the most important goal is to provide clean and simple abstractions
+
+* length by itself is rarely a good reason for splitting up a method as we now have additional interfaces, which add complexity
+* shouldn't break up a method unless it makes the overall system simplier
+* if method had complex interactions within its blocks, it's even more important to keep them together
+* method should be deep with a clean and simple abstraction
+* Split a method if it results in a cleaner abstraction:
+    * factor out a subtask into a separate method which is invoked by the parent method. Revert if you are jumping back and forth a lot
+    * split method into two separate methods with interfaces that are simplier than the interface of the original method
+
+---
+
+## Chapter 10: Define Errors Out of Existence
+
+> Exception handling is one of the worst sources of complexity in software systems
+
+* **exception** - any uncommon condition that alters the normal flow of control in a program
+
+### Why exceptions add complexity
+
+* Ways exceptions can add complexity:
+    * caller may provide bad arguemnts or configuration information
+    * invoked method may not be able to complete a requested operation
+    * in distributed systems, network packets may be lost or delayed, servers may not respond in a teimely fashion, or peers may communicate in unexpected ways
+    * code may detect bugs, internal inconsistencies, or situations it is not prepared to handle
+* exception handling can account for a significant fraction of all the code in a system
+* exception handling code is inherently more difficult to write than normal-case code
+* when an exception occurs, programmer can deal with two ways:
+    1. move forward and complete the work in progress in spite of the exception
+    1. abort the operation in progress and report the exception upwards
+        * aborting can result in an inconsistent system state so the exception handling code must restore consistency
+* handling exceptions can result in more exceptions
+    * secondary exceptions occuring during recovery are often more subtle and complex than the primary exceptions
+    * find a way to handle exceptions without introducing more exceptions
+* exceptions don't occur very often in running systems, so exception handling code is rarely executed
+    * write tests to make sure the code functions the way you think it should
+
+### Too many exceptions
+
+* problems are exacerbated when too many unnecessary exceptions are defined. This results in an over-defensive coding style
+* exceptions are a way to punt the problem to the caller
+* exceptions are part of your interface, keep them simple
+* exceptions also affect multiple layers as they can propogate through several stacks before being caught
+* best way to reduce complexity is to reduce the number of places exceptions have to be handled
+
+### Define errors out of existence
+
+* define APIs so there are no exceptions to handle and reduce the amount of code that needs to be written to handle errors
+
+### Mask Exceptions
+
+* when an exceptional condition is detected and handled at a low level in the system so that higher levels of software do not need to be aware of the condition
+* doesn't work in all situations, but the reduced interface allows classes to be deeper
+* example of pulling complexity downward
+
+### Exception aggregation
+
+* handle many exceptions with a single piece of code, rather than writing distinct handlers for many individual exceptions
+* exception handling design pattern
+    * if system processes a series of requests, it's useful to define an exception that aborts the current request, cleans up the system's state, and contnues with the next request
+    * the exception is caught in a single place near the top of the system's request-handling loop
+    * exception can be thrown at any point in the processing of a request to abort the request
+    * different subclasses of the exception can be defined for different conditions
+* aggregation works best if an exception propagates several levels up the stack before it is handled; results in more exceptions from more methods to be handled in the same place
+* form of general-purpose mechanism over special-purpose
+
+### Crash Application
+
+* certain errors are not worth tryign to handle
+* print diagnostic information and abort application
+* `ckalloc` vs `malloc`
+
+### Design special cases out of existence
+
+* special cases can result in code with lots of if statements which make it hard to understand
+* design normal case in a way that automatically handles special case without extra code
+
+### Taking it too far
+
+* defining away exceptions or masking them makes sense if the exception information isn't needed outside the moduel
+* with exceptions, we must determine what is important and what is not important. Things that are not important should be hidden, and the more of them the better. If something is important, it must be exposed
+
+---
+
+## Chapter 11: Design it Twice
+
+> designing software is hard, so it's unlikely that your first thought about how to structre a module or system will produce the best design
+
+* you will end up with a much better result if you consider multiple options for each major decison decision
+* don't need to pin down every detail, high-level sketch of the important methods is more than enough
+* try to pick radically different approaches
+* even if there is only one obvious approach, try another one
+* after you have sketched out all the alternatives, make a list of pros and cons for each one
+* consider
+    * which version has the simpler interface?
+    * is one interface more general-purpose than another?
+    * does one interface enable a more efficient implementation?
+* once you have compared the designs, you can make an informed decision
+* can apply this principle to many levels of a system
+    * goals are different for the interface and implementation so consider the best approach
+* this should not take a lot of extra time and it will pay off in the long run as you will not to deal with the extra complexity and cognitive load that poor design brings
+
+### Ego
+
+* smart people feel pressure to get things right the firs ttime
+* solving hard problems requires complex solutions where the first design is rarely the best one
