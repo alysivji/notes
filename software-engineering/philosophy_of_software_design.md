@@ -49,6 +49,20 @@ by John Ousterhout
     - [Taking it too far](#taking-it-too-far)
 - [Chapter 11: Design it Twice](#chapter-11-design-it-twice)
     - [Ego](#ego)
+- [Chapter 12: Why Write Comments? The Four Excuses](#chapter-12-why-write-comments-the-four-excuses)
+    - [Good code is self-documenting](#good-code-is-self-documenting)
+    - [I don't have time to write comments](#i-dont-have-time-to-write-comments)
+    - [Comments get out of date and become misleading](#comments-get-out-of-date-and-become-misleading)
+    - [Benefits of well-written comments](#benefits-of-well-written-comments)
+- [Chapter 13: Comments Should Describe Things that Aren't Obvious from the Code](#chapter-13-comments-should-describe-things-that-arent-obvious-from-the-code)
+    - [Pick conventions](#pick-conventions)
+    - [Don't repeat the code](#dont-repeat-the-code)
+    - [Lower-level comments add precision](#lower-level-comments-add-precision)
+    - [Higher-evel comments enchance intuition](#higher-evel-comments-enchance-intuition)
+    - [Interface documentation](#interface-documentation)
+    - [Implementation comments: what and why, not how](#implementation-comments-what-and-why-not-how)
+    - [Cross-module design decisions](#cross-module-design-decisions)
+- [Chapter 14: Choosing Names](#chapter-14-choosing-names)
 
 <!-- /TOC -->
 
@@ -474,3 +488,107 @@ Eliminating Complexity
 
 * smart people feel pressure to get things right the firs ttime
 * solving hard problems requires complex solutions where the first design is rarely the best one
+
+---
+
+## Chapter 12: Why Write Comments? The Four Excuses
+
+* comments are essential to help developers under a system and work efficiently
+* documentation plays an important role in abstraction; without comments, you can't hdie complexity
+* process of writing comments will improve a system's design
+* good software design loses value if its poorly documented
+
+### Good code is self-documenting
+
+> If users must read the code of a method in orer to use it, then there is no abstraction
+
+* there are things you can do when writing code to reduce the need of comments, but there is a significant amount of design information that can't be represented in comments
+* it's not practical for users to read the code for large projects
+* important that comments are written in a human language, which makes them less precise but provides more expressive power
+
+### I don't have time to write comments
+
+* if you want a clean software structure, which will allow you to work efficiently over the long-term, then you must take some time to create that structure
+* writing good comments won't take more than 10% of your development time
+* benefits of good documentation will quickly offset this cost
+
+### Comments get out of date and become misleading
+
+* keeping documenting up-to-date does not require an enormous effort
+* code reviews provide a great mechanicsm for detecting and fixing stale comments
+
+### Benefits of well-written comments
+
+> Comments capture information that was in the midn of the designer but couldn't be represented in the code
+
+* comments are valuable even on single-person projects as many of the details of the original design will have been forgotten
+* documentation reduces cognitive load by providing developers with the ifnormation they need to make changes and by making it easy for developers to ignore information that is irrelevant
+* docuemtnation can also reduce unknown unknowns by clarifying the structure of the system so that it is clear what is information and code is relevant for any given change
+
+---
+
+## Chapter 13: Comments Should Describe Things that Aren't Obvious from the Code
+
+* comments can make it explicit and clear why code is needed or implemented in a particular way
+* developers should be able to understand the abstraction provided by a module without reading any code other than its externally visible declaration
+
+### Pick conventions
+
+* conventions ensure consistency and force you to write comments
+* types of comments:
+    * **interface** comment block that precedes the declaration of a module
+    * **data structure member** next to the declaration of a field in a data structure
+    * **implementation** comment inside the code of a method or a function that describes how it works internally
+    * **cross-module** describing dependencies that cross module boundaries
+
+### Don't repeat the code
+
+> Could someone who has never seen the code write the comments just by looking at the code next to the comment?
+
+* use different words in the comment from those in the name of the entity being described
+
+### Lower-level comments add precision
+
+> Lower-level comments offer precision by clarifying exact meaning
+
+* comments augment the code by providing information at a different level of detail
+* think about units, boundary conditions, null values, side effects, etc
+* when documenting a variable, think nouns not verbs
+
+### Higher-evel comments enchance intuition
+
+> High-level comments offer intuition by describing reasoning behind the code
+
+* think about
+    * what is the code trying to do
+    * what is the simplest thing you can say that explans everything in the code
+    * what is the most important thing about this code
+* need to ignore low-level details and think about system only in terms of most fundamental characteristics
+* comments describing "how we get here" are useful
+
+### Interface documentation
+
+> Provide information that someone needs to know in order to use a clas or method
+
+* code isn't suitable for defining abstractions
+* if you want code that presents good abstractions, you must document those abstractions with comments
+* separate interface comments from implementation comments
+
+### Implementation comments: what and why, not how
+
+> Help readers understand what code is doing and why it was done that way
+
+* add comment before major blocks to provide high-level description of what that block does
+* have comment before loop that describes what happens in each iteration
+* loop comments are only needed longer or more complex loops, where it may not be obvious what the loop is doing
+* if you are fixing a bug, add a comment to the issue in the bug tracking database
+
+### Cross-module design decisions
+
+* challenge is to finding a place to put it where it can be found
+* design_notes central file with references in modules, as required
+
+---
+
+## Chapter 14: Choosing Names
+
