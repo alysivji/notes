@@ -63,6 +63,13 @@ by John Ousterhout
     - [Implementation comments: what and why, not how](#implementation-comments-what-and-why-not-how)
     - [Cross-module design decisions](#cross-module-design-decisions)
 - [Chapter 14: Choosing Names](#chapter-14-choosing-names)
+    - [Create an image](#create-an-image)
+    - [Names should be precise](#names-should-be-precise)
+    - [Use names consistently](#use-names-consistently)
+    - [More Thoughts](#more-thoughts)
+- [Chapter 15: Write The Comments First](#chapter-15-write-the-comments-first)
+    - [Delayed comments are bad comments](#delayed-comments-are-bad-comments)
+    - [Write the comments first](#write-the-comments-first)
 
 <!-- /TOC -->
 
@@ -592,3 +599,61 @@ Eliminating Complexity
 
 ## Chapter 14: Choosing Names
 
+> Selecting names for variables, methods, and other entities is one of the most underrated aspects of software design. Good names are a form of documentation: they make code easier to understand. They reduce the need for other documentation and make it easier to detect errors. Conversely, poor name choices increase the complexity of code and create ambiguities and misunderstandings that can result in bugs. Name chocie is an example of the principle that complexity is incremental. Choosing a mediocre name for particular variable, as opposed to the best possible name, probably won't have much impact on the overall complexity of a system. However, software systems have thousands of variables; choosing good names for all of these will have a significant impact on complexity and manageability.
+
+* most develoeprs don't spend much time thinking about names; they tend to use the first name that comes to mind as long as it is reasonably close to matching the thing it names
+* good names have 2 properties: precision and consistency
+
+### Create an image
+
+* goal is to create an image in the mind of the reader about the nature of the thing being named
+* good name describes what the underlying entity is and what it is not
+* names become unwieldy if they contain more than two or three words
+* names are a form of abstraction: they provide a simplified way of thinking about a more complex underlying entity
+
+### Names should be precise
+
+* most common problem is that names are too generic or vague
+* if you find it difficult to come up with a name for a particular variable that is precise, intuitive, and not too long, this is red flag
+    * variable may not have a clear definition or purpose
+* process of choosing a good name can improve your design by identifying weaknesses
+
+### Use names consistently
+
+* consistency reduces cognitive load: reader has seen the name in one context, they can reuse their knowledge and make assumptions when they see the name in a different context
+* three requirements:
+    1. always use the common name for a given purpose
+    1. never use the common name for anythign other than the given purpose
+    1. make sure the purpose is narrow enough that all variables with the name have the same behavior
+
+### More Thoughts
+
+* readability must be determined by the readers, not the writers
+* developing a skill for naming things is an investment: it's hard at first, but becomes easier the more you do it
+
+---
+
+## Chapter 15: Write The Comments First
+
+> Use comments as part of the design process
+
+* best time to write comments is at the beginning of the process
+* three benefits:
+    1. produces better comments as key design issues are fresh in your mind
+    1. comments are an abstraction and can help indicate complexity before you write code
+    1. it makes things more fun (calm down, John Ousterhout)
+
+### Delayed comments are bad comments
+
+* delaying documentation often means it does not get written
+* even if you go back, you forgot what was in your head during the design process
+* most important ocmments will be missing important facts
+
+### Write the comments first
+
+* write by writing the class interface comment
+* write interface comments and signatures for the most important public methods, but leave method bodies empty
+* iterate a bit over comment until basic structure feels right
+* write declarations and commnets for the most important class instance variables
+* fill in bodies of methods, adding implementation comments as needed
+* will find flaws in your decision
