@@ -70,6 +70,19 @@ by John Ousterhout
 - [Chapter 15: Write The Comments First](#chapter-15-write-the-comments-first)
     - [Delayed comments are bad comments](#delayed-comments-are-bad-comments)
     - [Write the comments first](#write-the-comments-first)
+- [Chapter 16: Modifying Existing Code](#chapter-16-modifying-existing-code)
+    - [Stay Straetgic](#stay-straetgic)
+    - [Maintaining comments: keep the comments near the code](#maintaining-comments-keep-the-comments-near-the-code)
+    - [Comments belong in the code, not the commit log](#comments-belong-in-the-code-not-the-commit-log)
+    - [Maintaining comments: avoid duplication](#maintaining-comments-avoid-duplication)
+    - [Maintaining comments: check the diffs](#maintaining-comments-check-the-diffs)
+    - [Higher-level comments are easier to maintain](#higher-level-comments-are-easier-to-maintain)
+- [Chapter 17: Consistency](#chapter-17-consistency)
+    - [Ensuring Consistency](#ensuring-consistency)
+- [Chapter 18: Code Should be Obvious](#chapter-18-code-should-be-obvious)
+    - [Things that make code more obvious](#things-that-make-code-more-obvious)
+    - [Things that make code less obvious](#things-that-make-code-less-obvious)
+- [Chapter 19: Software Trends](#chapter-19-software-trends)
 
 <!-- /TOC -->
 
@@ -657,3 +670,85 @@ Eliminating Complexity
 * write declarations and commnets for the most important class instance variables
 * fill in bodies of methods, adding implementation comments as needed
 * will find flaws in your decision
+
+---
+
+## Chapter 16: Modifying Existing Code
+
+* it's not possible to conceive the right design for a system at the outset; the design of a mature system is determined more by changes made during the system's evolution than by any initial conception
+
+### Stay Straetgic
+
+* when developers go into existing code to make changes such as bug fixes or new features, they don't usually think strategically
+    * usually think what is the smallest possible change I can make that does what I need?
+* if you invest a little extra time to refactor and improve the system design, you'll end up with a cleaner system
+* whenever you modify any code, try to find a way to improve the system design at least a little bit in the process
+* every development organization should plan to spend a small fraction of its total effort on cleanup and refactoring; this work will pay for itself over the long run
+
+### Maintaining comments: keep the comments near the code
+
+* best way to ensure that comments get updated is to postiion them close to the close they describe, so develoeprs will see them when they change the code
+* if a method has three major phases, don't write one comment at the top of the method that describes all of the phases in detail, write a separate comment for each phase
+
+### Comments belong in the code, not the commit log
+
+* place things where develoeprs are likely to see it
+
+### Maintaining comments: avoid duplication
+
+* if information is already documented someplace outside of your projet, don't repeat the documentation; just reference the external source
+
+### Maintaining comments: check the diffs
+
+* always make sure the change you made is also reflected in the comments; do this during the PR process
+
+### Higher-level comments are easier to maintain
+
+* do not reflect details of the code so they will not be affected by minor code changes; only changes in overall behavior will affect these comments
+
+---
+
+## Chapter 17: Consistency
+
+* consistency is a powerful tool for reducing the complexity of a system and making its behavior more obvious
+* consistency means that similar things are done in similar ways and dissimilar things are done in different ways
+* once you have learned how somethign is done in one place, you can use that knowledge to understand other places that use the same approach
+
+### Ensuring Consistency
+
+* consistence is hard to maintain, especially when manny people work on a project over a long time
+* create a document that lists the most important overall conventions such as coding style guidelines
+* best way to enforce conventions is to write a tool that checks for violations, and make sure that code cannot be committed to the repository unless it passes the checker
+* code reviews provide an opportunity for education
+* do not change existing conventions; a better idea is not a sufficient excuse to introduce inconsistencies
+    * reconsidering established conventions is rarely a good use of developer time
+
+---
+
+## Chapter 18: Code Should be Obvious
+
+> Software should be designed for ease of reading, not ease of writing
+
+* obvious code can be read quickly, without much thought
+* unobvious code must expend a lot of time and energy to understand it; reduces efficiency and increases likelihood of misunderstanding and bugs
+* it's easier to notice thatsomeone else's code is nonobvious than to see problems with your own code
+* code review plays a big part in finding obviousness of code
+
+### Things that make code more obvious
+
+* use design techniques such as abstractions
+* ensure readers always have information they need to understand code
+* good names
+* consistency
+* white space
+* comments help us understand code that can't be made more obvoius
+
+### Things that make code less obvious
+
+* event driven programming where application responds to external occurences; hard to follow flow of control
+* generic containers with grouped elements; use `collections.namedtuples` instead
+* code that violates reader's expectations
+
+---
+
+## Chapter 19: Software Trends
