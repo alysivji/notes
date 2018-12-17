@@ -6,10 +6,13 @@ By Robert C. Martin (aka "Uncle Bob")
 <!-- TOC -->
 
 - [Chapter 1: Clean Code](#chapter-1-clean-code)
-    - [Boy Scout Rule](#boy-scout-rule)
+  - [Boy Scout Rule](#boy-scout-rule)
 - [Chapter 2: Meaningful Names](#chapter-2-meaningful-names)
 - [Chapter 3: Functions](#chapter-3-functions)
-    - [Function Goals](#function-goals)
+  - [Function Goals](#function-goals)
+- [Chapter 4: Comments](#chapter-4-comments)
+  - [Good Comments](#good-comments)
+- [Chapter 5: Formatting](#chapter-5-formatting)
 
 <!-- /TOC -->
 
@@ -95,3 +98,24 @@ Leave the campground cleaner than you found it
 * extract try/catch blocks into functions of their own
 * duplication is the root of all evil
 * write your code, write tests, clean your code with tests in place
+
+## Chapter 4: Comments
+
+> The proper use of comments is to compensate for our failure to express ourself in code
+
+* truth can only be found in one place: the code
+* clear and expressive code with few comments is far superior to cluttered and complex code with lots of comments
+* it only takes a few seconds of thought to explain most of your intent in code: in most cases, create a function that says the same thing as the comment you want to write
+
+### Good Comments
+
+* legal comments
+* informative comments
+* explanation of intent
+* clarification
+* warning of consequence
+* `TODO` comments
+* amplification
+* documenting public api using Javdocs or Sphinx
+
+## Chapter 5: Formatting
