@@ -119,3 +119,20 @@ Leave the campground cleaner than you found it
 * documenting public api using Javdocs or Sphinx
 
 ## Chapter 5: Formatting
+
+> The coding style and readability set precedents that continue to affect maintainability and extensibility long after the original code has been changed beyond recognition. Your style and discipline survives, even though your code does not.
+
+* smaller files are usually easier to understand than larger files
+* think of reading code like reading a newspaper (headline with details as you go further)
+* groups of lines represent a complete thought, and these should be separated from other blocks with blank lines
+* lines of code that are tightly related should appear vertically dense
+* concepts thare are closely related should be kept vertically close to each other
+* variables should be declared as close to their usage as possible
+  * instance variable should be declared at the top of a class
+* if one function calls another, they should be vertically close and the caller should be above the callee (gives the program a natural flow)
+* certain bits of code want to be near other bits so we should keep them together vertically
+* try to keep line lengths short, 80-100-120
+* use horizontal whitespace to associate things that are strongly related and disassociate things that are more weakly related
+* source code is a hierarchy rather than an outline
+  * to make the hierarchy of scopes visible, we indent the lines of source code in proportion to their position in the hiearchy
+* team should agree on a consistent style that will be used for formatting
