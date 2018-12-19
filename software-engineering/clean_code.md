@@ -13,6 +13,7 @@ By Robert C. Martin (aka "Uncle Bob")
 - [Chapter 4: Comments](#chapter-4-comments)
   - [Good Comments](#good-comments)
 - [Chapter 5: Formatting](#chapter-5-formatting)
+  - [The Newspaper Metaphor](#the-newspaper-metaphor)
 
 <!-- /TOC -->
 
@@ -136,3 +137,11 @@ Leave the campground cleaner than you found it
 * source code is a hierarchy rather than an outline
   * to make the hierarchy of scopes visible, we indent the lines of source code in proportion to their position in the hiearchy
 * team should agree on a consistent style that will be used for formatting
+
+### The Newspaper Metaphor
+
+> Think of a well-written newspaper article. You read it vertically. At the top you expect a headline that will tell you what the story is abvout and allows you to decide whether it is something you want to read. The first paragraph gives you a synopsis of the whole story, hiding all the details while giving you the broad-brush concepts. As you continue downward, the details incrase until you have all the dates, names, quotes, claims, and other minutia.
+>
+> We would like a source file to be like a newspaper article. The name should be simple, but explanatory. The name, by itself, should be sufficient to tell us whether we are in the right module or not. The topmost parts of the source file should provide the high-level concepts and alorithms. Detila should incrase as we m ove downard, until the end we find the lowest level fu nctions and details in the source file.
+>
+> A newspaper is composed of many articles; most are very small. Some are a bit larger. Very few contain as much text as a page can hold. This makes the newspaper *useable*. If the newspaper were just one long story containing a disorganized agglomeration of facts, dates, and names, then we simply would not read it.
