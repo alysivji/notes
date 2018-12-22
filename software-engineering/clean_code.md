@@ -14,6 +14,8 @@ By Robert C. Martin (aka "Uncle Bob")
   - [Good Comments](#good-comments)
 - [Chapter 5: Formatting](#chapter-5-formatting)
   - [The Newspaper Metaphor](#the-newspaper-metaphor)
+- [Chapter 6: Objects and Data Structures](#chapter-6-objects-and-data-structures)
+  - [Conclusion](#conclusion)
 
 <!-- /TOC -->
 
@@ -140,8 +142,31 @@ Leave the campground cleaner than you found it
 
 ### The Newspaper Metaphor
 
-> Think of a well-written newspaper article. You read it vertically. At the top you expect a headline that will tell you what the story is abvout and allows you to decide whether it is something you want to read. The first paragraph gives you a synopsis of the whole story, hiding all the details while giving you the broad-brush concepts. As you continue downward, the details incrase until you have all the dates, names, quotes, claims, and other minutia.
+> Think of a well-written newspaper article. You read it vertically. At the top you expect a headline that will tell you what the story is abvout and allows you to decide whether it is something you want to read. The first paragraph gives you a synopsis of the whole story, hiding all the details while giving you the broad-brush concepts. As you continue downward, the details increase until you have all the dates, names, quotes, claims, and other minutia.
 >
-> We would like a source file to be like a newspaper article. The name should be simple, but explanatory. The name, by itself, should be sufficient to tell us whether we are in the right module or not. The topmost parts of the source file should provide the high-level concepts and alorithms. Detila should incrase as we m ove downard, until the end we find the lowest level fu nctions and details in the source file.
+> We would like a source file to be like a newspaper article. The name should be simple, but explanatory. The name, by itself, should be sufficient to tell us whether we are in the right module or not. The topmost parts of the source file should provide the high-level concepts and algorithms. Details should increase as we move downward, until the end we find the lowest level functions and details in the source file.
 >
 > A newspaper is composed of many articles; most are very small. Some are a bit larger. Very few contain as much text as a page can hold. This makes the newspaper *useable*. If the newspaper were just one long story containing a disorganized agglomeration of facts, dates, and names, then we simply would not read it.
+
+## Chapter 6: Objects and Data Structures
+
+> Hiding implementations is not just a matter of putting a layer of functions between the variables. Hiding implementations is about abstractions! A class does not simply push its variables out thru getters and setters. Rather it exposes abstract interfaces that allow its users to manipulate the *essence* of the data, without having to know its implementations.
+>
+> We do not want to expose the details of our data. Rather we want to express our data in abstract terms. This is not merely accomplished by using interfaces and/or getters and setters. Serious thought needs to be put into the best way to represent the data that an object contains. The worst option is to blithely add getters and setters.
+
+- Objects hide their data behind abstractions and expose functions that operate on that data
+  - OO code, on the other hand, makes it easy to add new classes without changing existing functions
+  - OO code makes it hard to add new functions because all the classes must change
+- Data structures expose their data and have no meaningful functions
+  - procedural code (code using data structures) makes it easy to add new functions without changing existing data structures
+  - procedural code makes it hard to add new data structures because all the functions must change
+- **Law of Demeter** - a module should not know about the innards of the objects it manipulates
+- **Data Transfer Objects** (DTOs) refer to data structures that are classes with public variables and no functions
+  - [`collections.namedtuple`](https://docs.python.org/3/library/collections.html#collections.namedtuple) in Python
+  - DTOs are first in a series of translation stages that convert raw data in a database into objects in the application code
+
+### Conclusion
+
+> Objects expose behavior and hide data. This makes it easy to add new kinds of objects without changing existing behaviors. It also makes it hard to add new behaviors to existing objects. Data structures expose data and have no significant behavior. This makes it easy to add new behaviors to existing data structures but makes it hard to add new data structures to existing functions.
+>
+> In any given system, we will sometimes want the flexibility to add new data types, and so we prefer objects for that part of the system. Other times we will want the flexibility to add new behaviors, and so in that part of the system we prefer data types and procedures. Good software developers understand these issues without prejudice and choose the approach that is best for the job at hand.
