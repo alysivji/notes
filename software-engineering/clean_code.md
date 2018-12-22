@@ -36,109 +36,108 @@ Leave the campground cleaner than you found it
 
 > Hardest thing about choosing good nmaes is that it requires good descriptive skills and a shared cultural background
 
-* Use intension revealing names
-    * choosing good names takes time but saves more than it takes
-* Avoid disinformation
-    * avoid leaving false clues that obscure meaning of code
-    * avoid words whose entrenched meanings vary from our intended meaning
-    * spelling similar concepts similarly is *information*
-* Make meaningful distincions
-    * if names must be different, then they should also mean something different
-    * noise words are redundant (adding `variable`, `df` to name)
-    * distinghuish names in such a way that the reader knows what the differences offer
-* Use pronouncable names
-* Use searchable names
-    * the length of a name should correspond to the size of its scope
-    * if a variable or constant might be seen or used in multiple palces in code, it's imperative to give it a search-friendly name
-* Avoid encodings
-    * type prefixes
-* Avoid mental mapping
-    * readers shouldn't have to mentally translate your names into other names they already know
-* Don't be cute
-    * no inside jokes
-    * say what you mean, mean what you say
-* Pick one word per concept
-* Don't pun
-* Use solution domain names
-    * use computer science terminology in names
-* Use problem domain names
-    * code that has more to do with problem domain concepts should have names drawn from the problem domain
-* Add meaningful context
-    * place names in context for your reader by enclosing them in well-named classes, functions, or namespaces
-* Don't add gratuitous context
-
-* Class names
-    * classes and objects should have noun or noun phrase names like `Customer`, `WikiPage`, `Account`, and `AddressParser`
-    * avoid words like `Manager`, `Processor`, `Data`, or `Info` in the name of a class
-    * class names should never be verbs
-* Method names
-    * method should have verb or verb phrase names like `postPayment`, `deletePage`, or `save`
+- Use intention revealing names
+    - choosing good names takes time but saves more than it takes
+- Avoid disinformation
+    - avoid leaving false clues that obscure meaning of code
+    - avoid words whose entrenched meanings vary from our intended meaning
+    - spelling similar concepts similarly is *information*
+- Make meaningful distinctions
+    - if names must be different, then they should also mean something different
+    - noise words are redundant (adding `variable`, `df` to name)
+    - distinguish names in such a way that the reader knows what the differences offer
+- Use pronounceable names
+- Use searchable names
+    - the length of a name should correspond to the size of its scope
+    - if a variable or constant might be seen or used in multiple palces in code, it's imperative to give it a search-friendly name
+- Avoid encodings
+    - type prefixes
+- Avoid mental mapping
+    - readers shouldn't have to mentally translate your names into other names they already know
+- Don't be cute
+    - no inside jokes
+    - say what you mean, mean what you say
+- Pick one word per concept
+- Don't pun
+- Use solution domain names
+    - use computer science terminology in names
+- Use problem domain names
+    - code that has more to do with problem domain concepts should have names drawn from the problem domain
+- Add meaningful context
+    - place names in context for your reader by enclosing them in well-named classes, functions, or namespaces
+- Don't add gratuitous context
+- Class names
+    - classes and objects should have noun or noun phrase names like `Customer`, `WikiPage`, `Account`, and `AddressParser`
+    - avoid words like `Manager`, `Processor`, `Data`, or `Info` in the name of a class
+    - class names should never be verbs
+- Method names
+    - method should have verb or verb phrase names like `postPayment`, `deletePage`, or `save`
 
 ## Chapter 3: Functions
 
 > Functions are the first line of organization in any program
 
-> * Functions should do one thing. They should do it well. They should do it only.
+> - Functions should do one thing. They should do it well. They should do it only.
 
 ### Function Goals
 
-* small
-* should not be large enough to hold nested structures
-* Statements within our function should be at same level of abstraction
-* want code to have a top down narrative
-* avoid switch statements
-    * if you have to use switch, do it somewhere and abstract it away with polymorphic classes
-* use descriptive names, be consistent
-* don't use too many function arguments
-* flag arguments are ugly (eh, debatable. I like sane defaults)
-* good names can go a long way towards explaining the intent of a function and order and intent of arguments
-* have no side effects
-* avoid temporal coupling
-* if your functions must change the state of something, have it change the state of its owning object
-* should either do something or answer something, but not both
-* prefer exceptions to returning error codes
-    * new exceptions are derivatives of the exception class
-* extract try/catch blocks into functions of their own
-* duplication is the root of all evil
-* write your code, write tests, clean your code with tests in place
+- small
+- should not be large enough to hold nested structures
+- Statements within our function should be at same level of abstraction
+- want code to have a top down narrative
+- avoid switch statements
+    - if you have to use switch, do it somewhere and abstract it away with polymorphic classes
+- use descriptive names, be consistent
+- don't use too many function arguments
+- flag arguments are ugly (eh, debatable. I like sane defaults)
+- good names can go a long way towards explaining the intent of a function and order and intent of arguments
+- have no side effects
+- avoid temporal coupling
+- if your functions must change the state of something, have it change the state of its owning object
+- should either do something or answer something, but not both
+- prefer exceptions to returning error codes
+    - new exceptions are derivatives of the exception class
+- extract try/catch blocks into functions of their own
+- duplication is the root of all evil
+- write your code, write tests, clean your code with tests in place
 
 ## Chapter 4: Comments
 
 > The proper use of comments is to compensate for our failure to express ourself in code
 
-* truth can only be found in one place: the code
-* clear and expressive code with few comments is far superior to cluttered and complex code with lots of comments
-* it only takes a few seconds of thought to explain most of your intent in code: in most cases, create a function that says the same thing as the comment you want to write
+- truth can only be found in one place: the code
+- clear and expressive code with few comments is far superior to cluttered and complex code with lots of comments
+- it only takes a few seconds of thought to explain most of your intent in code: in most cases, create a function that says the same thing as the comment you want to write
 
 ### Good Comments
 
-* legal comments
-* informative comments
-* explanation of intent
-* clarification
-* warning of consequence
-* `TODO` comments
-* amplification
-* documenting public api using Javdocs or Sphinx
+- legal comments
+- informative comments
+- explanation of intent
+- clarification
+- warning of consequence
+- `TODO` comments
+- amplification
+- documenting public api using Javdocs or Sphinx
 
 ## Chapter 5: Formatting
 
 > The coding style and readability set precedents that continue to affect maintainability and extensibility long after the original code has been changed beyond recognition. Your style and discipline survives, even though your code does not.
 
-* smaller files are usually easier to understand than larger files
-* think of reading code like reading a newspaper (headline with details as you go further)
-* groups of lines represent a complete thought, and these should be separated from other blocks with blank lines
-* lines of code that are tightly related should appear vertically dense
-* concepts thare are closely related should be kept vertically close to each other
-* variables should be declared as close to their usage as possible
-  * instance variable should be declared at the top of a class
-* if one function calls another, they should be vertically close and the caller should be above the callee (gives the program a natural flow)
-* certain bits of code want to be near other bits so we should keep them together vertically
-* try to keep line lengths short, 80-100-120
-* use horizontal whitespace to associate things that are strongly related and disassociate things that are more weakly related
-* source code is a hierarchy rather than an outline
-  * to make the hierarchy of scopes visible, we indent the lines of source code in proportion to their position in the hiearchy
-* team should agree on a consistent style that will be used for formatting
+- smaller files are usually easier to understand than larger files
+- think of reading code like reading a newspaper (headline with details as you go further)
+- groups of lines represent a complete thought, and these should be separated from other blocks with blank lines
+- lines of code that are tightly related should appear vertically dense
+- concepts thare are closely related should be kept vertically close to each other
+- variables should be declared as close to their usage as possible
+  - instance variable should be declared at the top of a class
+- if one function calls another, they should be vertically close and the caller should be above the callee (gives the program a natural flow)
+- certain bits of code want to be near other bits so we should keep them together vertically
+- try to keep line lengths short, 80-100-120
+- use horizontal whitespace to associate things that are strongly related and disassociate things that are more weakly related
+- source code is a hierarchy rather than an outline
+  - to make the hierarchy of scopes visible, we indent the lines of source code in proportion to their position in the hiearchy
+- team should agree on a consistent style that will be used for formatting
 
 ### The Newspaper Metaphor
 
@@ -150,7 +149,7 @@ Leave the campground cleaner than you found it
 
 ## Chapter 6: Objects and Data Structures
 
-> Hiding implementations is not just a matter of putting a layer of functions between the variables. Hiding implementations is about abstractions! A class does not simply push its variables out thru getters and setters. Rather it exposes abstract interfaces that allow its users to manipulate the *essence* of the data, without having to know its implementations.
+> Hiding implementations is not just a matter of putting a layer of functions between the variables. Hiding implementations is about abstractions! A class does not simply push its variables out thru getters and setters. Rather it exposes abstract interfaces that allow its users to manipulate the *essence- of the data, without having to know its implementations.
 >
 > We do not want to expose the details of our data. Rather we want to express our data in abstract terms. This is not merely accomplished by using interfaces and/or getters and setters. Serious thought needs to be put into the best way to represent the data that an object contains. The worst option is to blithely add getters and setters.
 
@@ -160,8 +159,8 @@ Leave the campground cleaner than you found it
 - Data structures expose their data and have no meaningful functions
   - procedural code (code using data structures) makes it easy to add new functions without changing existing data structures
   - procedural code makes it hard to add new data structures because all the functions must change
-- **Law of Demeter** - a module should not know about the innards of the objects it manipulates
-- **Data Transfer Objects** (DTOs) refer to data structures that are classes with public variables and no functions
+- **Law of Demeter*- - a module should not know about the innards of the objects it manipulates
+- **Data Transfer Objects*- (DTOs) refer to data structures that are classes with public variables and no functions
   - [`collections.namedtuple`](https://docs.python.org/3/library/collections.html#collections.namedtuple) in Python
   - DTOs are first in a series of translation stages that convert raw data in a database into objects in the application code
 
