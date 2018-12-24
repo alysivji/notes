@@ -16,6 +16,11 @@ By Robert C. Martin (aka "Uncle Bob")
   - [The Newspaper Metaphor](#the-newspaper-metaphor)
 - [Chapter 6: Objects and Data Structures](#chapter-6-objects-and-data-structures)
   - [Conclusion](#conclusion)
+- [Chapter 7: Error Handling](#chapter-7-error-handling)
+  - [Conclusion](#conclusion-1)
+- [Chapter 8: Boundaries](#chapter-8-boundaries)
+  - [Conclusion](#conclusion-2)
+- [Chapter 9: Unit Tests](#chapter-9-unit-tests)
 
 <!-- /TOC -->
 
@@ -169,3 +174,52 @@ Leave the campground cleaner than you found it
 > Objects expose behavior and hide data. This makes it easy to add new kinds of objects without changing existing behaviors. It also makes it hard to add new behaviors to existing objects. Data structures expose data and have no significant behavior. This makes it easy to add new behaviors to existing data structures but makes it hard to add new data structures to existing functions.
 >
 > In any given system, we will sometimes want the flexibility to add new data types, and so we prefer objects for that part of the system. Other times we will want the flexibility to add new behaviors, and so in that part of the system we prefer data types and procedures. Good software developers understand these issues without prejudice and choose the approach that is best for the job at hand.
+
+## Chapter 7: Error Handling
+
+> Error handling is important, but if it obscures logic, it's wrong
+
+- try to write tests that force exceptions and then add behavior to your handler to satisfy tests
+  - this will cause you to build the transaction scope of the `try` block first and will help maintain the transaction nature of that scope
+- each exception that you throw should provide enough context to determine the source and location of an error
+- create informative error messages and pass them along with your exceptions. Mention the operation that failed and the type of failure. If you are logging in your application, pass along enough information to be able to log the error in your `catch`
+- if we are doing the same work in many different `except` blocks, we can simplify our code by wrapping the API we are calling and making sure that it returns a common exception type
+  - benefits of wrapping API:
+    - minimize dependency upon it
+    - move to a different library in the future without much penalty
+    - easier to mock when you are testing
+    - you can define an API that you feel comfortable with vs having to use the vendor's API
+- often a single exception is fine for a particular area of code
+  - information sent with exception can distinguish the errors
+  - use different classes only if there are types when you want to catch one exception and allow another one to pass thru
+- create a class or configure an object so that it handles a special case for you (Fowler -- Special Case Pattern)
+  - client code does not have to deal with exceptional behavior, it's encapsulated inside of the special case object
+- don't return `null`, return an empty container
+  - this isn't the best advice for Python
+- do not pass `null` into methods
+
+### Conclusion
+
+> Clean code is readable, but it must also be robust. These are not conflicting goals. We can write robust clean code if we see error handling as a separate concern, something that is viewable independently of our main logic. To the degree that we are able to do that, we can reason about it independently, and we can make great strides in the maintainability of our code.
+
+## Chapter 8: Boundaries
+
+> There is a natural tension between the provider of an interface and the user of an interface. Providers of third-party packages and frameworks strive for broad applicability so tey can work in many environments and appeal to a wide audience. Users, on the other hand, want an interface that is focused on their particular needs. This tension can cause problems at the boundaries of the system.
+
+- if you want to use a boundary interface like `Map`, keep it inside the class, or close family of classes, where it is used. Avoid returning it from, or accepting it as an argument to, public APIs.
+- it is pragmatic to write tests for third-party code
+  - learning a new codebase is hard, try to write tests to explore our understanding of the library
+  - tests focus on what we want out of the API
+  - our tests can be used to check if new versions of the third-party library works the way we expect it to work
+- define your own interface if the code you want to integrate with has not been written, do it even if it has been written
+  - the Adapter Pattern encapsulates the interaction with the API and provides a single place to change when the API evolves
+
+### Conclusion
+
+> Interesting things happen at boundaries. Change is one of those things. Good software designs accommodate change without huge investments and rework. When we use code that is out of our control, special care must be taken to protect our investment and make sure future change is not too costly
+>
+> Code at the boundaries needs clear separation and tests that define expectations. We should avoid letting too much of our code know about the third-party particulars. It's better to depend on something you control than on something you don't control, lest it end up controlling you.
+>
+> We manage third-party boundaries by having very few places in the code that refer to them
+
+## Chapter 9: Unit Tests
