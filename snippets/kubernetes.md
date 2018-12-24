@@ -1,0 +1,49 @@
+# Kubernetes (k8s)
+
+- orchestrator with master and nodes
+- master looks after cluster
+  - apiserver
+    - api or `kubectl`
+  - cluster store
+    - persist store about cluster state and config
+    - state of truth for cluster
+  - controller manager
+    - node, endpoints, namespace controllers
+    - watches for changes
+    - maintains desired state
+  - kube-scheduler
+    - watches apiserver for new pods and assigns work to nodes
+- nodes run workloads
+  - kubelet
+    - main kubernetes agent
+    - registers node with cluster
+    - watches apiserver
+    - instantiates pods
+    - reports back to master
+    - exposes endpoints on `:10255`
+  - container engine
+    - does container management
+  - kube-proxy
+    - k8s networking
+    - 1 IP per pod
+    - load balances across all pods in a service
+- declarative model
+  - give master a manifest file that describes the desired state
+- pods
+  - atomic unit of scheduling and scaling
+  - containers always run inside of pods
+    - can have multiple containers (main container, sidecar container)
+  - ring-fenced environment
+    - network stack
+    - kernel namespace
+    - all containers in a pod share the pod environment
+  - if a pod dies, a new pod is spun up (has a different IP)
+- services
+  - we can't rely on pod IPs so we use services
+  - provides a stable IP and DNS name
+  - a higher level stable abstraction point for pods that provide load balancing
+  - pod belongs to service via `label`
+  - only send traffic to healthy pod
+- deployments
+  - declarative description of how we want our architecture to look
+  - simple rolling updates and rollbacks
