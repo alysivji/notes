@@ -21,6 +21,8 @@ By Robert C. Martin (aka "Uncle Bob")
 - [Chapter 8: Boundaries](#chapter-8-boundaries)
   - [Conclusion](#conclusion-2)
 - [Chapter 9: Unit Tests](#chapter-9-unit-tests)
+  - [Rules for Clean Test](#rules-for-clean-test)
+  - [Three Laws of TDD](#three-laws-of-tdd)
 
 <!-- /TOC -->
 
@@ -223,3 +225,35 @@ Leave the campground cleaner than you found it
 > We manage third-party boundaries by having very few places in the code that refer to them
 
 ## Chapter 9: Unit Tests
+
+> Test code is just as important as production code. It is not a second-class citizen. It requires thought, design, and care. It must be kept as clean as production code.
+
+- in the past we would write ad-hoc code to test our classes and methods and run it via a simple driver that we interacted with
+- now we have test runners that standardize how we structure and store our tests so they can be used by anybody
+- sheer bulk of tests can rival size of production code so it needs to be clean
+  - dirty tests make things hard to change
+  - the more tangled the test code, the more likely it is that you will spend more time cramming new tests into the suite than it takes to write the new production code
+- the higher the test coverage, the less you fear
+- tests allow you to change your code with near impunity
+  - improve architecture and design without feature
+- clean tests are **readable**
+- invent domain-specific testing language that is made up of functions and utilities that make tests more convenient to write and easier to read
+  - not developed up front, rather it evolves from the continued refactoring of test code that has gotten too tainted by obfuscating detail
+  - pytest fixtures that return errors
+- test code does not need to be as efficient as production code
+- have a `getState()` method in your class that generates the current state which you can compare to expected state
+- each test should encapsulate a single concept
+
+### Rules for Clean Test
+
+- **F**ast. Tests should be fast
+- **I**ndependent. Tests should not depend on each other.
+- **R**epeatable. Tests should be repeatable in any environment
+- **S**elf-validating. Tests should have boolean output, either pass or fail
+- **T**imely. Tests need to be written in a timely fashion
+
+### Three Laws of TDD
+
+1. You may not write production code until you have written a failing unit test.
+1. You may not write more of a unit test than is sufficient to fail, and not compiling is failing.
+1. You may not write more production code than is sufficient to pass the currently failing test.
