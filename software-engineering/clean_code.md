@@ -23,6 +23,11 @@ By Robert C. Martin (aka "Uncle Bob")
 - [Chapter 9: Unit Tests](#chapter-9-unit-tests)
   - [Rules for Clean Test](#rules-for-clean-test)
   - [Three Laws of TDD](#three-laws-of-tdd)
+- [Chapter 10: Classes](#chapter-10-classes)
+  - [Single Responsibility Principle](#single-responsibility-principle)
+  - [Open-Close Principle](#open-close-principle)
+- [Chapter 11: Systems](#chapter-11-systems)
+  - [Conclusion](#conclusion-3)
 
 <!-- /TOC -->
 
@@ -257,3 +262,54 @@ Leave the campground cleaner than you found it
 1. You may not write production code until you have written a failing unit test.
 1. You may not write more of a unit test than is sufficient to fail, and not compiling is failing.
 1. You may not write more production code than is sufficient to pass the currently failing test.
+
+## Chapter 10: Classes
+
+- class should begin with a list of variables, public functions, and then private functions are called by public funtions
+- classes should be small in terms of number of responsibilities
+- name of class should describe what responsibilities it fulfills
+  - ambiguous class names likely have too many responsibilities
+  - trying to identify responsibilities helps us recognize and create better abstractions
+- classes should have a small number of instance variables
+  - the more variables a method manipulates, the more cohesive that method is to its class
+  - classes should have relatively high cohesion
+- when classes lose cohesion, split them
+  - breaking a large function into many smaller functions often gives us the opportunity to split several smaller classes out as well
+- tests allow us to refactor without fear
+- organize our classes so to reduce the risk of change
+- dependencies upon concrete details create challenges for testing our system
+  - dependency injection allows us to decouple systems to become more testable
+
+### Single Responsibility Principle
+
+> A class or module should have one, and only one, reason to change
+
+- getting software to work and making software clean are two very different activities
+- problem is that too many people think we are done once the program works, they fail to switch to the other concern of organization and cleanliness
+  - we move to the next problem rather than going back and breaking up our classes into decoupled units with single responsibilities
+- every sizeable system will contain a large amount of logic and complexity
+  - we should organize code so we know where to find it
+
+### Open-Close Principle
+
+> Classes should be open for extension but closed for modification
+
+- structure systems so that we muck with as little as possible when we update them with new or changed features
+
+## Chapter 11: Systems
+
+> Software systems are unique compared to physical systems. Their architectures can grow incrementally, if we maintain the proper separation of concerns
+
+- it is a myth that we can get systems "right the first time." Instead, we should implement only today's stories, then refactor and expand the system to implement new stories tomorrow. THi sis the essence of iterative and incremental agility. Test-driven development, refactoring, and the clean code they produce make this work at the code level.
+- best to postpone decisions until the last possible moment
+- standards make it easier to reuse ideas and components, but creating standards takes too long and lose touch with the real needs of the adopters they are intending to serve
+- Domain Specific Languages (DSLs) raise the abstraction level above code idioms and design patterns
+  - allow developer to reveal the intent of the code at the appropriate level of abstraction
+
+### Conclusion
+
+> Systems must be clean too. An invasive architecture overwhelms the domain logic and impacts agility. When the domain logic is obscured, quality suffers because bugs find it easier to hide and stories become harder to implement. If agility is compromised, productivity suffers and the benefits of TDD are lost
+>
+> At all levels of abstraction, the intent should be clear. This will only happen if you write plain old objects and use aspect like mechanisms to incorporate other implementation concerns noninvasively.
+>
+> Whether you are designing systems or individual modules, never forget to use the simples thing that can possibly work.
