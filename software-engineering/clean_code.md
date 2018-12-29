@@ -28,6 +28,8 @@ By Robert C. Martin (aka "Uncle Bob")
   - [Open-Close Principle](#open-close-principle)
 - [Chapter 11: Systems](#chapter-11-systems)
   - [Conclusion](#conclusion-3)
+- [Chapter 12: Emergence](#chapter-12-emergence)
+  - [Rules for Simple Design](#rules-for-simple-design)
 
 <!-- /TOC -->
 
@@ -313,3 +315,22 @@ Leave the campground cleaner than you found it
 > At all levels of abstraction, the intent should be clear. This will only happen if you write plain old objects and use aspect like mechanisms to incorporate other implementation concerns noninvasively.
 >
 > Whether you are designing systems or individual modules, never forget to use the simples thing that can possibly work.
+
+## Chapter 12: Emergence
+
+> It's easy to write code that we understand, because at the time we write it we're deep in an understanding of the problem we're trying to solve. Other maintainers of the code aren't going to have so deep an understanding
+
+- design must produce a system that acts as intended
+- tests help us ensure the program work as intended
+- writing tests leads to better designs
+- tests enable refactoring and empower us to keep our code clean
+- duplication is the primary enemy of a well-designed system, it represents additional work, additional risk, and additional unnecessary complexity
+- express yourself by choosing good names and by keeping your functions and classes small
+- often we get our working working and move onto the next program without giving sufficient thought to making that code easy for the next person to read
+
+### Rules for Simple Design
+
+1. Runs all the tests
+1. Contains no duplication
+1. Expresses the intent of the programmer
+1. Minimizes the number of classes and methods
