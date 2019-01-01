@@ -30,6 +30,12 @@ By Robert C. Martin (aka "Uncle Bob")
   - [Conclusion](#conclusion-3)
 - [Chapter 12: Emergence](#chapter-12-emergence)
   - [Rules for Simple Design](#rules-for-simple-design)
+- [Chapter 13: Concurrency](#chapter-13-concurrency)
+  - [Concurrency Myths and Misconceptions](#concurrency-myths-and-misconceptions)
+  - [Concurrency Defense Principles](#concurrency-defense-principles)
+  - [Conclusion](#conclusion-4)
+- [Chapter 14: Successive Refinement](#chapter-14-successive-refinement)
+  - [Conclusion](#conclusion-5)
 
 <!-- /TOC -->
 
@@ -48,7 +54,7 @@ Leave the campground cleaner than you found it
 
 ## Chapter 2: Meaningful Names
 
-> Hardest thing about choosing good nmaes is that it requires good descriptive skills and a shared cultural background
+> Hardest thing about choosing good names is that it requires good descriptive skills and a shared cultural background
 
 - Use intention revealing names
     - choosing good names takes time but saves more than it takes
@@ -334,3 +340,145 @@ Leave the campground cleaner than you found it
 1. Contains no duplication
 1. Expresses the intent of the programmer
 1. Minimizes the number of classes and methods
+
+## Chapter 13: Concurrency
+
+> Objects are abstractions of processing. Threads are abstractions of schedule.
+
+- concurrency is a decoupling strategy: it helps us decouple what gets done from when it gets done improving both the throughput and structure of an application
+- concurrent applications look like many collaborating computers rather than one big main loop
+  - can make the system easier to understand and offers some powerful ways to separate concerns
+- concurrency incurs some overhead
+- correct concurrency is complex
+- concurrency bugs are hard to replicate
+- concurrency often requires a fundamental change in design strategy
+
+### Concurrency Myths and Misconceptions
+
+- concurrency always improves performance
+  - only when there is a lot of wait time that can be shared between multiple threads or processors
+- design does not change when writing concurrent programs
+  - decoupling *what* from *when* usually has a huge effect on the structure of the system
+- understanding concurrency issues is not important when working with a container (web, ORM)
+
+### Concurrency Defense Principles
+
+#### Single Responsibility Principle
+
+- a given method/class/component should have a single reason to change
+- concurrent design is complex enough to be a reason to change so we should separate it from the rest of the code
+
+#### Limit the Scope of the Data
+
+- take data encapsulation to heart; severely limit the access of data that may be shared
+
+#### Use Copies of Data
+
+- good way to avoid shared data is to avoid sharing the data in the first place
+- if possible, copy objects and treat them as read-only
+- might be possible to copy objects, collect results from multiple threads in these copies and merge results in a single thread
+- only copy data if it helps you avoid using locks
+
+#### Threads Should be as Independent as Possible
+
+- each thread should exist in its own world, sharing no data with any other thread
+- each thread processes one client request, with all of the required data coming from an unshared source and stored as local variables
+- attempt to partition data into independent subsets that can be operated on by independent threads, possibly in different processors
+
+#### Know Your Library
+
+#### Know Your Execution Methods
+
+##### Definitions
+
+**Bound Resource** - resource of a fixed size or number used in a concurrent environment. Examples include database connections and fixed-size read/write buffers
+
+**Mutual Exclusion** - only one thread can access shared data or a shared resource at a time
+
+**Starvation** - one thread or a group of threads is prohibited from proceeding for an excessively long time or forever. For example, always letting fast-running threads through first could starve out longer running threads if there is no end to the fast-running threads.
+
+**Deadlock** - two or more threads waiting for each other to finish. Each thread has a resource that the other thread requires and neither can finish until it gets the other resource.
+
+**Livelock** - threads in lockstep, each trying to do work but finding another "in the way."  Due to resonance, threads continue trying to make progress but are unable to for an excessively long time -- or forever.
+
+##### [Producer-Consumer](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem)
+
+> One or more producer threads create some work and place it in a buffer or queue. One or more consumer threads acquire that work from the queue and complete it. The queue between the producers and consumers is a *bound resource*. This means producers must wait for free space in the queue before writing and consuemrs must wait until there is something in the queue to consume. Coordination between the producers and consumers via the queue involves producers and consumers signaling each other. The producers write to the queue and signal that the queue is no longer empty. Consumers read from the queue and signal that the queue is no longer full. Both potentially wait to be notified when they can continue.
+
+##### [Readers-Writers](https://en.wikipedia.org/wiki/Readers%E2%80%93writers_problem)
+
+> When you have a shared resource that primarily serves as a source of information fro readers, but which is occasionally updated by writers, throughput is an issue. Emphasizing throughput can cause starvation and the accumulation of stale information. Allowing updates can impact throughput. Coordinating readers so they do not read something a writer is updating and vice versa is a though balancing act. Writers tend to block many readers for a long period of time, thus causing throughput issues.
+>
+> The challenge is to balance the needs of both readers and writers to satisfy correct operation, provide reasonable throughput and avoiding starvation. A simple strategy makes writers wait until there are no readers before allowing the writer to perform an update. If there are continuous readers, however, the writers will be starved. On the other hand, if there are frequent writers and they are given priority, throughput will suffer. Finding that balance and avoiding concurrent update issues is what the problem addresses.
+
+
+##### [Dining Philosophers](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
+
+> Image a number of philosophers sitting around a circular table. A fork is placed to the left of each philosopher. There is a big bowl of spaghetti in the center of the table. The philosophers spend their time thinking unless they get hungry. Once hungry, they pick up the forks on either side of them and eat. A philosopher cannot eat unless he is holding two forks. If the philosopher to his right or left is already using one of the forks he needs, he must wait until that philosopher finishes eating and puts the fork back down. Once a philosopher eats, he puts both his forks back down on the table and waits until he is hungry again.
+>
+> Replace philosophers with threads and forks with resources and this problem is similar to many enterprise application sin which processes compete for resources. Unless carefully designed, systems that compete in this way can experience deadlock, livelock, throughput, and efficiency degradation.
+
+#### Beware Dependencies Between Synchronized Methods
+
+- avoid using more than one method on a shared object
+- there will be times when you must use more than one method on a shared object, when thi sis the case there are three ways to make the code correct:
+  - client-based locking -- have the client lock the server before calling the first method and make sure the lock's extent includes code calling the last method
+  - server-based locking -- within the server create a method that locks the server, calls all the methods, and then unlocks. Have the client call the new method
+  - adapted server -- create an intermediary that performs the locking. This is an example of server-based locking, where the original server cannot be changed
+
+#### Keep Synchronized Sections Small
+
+- all sections of code guarded by the same lock are guaranteed to have only one thread executing through them at any given time
+- locks are expensive because they create delays and add overhead
+
+#### Writing Correct Shutdown Code is Hard
+
+- writing a system that is meant to stay live and run forever is different from writing something that works for awhile and then shuts down gracefully
+- think about shutdown early and get it working early, it's going to take longer than you expect
+
+#### Testing Threaded Code
+
+- write tests that have the potential to expose problems and then run them frequently, with different programmatic configurations and system configurations and load. If tests ever fail, track down the failure. Don't ignore a failure just because the tests pass on a subsequent run.
+- do not ignore system failures as one-offs
+- do not try to chase down non-threading bugs and threading bugs at the same time. Make sure your code works outside of threads
+- make your thread-based code especially pluggable so that you can run it in various configurations
+- find ways to time the performance of your system under different configurations
+- things happen when the system switches between tasks. To encourage task swapping, run with more threads than processors or cores. THe more frequently your tasks swap, the more likely you'll encounter code that is missing a critical section or causes deadlock.
+- run your threaded code on all target platforms early and often
+- use automated instrumentation strategies (jigging) to ferret out errors
+
+### Conclusion
+
+> Concurrent code is difficult to get right. Code that is simple to follow can become nightmarish when multiple threads and shared data get into the mix. If you are faced with writing concurrent code, you need to write clean code with rigor or else face subtle and infrequent failures.
+>
+> First and foremost, follow the Single Responsibility Principle. Break your system into plain objects that separate thread-aware code from thread-ignorant code. Make sure when you are testing your thread-aware code, you are only testing it and nothing else. This suggests that your thread-aware code should be small and focused.
+>
+> Know the possible sources of concurrency issues: multiple threads operating on shared data, or using a common resource pool. Boundary cases, such as shutting down cleanly or finishing the iteration of a loop, can be especially thorny.
+>
+> Learn your library and know the fundamental algorithms. Understand how some of the features offered by the library support solving problems similar to the fundamental algorithms.
+>
+> Learn how to find regions of code that must be locked and lock them. Do not lock regions of code that do not need to be locked. Avoid calling one locked section from another. This requires a deep understanding of whether something is or is not shared. Keep the amount of shared objects and the scope fo the sharing as narrow as possible. Change designs of the objects with shared data to accommodate clients rather than forcing clients to manage shared state.
+>
+> Issues will crop up. THe ones that do not crop up early are often written off as a one-time occurrence. These so-called one-offs typically only happen under load or at seemingly random times. Therefore, you need to be able to run your thread-related code in many configurations on many platforms repeatedly and continuously. Testability, which comes naturally from  following the Three Laws of TDD, implies some level of plug-ability, which offers the support necessary to run code in a wider range of configurations.
+>
+> You will greatly improve your chances of finding erroneous code if you take the time to instrument your code. You can either do so by handing or using some kind of automated technology. Invest in this early. You want to be running your thread-based code as long as possible before ou plug it into production.
+>
+> If you take a clean approach, your chances of getting it right increase drastically.
+
+## Chapter 14: Successive Refinement
+
+- to write clean code, you must first write dirty code and then clean it
+- write a rough draft, then a second draft, then several subsequent drafts until we have our final version
+- writing clean compositions is a matter of successive refinement
+- one of the best ways to ruin a program is to make massive changes to its structure in the name of improvements. The problem is that it's very hard to get the program working the same way it worked before the "improvements"
+  - to avoid this problem, use TDD
+  - it forces you to keep each change small and ensures your program works as intended
+- putting things in so you can take them out again is pretty common in refactoring
+
+### Conclusion
+
+> It is not enough for your code to work. Code that works is often badly broken. PRogrammers who satisfy themselves with merely working code are behaving unprofessionally. They may fear that they don't have time to improve the structure and design of their code, but I disagree. Nothing has a more profound and long-term degrading effect upon a development program than bad code.
+>
+> Of course bad code can be cleaned up. Bt it's very expensive. As code rots, the modules insinuate themselves into each other, creating lots of hidden and tangled dependencies. Finding and breaking old dependencies is a long and arduous task. On the other hand, keeping code clean is relatively easy. If you made a mess in a module in the morning, it is easy to clean it up in the afternoon. Better yet, if you made a mess five minutes ago, it's very easy to clean it up right now.
+>
+> So the solution is to continuously kee pyour code as clean and simple as it can be. Never let the rot get started.
