@@ -36,6 +36,9 @@ By Robert C. Martin (aka "Uncle Bob")
   - [Conclusion](#conclusion-4)
 - [Chapter 14: Successive Refinement](#chapter-14-successive-refinement)
   - [Conclusion](#conclusion-5)
+- [Chapter 15: JUnit Internals](#chapter-15-junit-internals)
+- [Chapter 16: Refactoring `SerialDate`](#chapter-16-refactoring-serialdate)
+- [Chapter 17: Smells and Heuristics](#chapter-17-smells-and-heuristics)
 
 <!-- /TOC -->
 
@@ -481,4 +484,14 @@ Leave the campground cleaner than you found it
 >
 > Of course bad code can be cleaned up. Bt it's very expensive. As code rots, the modules insinuate themselves into each other, creating lots of hidden and tangled dependencies. Finding and breaking old dependencies is a long and arduous task. On the other hand, keeping code clean is relatively easy. If you made a mess in a module in the morning, it is easy to clean it up in the afternoon. Better yet, if you made a mess five minutes ago, it's very easy to clean it up right now.
 >
-> So the solution is to continuously kee pyour code as clean and simple as it can be. Never let the rot get started.
+> So the solution is to continuously keep your code as clean and simple as it can be. Never let the rot get started.
+
+## Chapter 15: JUnit Internals
+
+> No module is immune from improvement, and each of us has the responsibility to leave the code a little better than we found it
+
+## Chapter 16: Refactoring `SerialDate`
+
+> Code review is not an activity of nastiness or arrogance. What I am about to do is nothing more and nothing less than a professional review. It is something that we should all be comfortable doing. And it is something we should welcome when it is done for us. It is only through critiques like these that we will lern. Doctors do it. Pilots do it. Lawyers do it. And we programmers need to learn how to do it too.
+
+## Chapter 17: Smells and Heuristics
