@@ -39,6 +39,20 @@ By Robert C. Martin (aka "Uncle Bob")
 - [Chapter 15: JUnit Internals](#chapter-15-junit-internals)
 - [Chapter 16: Refactoring `SerialDate`](#chapter-16-refactoring-serialdate)
 - [Chapter 17: Smells and Heuristics](#chapter-17-smells-and-heuristics)
+  - [Comments](#comments)
+  - [Environment](#environment)
+  - [Functions](#functions)
+  - [General](#general)
+  - [Names](#names)
+  - [Tests](#tests)
+  - [Conclusion](#conclusion-6)
+- [Appendix A: Concurrency II](#appendix-a-concurrency-ii)
+  - [Client-Server Example](#client-server-example)
+  - [Single Responsibility Principle](#single-responsibility-principle-1)
+  - [Knowing Your Library](#knowing-your-library)
+  - [Server-based locking](#server-based-locking)
+  - [Deadlocks](#deadlocks)
+  - [Testing Multi-threaded Code](#testing-multi-threaded-code)
 
 <!-- /TOC -->
 
@@ -495,3 +509,366 @@ Leave the campground cleaner than you found it
 > Code review is not an activity of nastiness or arrogance. What I am about to do is nothing more and nothing less than a professional review. It is something that we should all be comfortable doing. And it is something we should welcome when it is done for us. It is only through critiques like these that we will lern. Doctors do it. Pilots do it. Lawyers do it. And we programmers need to learn how to do it too.
 
 ## Chapter 17: Smells and Heuristics
+
+### Comments
+
+#### C1: Inappropriate Information
+
+- comments should be reserved for technical notes about the code and design
+
+#### C2: Obsolete Comment
+
+- a comment that has gotten old, irrelevant, and incorrect is obsolete
+- if you find an obsolete comment, it's best to update it or get rid of it as quickly as possible
+
+#### C3: Redundant Comment
+
+- comment that describes something that adequately describes itself
+- comments should say things that the code cannot say for itself
+
+#### C4: Poorly Written Comment
+
+- if you are going to write a comment, take the time to make sure it is the best comment yu can write
+- choose your words carefully
+- use correct grammar and punctuation
+
+#### C5: Commented-out Code
+
+- worst practice because we have source control
+
+### Environment
+
+#### E1: Build Requires More Than One Step
+
+- building a project should be a single trivial operation
+- you should be able to check out the system with one simple command and then issue another simple command to build it
+
+#### E2: Tests Require More Than One Step
+
+- you should be able to run all the unit tests with just one command
+
+### Functions
+
+#### F1: Too Many Arguments
+
+#### F2: Output Arguments
+
+- if your function must change the state of something, have it change the state of the object it is called on
+
+#### F3: Flag Arguments
+
+#### F4: Dead Function
+
+- methods that are never called should be discarded
+- keeping dead code around is wasteful
+
+### General
+
+#### G1: Multiple Languages in One Source File
+
+#### G2: Obvious Behavior is Unimplemented
+
+- **Principle of Least Surprise** any function or call should implement the behaviors that another programmer could reasonably expect
+
+#### G3: Incorrect Behavior at the Boundaries
+
+- don't rely on your intuition, look for every boundary condition and write a test for it
+
+#### G4: Overridden Safeties
+
+- turning off failing tests and telling yourself you'll get them to pass later is as bad as pretending your credit cards are free money
+
+#### G5: Duplication
+
+- every time you see duplication in the code, it represents a missed opportunity for abstraction
+- a more subtle form is the `switch/case` or `if/else` chain that appears again and again in various modules, always testing for the same set of conditions
+  - this can be replaced with polymorphism
+
+#### G6: Code at Wrong Level of Abstraction
+
+#### G7: Base Classes Depending on Their Derivatives
+
+#### G8: Too Much Information
+
+> Well-defined modules have very small interfaces that allow you to do a lot with a little. Poorly defined modules have wide and deep interfaces that force you to use many different gestures to get simple thing done. A well-defined interface does not offer very many functions to depend upon, so coupling is low. A poorly defined interface provides lots of functions that you must call, so coupling is high.
+>
+> Hide your data. Hide your utility functions. Hide your constants and your temporaries. Don't create classes with lots of instance variables. Don't create lots of protected variables and functions for your subclasses. Concentrate on keeping interfaces very tight and small. Help keep coupling low by limiting information.
+
+#### G9: Dead Code
+
+- if you find code that is never executed, delete it from the system
+
+#### G10: Vertical Separation
+
+- variables and functions should be defined close to where they are used
+
+#### G11: Inconsistency
+
+- if you do something a certain way, do all similar things in the same way
+
+#### G12: Clutter
+
+- keep your source files clean, well-organized, and free of clutter
+
+#### G13: Artificial Coupling
+
+- things that don't depend upon each other should not be artificially coupled
+- take the time to figure out where functions, constants, and variables ought to be declared
+- don't just toss them in the most convenient place at hand and then leave them there
+
+#### G14: Feature Envy
+
+#### G15: Selector Arguments
+
+#### G16: Obscured Intent
+
+#### G17: Misplaced Responsibility
+
+- code should be place where a reader would naturally expect it to be
+
+#### G18: Inappropriate Static
+
+#### G19: Use Explanatory Variables
+
+- one of the most powerful ways to make a program readable is to break the calculations up into intermediate values that are held in variables with meaningful names
+- more explanatory variables are generally better than fewer
+- remarkable how an opaque module can suddenly become transparent simply by breaking the calculation up into well-named intermediate values
+
+#### G20: Function Names Should Say What They Do
+
+- if you have to look at the implementation (or documentation) of the function to know what it does, then you should work to find a better name or rearrange the functionality so that it can be placed in functions with better names
+
+#### G21: Understand the Algorithm
+
+- before you consider yourself to be done with a function, make sure you understand how it works
+- it is not good enough that it passes all the tests, you must know how the solution is correct
+- often the best way to gain this knowledge and understanding is to refactor the function into something that is so clean and expressive that it is obvious how it works
+
+#### G22: Make Logical Dependencies Physical
+
+#### G23: Prefer Polymorphism to `If/Else` or `Switch/Case`
+
+- **One Switch Rule**: There may be no more than one switch statement for a given type of selection
+- the cases in that switch statement must create polymorphic objects that take the place of other such switch statements in the rest of the system
+
+#### G24: Follow Standard Conventions
+
+#### G25: Replace Magic Numbers with Named Constants
+
+- bad idea to have raw numbers in your code, you should hide them behind well-named constants
+
+#### G26: Be Precise
+
+- when you make a decision in your code, make sure you make it precisely
+- know why you have made it and how you will deal with any exceptions
+- don't be lazy about the precision of your decision
+
+#### G27: Structure over Convention
+
+- enforce design decisions with structure over convention
+- naming conventions are good, but they are inferior to structures that force compliance
+
+#### G28: Encapsulate Conditionals
+
+- extract functions that explain the intent of the conditional
+
+#### G29: Avoid Negative Conditionals
+
+#### G30: Functions Should Do One Things
+
+- functions that do more than one thing should be converted into smaller functions, each of which does one thing
+
+#### G31: Hidden Temporal Couplings
+
+- temporal couplings are often necessary, but you should not hide the coupling
+- structure the arguments of your functions such that the order in which they should be called is obvious
+
+#### G32: Don't Be Arbitrary
+
+- have a reason for the way you structure your code, and make sure that reason is communicated by the structure of the code
+
+#### G33: Encapsulate Boundary Conditions
+
+- boundary conditions are hard to keep track of
+- put the processing for them in one place, don't let them leak all over the code
+
+#### G34: Functions Should Descend Only One Level of Abstraction
+
+- when you break a function along the lines of abstraction, you often uncover new lines of abstraction that were obscured by the previous statement
+
+#### G35: Keep Configurable Data at High Levels
+
+#### G36: Avoid Transitive Navigation
+
+- **Law of Demeter**: make sure that the modules know only about their immediate collaborators and do not know the navigation map of the whole system
+  - **Writing Shy Code** in Pragmatic Programmer speak
+- we want our immediate collaborators to offer all the services we  need
+- should not have to roam through the object graph of the system, hunting for the method we want to call
+
+### Names
+
+#### N1: Choose Descriptive Names
+
+- don't be too quick to choose a name
+- make sure the name is descriptive
+- meanings tend to drift as software evolves, so frequently reevaluate the appropriateness of the names you choose
+- names in software are 90% of what makes software readable
+- you need to take the time to choose them wisely and keep them relevant
+- names are too important to create carelessly
+
+#### N2: Choose Names at the Appropriate Level of Abstraction
+
+- don't pick names that communicate implementation, choose names that reflect the level of abstraction of the class or function that you are working in
+- making code readable requires a dedication to continuous improvement
+
+#### N3: Use Standard Nomenclature Where Possible
+
+- names are easier to understand if they are based on existing convention or usage
+- teams will often invent their own standard system of names for a particular project
+  - **ubiquitous language** for the project
+
+#### N4: Unambiguous Names
+
+- choose names that make the workings of a function or variable unambiguous
+
+#### N5: Use Long Names for Long Scopes
+
+- length of a name should be related to the length of the scope
+- you can use very short variable names for tiny scopes, but for big scopes you should use longer names
+
+#### N6: Avoid Encodings
+
+- names should not be encoded with type or scope information
+
+#### N7: Names Should Describe Side-Effects
+
+- names should describe everything that a function, variable, or class is or does
+- don't hide side effects with a name
+
+### Tests
+
+#### T1: Insufficient Tests
+
+- a test suite should test everything that could possibly break
+- tests are insufficient so long as there are conditions that have not been explored by the tests or calculations that have not been validated
+
+#### T2: Use a Coverage Tool
+
+- coverage tools report gaps in your testing strategy
+
+#### T3: Don't Skip Trivial Tests
+
+- they are easy to write and their documentation value is higher than the cost to produce them
+
+#### T4: An Ignored Test is a Question about Ambiguity
+
+- we can express our question about the requirements as a test that is commented out, or a test that annotated with `@pytest.mark.skip`
+
+#### T5: Test Boundary Conditions
+
+- we often get the middle of the algorithm right, but misjudge the boundary conditions
+
+#### T6: Exhaustively Test Near Bugs
+
+- bugs then to congregate
+- when you find a bug in a function, it is wise to do an exhaustive test of that function
+- the bug was probably not alone
+
+#### T7: Patterns of Failure Are Revealing
+
+#### T8: Test Coverage Patterns Can Be Revealing
+
+- looking at code that is or is not executed by the passing test gives clues to why the failing tests fail
+
+#### T9: Test Should be Fast
+
+- a slow test is a test that won't get run
+
+### Conclusion
+
+> Clean code is not written by following a ste of rules. You don't become a software craftsman by learning a list of heuristics. Professionalism and craftsmanship come from values that drive disciplines
+
+## Appendix A: Concurrency II
+
+- atomic operation is an uninterruptible operation
+
+### Client-Server Example
+
+- where is time being spent, two possibilities:
+  - I/O - using a socket, connecting to a database, waiting for virtual memory swapping, and so on
+    - concurrency can increase efficiency: when one part is waiting for I/O, another part can use the wait time to process something else
+  - Processor - numerical calculations, regular expressions processing, garbage collection, and so on
+    - more processing hardware can improve throughput, adding threads will not increase number of CPU cycles so it will not go faster
+
+### Single Responsibility Principle
+
+- to keep concurrent systems clean, thread management should be kept to a few well-controlled places
+- any code that manages threads should do nothing other than thread management
+
+### Knowing Your Library
+
+- if you are creating threads, use the `Executor` as it makes your code cleaner and easier to follow
+  - the `Executor` framework will pool threads, resize automatically, and recreate threads if necessary
+  - it supports `futures`, a concurrent programming construct
+    - futures are useful when we need to execute multiple, independent operations and wait for both to finish
+- modern processors have an operation typically called `Compare and Swap (CAS)`
+  - locks are costly so this methodology will check to see if a situation occurs where multiple threads modify the same value
+
+### Server-based locking
+
+- reduces repeated code
+- has better performance than client-based locking
+- reduces possibility of errors
+- encforces a single policy
+- reduces scope of shared variables
+
+### Deadlocks
+
+- deadlock is when two threads are waiting for the other one to finish and send them work
+- requires all four conditions:
+  - Mutual Exclusion -- when multiple threads need to use the same resource and the resources cannot be used by multiple threads at the same time or are limited in number
+  - Lock & Wait -- one thread acquires a resource, it will not release the resource until it has acquired all of the other resources it requires and has completed its work
+  - No Preemption -- one thread cannot take away resources from another thread, only way to get it back is by having the holding thread release the resource
+  - Circular Wait aka "the deadly embrace" -- image two threads (T1 and T2) and 2 resources (R1 and R2). T1 has R1 and T2 has R2. T1 also requires R2 and T2 also requires R1
+
+#### Breaking Mutual Exclusion
+
+- using resources that allow simultaneous use, atomic data structures
+- increasing the number of resources such that it equals or exceeds the number of competing threads
+- checking that all your resources are free before seizing any
+
+#### Breaking Lock & Wait
+
+- refuse to wait: check each resource before you seize it and release all resources and start over if you run into one that's busy
+- leads to:
+  - Starvation -- one thread being unable to acquire the resource it needs
+  - Livelock -- several threads might get into lockstep and all acquire one resource and then release one resource, over and over again
+- it's inefficiency, but a good last resource to implement if nothing else works
+
+#### Breaking Preemption
+
+- allow threads to take resources away from other threads via a request mechanism
+- when a thread discovers that a resource is buys, it asks the owner to release it
+  - if the owner is also waiting for some other resource, it releases them all and starts again
+- like previous approach but a thread is allowed to wait for a resource
+- managing requests is tricky
+
+#### Breaking Circular Wait
+
+- most common approach to preventing deadlock
+- requires a simple convention agreed to by all parties
+- if all threads can agree on a global ordering of resources and if they all allocate resources in that order, then deadlock is impossible
+- problems:
+  - order of acquisition might not correspond to the order of use
+    - a resource acquired at the start might not be used until the end which means resources are locked longer than necessary
+  - hard to impose an order on the acquisition of resources
+    - if ID of second resource comes from an operation performed on the first, then ordering is not feasible
+- isolating thread-related part of your solution to allow for tuning and experimentation is a powerful way to gain the insights needed to determine the best strategies
+
+### Testing Multi-threaded Code
+
+- hard to demonstrate broken code as it only happens very rarely
+- Monte Carlo Testing -- make tests flexible so they can be tuned and log conditions under which tests failed
+- run test on every one of the target deployment platforms
+  - longer the tests run without failure, the more likely the code is correct
+- run tests on a machine with varying loads
