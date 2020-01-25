@@ -6,6 +6,7 @@ By Eric Freeman and Elisabeth Robson
 
 <!-- TOC -->
 
+- [Resources](#resources)
 - [Book](#book)
   - [Chapter 1: Introduction to Design Patterns](#chapter-1-introduction-to-design-patterns)
 - [Design Principles](#design-principles)
@@ -20,10 +21,15 @@ By Eric Freeman and Elisabeth Robson
   - [Strategy Pattern](#strategy-pattern)
   - [Observer Pattern](#observer-pattern)
   - [Decorator Pattern](#decorator-pattern)
-  - [Simple Factory](#simple-factory)
+  - [Factory Pattern](#factory-pattern)
   - [Abstract Factory](#abstract-factory)
+  - [Singleton Pattern](#singleton-pattern)
 
 <!-- /TOC -->
+
+## Resources
+
+- [YouTube playlist about book](https://www.youtube.com/playlist?list=PLrhzvIcii6GNjpARdnO4ueTUAVR9eMBpc)
 
 ## Book
 
@@ -115,6 +121,9 @@ By Eric Freeman and Elisabeth Robson
 - behavior comes through the composition of decorators with the base components as well as other decorators
 - with composition, we can mix and match decorators any way we like... at runtime
 - decorators are typically created by using other patterns like `Factory` and `Builder`
+- can think of `Decorator Pattern` as recursion
+  - decorator classes are recursive case
+  - base class is base case
 
 #### Drawbacks
 
@@ -132,7 +141,7 @@ By Eric Freeman and Elisabeth Robson
 - decorator adds its own behavior either before and/or after delegating to the object it decorates to do the rest of the job
 - objects can be decorated at any time, so we can decorate objects dynamically at runtime with as many decorators as we like
 
-### Simple Factory
+### Factory Pattern
 
 > Defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses
 
@@ -166,3 +175,27 @@ By Eric Freeman and Elisabeth Robson
 - changing interface means you ahve to change the interface for every subclass
 - use when clients need to create products that belong together
 - relies on object composition: object creation is implemented in methods exposed in the factory interface
+
+### Singleton Pattern
+
+> Ensures a class has only one instance, and provides a global point of access to it
+
+- convention for ensuring one and only one object is instantiated for a given class
+- gives us a global point of access, just like a global variable
+- create objects only when they are needed
+- contain registry settings, manage pools of resources (connections, threads)
+- can assure that every object in our application is making use of the same global resource
+- class is managing a single instance of itself
+  - prevent other classes from creating a new instance
+  - call the `.getInstance()` method to create / get the class itself
+    - initialize Singleton in a lazy manner
+- Singleton is not only responsible for managing its one instance (and providing global access), it is also responsible for whatever its main role is in your application
+- like most patterns, Singleton is not necessarily meant to be a solution that can fit into a library
+- this pattern is trivial to add to any existing class
+- should be used sparingly
+  - large numbers of Singletons means we may have done something wrong
+
+#### To Read
+
+- https://stackoverflow.com/a/2085988
+- https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
