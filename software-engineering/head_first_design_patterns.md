@@ -17,13 +17,18 @@ By Eric Freeman and Elisabeth Robson
   - [Strive for loosely coupled designs between objects](#strive-for-loosely-coupled-designs-between-objects)
   - [Classes should be open for extension, but closed for modification](#classes-should-be-open-for-extension-but-closed-for-modification)
   - [Dependency Inversion Principle](#dependency-inversion-principle)
+  - [Principle of Least Knowledge](#principle-of-least-knowledge)
 - [Patterns](#patterns)
+  - [Honourable Mentions](#honourable-mentions)
   - [Strategy Pattern](#strategy-pattern)
   - [Observer Pattern](#observer-pattern)
   - [Decorator Pattern](#decorator-pattern)
   - [Factory Pattern](#factory-pattern)
   - [Abstract Factory](#abstract-factory)
   - [Singleton Pattern](#singleton-pattern)
+  - [Command Pattern](#command-pattern)
+  - [Adapter Pattern](#adapter-pattern)
+  - [Facade Pattern](#facade-pattern)
 
 <!-- /TOC -->
 
@@ -91,7 +96,27 @@ By Eric Freeman and Elisabeth Robson
   - no class should derive from a concrete class
   - no method should override an implemented method of any of its base classes
 
+### Principle of Least Knowledge
+
+> Talk only to your friends
+
+- when you are designing a system, for any object, be careful of the number of classes it interacts with anad also how it comes to interact with those classes
+- prevents us from creating designs that have a large number of classes coupled together so that changes in one part of the system cascade to other parts
+- when you bulid a lot of dependencies between many classes, you are building a fragile system that will be xcostly to maintain and complex for others to understand
+- only invoke methods that belong to:
+  - object iself
+  - objects passed in as a parameter to the method
+  - any object the method creates or instantiates
+  - any components of the object
+
 ## Patterns
+
+### Honourable Mentions
+
+#### `null` Object
+
+- useful for when you don 't have a meaningful object to return, but what to remove the reponsibility of handling null from the client
+- i.e. `NoCommand` object
 
 ### Strategy Pattern
 
@@ -199,3 +224,78 @@ By Eric Freeman and Elisabeth Robson
 
 - https://stackoverflow.com/a/2085988
 - https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
+
+### Command Pattern
+
+> Encapsulates a request as an object, thereby letting you parameterize other objects with different requests, queue or log reports, and support undoable operations
+
+- by encapsulating method invocation, we can crystalize pieces of computation so that the object invoking the computation doesn't need to worry about how to do things, it just uses our crystallized method to get it done
+- if we store encapsulated method invocations, we can add interested abilities to our program (undo)
+- allows us to deccouple the requester of an action from the object that actually performs the action
+- receiver of the request gets bound to the command it encapsulates
+- strive for "dumb" command objects that just invoke an action on a receiver
+  - can have "smart" command objects that can implement logic to carry out a request (reduces decoupling)
+- command is a packaged-up computation and pass it around like a first-class object
+  - provides a way to have a common interface to the behavior of many different receivers
+- based upon Dependency Injection
+- allows us to set how how invokers and receiver are bound to each other at runtime versus compile-time
+
+#### Client
+
+- responsible for creating commannd object
+- client performs a `.setCommand()` to store the command object in the invoker
+- can create command objects and invoke the computation on them at some later datetime
+
+#### Command Object
+
+- encapsulates a request by binding together a set of actions on a specific receiver
+  - packages actions and receiver up into an object that exposes the `.execute()` method
+- all commands implement the same interface, typically `.execute()`
+- `.execute()` method that encapsulates the action and can be called to invoke the action on the receiver
+
+#### Invoker
+
+- holds command, which is set via `.setCommand()`
+- calls `Command.execute()` to invoke actions on the Receiver
+
+#### Receiver
+
+- performs actions when `Client.execute()` is called
+- the set of objects we want to decouple from the invoker
+
+#### To Read
+
+- https://stackoverflow.com/questions/1494442/general-command-pattern-and-command-dispatch-pattern-in-python
+- https://olvlvl.com/2018-04-command-dispatcher-pattern
+
+#### Things I'm pondering
+
+- `EventEmitter` dispatch is very similar to command pattern
+  - yes, it is a python implementation
+- what is the difference between the command pattern and the dispatch command pattern?
+
+### Adapter Pattern
+
+> Converts the interface of a class into another interface the clients expect. Adaptee lets classes work together that couldn't otherwise because of incompatible interfaces.
+
+- job of implementing an adapter is proportional to the size of the interface you need to support as your target interface
+- adapter acts to decouple the client from the implemented interface
+- if we expect the itnerface to change over time, the adapter encapsulates the change so that the client doesn't have to be modified each time it needs to operate against a different interface
+- clients do not know the adapter is sitting in front of the adaptee
+- can use new libraries and subsets without changing any code
+- `intent` alter interface so that it matches one client is expected
+
+### Facade Pattern
+
+> Provides a unified interface to a set of interfaces in a subsytem. Facade defines a higher-level itnerface that makes the subsystem easier to use.
+
+- simplify the interface
+- hide all the complexity of one or more modules behind a well-lit facade
+- take a complex subsystem and make it easier to use by implementing a Facade class that provides provides a more reasonable interface
+- the underlying subsystem is availble if you need low level access
+- facades don't encapsulate the subsystem classes, they merely provide a simplified interface to their functinality
+- subsystem classes remain available to direct use by client that need to use more specific interfaces
+- facade is feel to add its own "smarts"
+- intent of the adapter p
+- `intent` provide a simplified interface to a subsystem
+- allows us to avoid tight coupling between clients and subsytems
