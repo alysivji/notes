@@ -9,7 +9,7 @@ Notes from books I am reading.
 - [Computer Science](#computer-science)
 - [Data Science](#data-science)
 - [Databases](#databases)
-- [Devops](#devops)
+- [DevOps](#devops)
 - [Django](#django)
 - [General](#general)
 - [Javascript](#javascript)
@@ -43,9 +43,15 @@ Notes from books I am reading.
 - [Stanford Db Course](databases/stanford_db_course.md)
 
 
-## Devops
+# Developer Relations
+
+- [Business Value of Developer Relations](developer-relations/business_value_of_developer_relations.md)
+- [Developer Marketing + Relations: The Essential Guide](developer-relations/developer_marketing_and_relations__the_essential_guide.md)
+
+## DevOps
 
 - [Docker](devops/docker.md)
+- [Kuberentes](devops/kubernetes)
 
 
 ## Django
