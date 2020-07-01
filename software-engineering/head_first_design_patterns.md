@@ -7,8 +7,7 @@ By Eric Freeman and Elisabeth Robson
 <!-- TOC -->
 
 - [Resources](#resources)
-- [Book](#book)
-  - [Chapter 1: Introduction to Design Patterns](#chapter-1-introduction-to-design-patterns)
+- [Introduction](#introduction)
 - [Design Principles](#design-principles)
   - [General Notes](#general-notes)
   - [Identify the aspect of your application that vary and separate them from what stays the same](#identify-the-aspect-of-your-application-that-vary-and-separate-them-from-what-stays-the-same)
@@ -36,9 +35,7 @@ By Eric Freeman and Elisabeth Robson
 
 - [YouTube playlist about book](https://www.youtube.com/playlist?list=PLrhzvIcii6GNjpARdnO4ueTUAVR9eMBpc)
 
-## Book
-
-### Chapter 1: Introduction to Design Patterns
+## Introduction
 
 - all patterns provide a way to let some part of your system vary independently of all other parts
 - design patterns give you a shared vocabulary with other developers. Once you've got the vocabulary, you can more easily communicate with other develoeprs and inspire those who don't know patterns to start learning them. It also elevates your thinking about architectures by letting you think at the pattern level, not the nitty-gritty object level
