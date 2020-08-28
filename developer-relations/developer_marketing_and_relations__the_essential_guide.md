@@ -36,6 +36,21 @@
   - [DevRel Organization Models](#devrel-organization-models)
   - [Location](#location)
   - [Conclusion](#conclusion)
+- [Chapter 6: Repositioning Your Brand To Developers](#chapter-6-repositioning-your-brand-to-developers)
+  - [Strategy for Developer Engagement](#strategy-for-developer-engagement)
+  - [Ongoing online engagement](#ongoing-online-engagement)
+  - [Events](#events)
+  - [Overall Learning and Best Practices](#overall-learning-and-best-practices)
+- [Chapter 7: Connecting Developers with Experts](#chapter-7-connecting-developers-with-experts)
+  - [How to build a network of experts](#how-to-build-a-network-of-experts)
+  - [Finding experts within your company](#finding-experts-within-your-company)
+  - [A developer program builds your exeternal network](#a-developer-program-builds-your-exeternal-network)
+  - [The developer community](#the-developer-community)
+- [Chapter 8: "Build It and They Will Come" May Not Work Investing Early in Developer Success](#chapter-8-build-it-and-they-will-come-may-not-work-investing-early-in-developer-success)
+  - [The Journey](#the-journey)
+  - [Beyond Awards: Improving Sales](#beyond-awards-improving-sales)
+  - [Pilot Programs](#pilot-programs)
+  - [Best Practices](#best-practices)
 
 <!-- /TOC -->
 
@@ -466,3 +481,113 @@ How to thoughtfully approach the tsk to form a successful relations team that ca
 1. If your team is large enough, consider your local presence as an laternative to a large centralized team
 1. Now structure your teams. You ahve four general ways to distribute work (functional, audience-centric, product-centric, execution-centric) but it is always a compromise between efficiency and agility and between external focus and internal alignment
 1. Your developer relations department is neither marketing nor sales, so don't consider outreach or adoption as the main metrics
+
+## Chapter 6: Repositioning Your Brand To Developers
+
+> a small core team of individuals are best equipped to define the direction of ongoing developer engagement, and to make rapid decisions to ensure that the engagements are successful
+
+### Strategy for Developer Engagement
+
+- Significant online content
+- In-person engagement
+- Quality free education
+- An external champions community
+- A program to engage developers at startups
+
+### Ongoing online engagement
+
+- we started sending out a monthly developer newsletter to stay in touch with the community on an ongoing basis
+- make it easy to find a community of like-minded develoeprs with forums for questions and discussions. The whole industry has seen that the success of communiites like Stack Overflow shows the best, most trusted experts are the developer's peers who have solved the exact same problem
+- newsletters can add value, but only if they are true newsletters with technical content and links to new material. Faux newsletters that are nothing more than marketing pitches will not only fail, but can also backfire and leave a bad impression
+
+### Events
+
+- Sales and Field Marketing teams have to change their mindsets to not just invest in programs that generate immediate pipeline
+  - this required explaining that realizing the benefits of developer-focused programs requires patience
+  - unlikely to pay off in deals closed this quarter, or even next quarter, for developres who have never engaged with the company before
+- developers don't want slick marketing collateral; they want code that works
+- developers attend in-person and online events because they are curious
+  - curious about meeting Oracle people, about learning about a giant company, about cutting-edge tech like AI and blockchain, about cloud services that might advacne their business or career
+  - they come to learn, not to buy or be aggressively marketed at
+
+### Overall Learning and Best Practices
+
+- relentlessly listen to developers both inside and outside the ecosystem, and inside and outside the company itself, to get the best view on your evolving audience
+  - what developers want is constantly changing
+  - engagement must always grow and evolve to meet developer's needs
+- understand that developers don't like to be sold to, and need to be engaged, not pitched. Anything that's purely a marketing effort will fail
+- get executive buy-in and support for developer engagement, from the highest level
+- define a small core team (handful or less) that defines direction, incorporates input, and makes fast decisions, and most of all,  isn't afriad to make changes in mid-stream
+- engage online and in person. The key is back-and-forth engagement and continuous education -- not presenting one-way marketing messages
+- think big and execute in small increments showing some value in each increment
+- a lot of small activities can be more effective for reaching diverse audiences, as well as allowing for paid changes and iterative learning
+- always remember to be authentic, open, and honest in your developer engagement
+
+## Chapter 7: Connecting Developers with Experts
+
+> When software developers using your platform or tools need answers or advice, you might think that your company would be able to provide the perfect resources for them. And you would be partially correct. While developers do seek guidance from their vendors, they often prefer to get information from their peers, meaning from your community, particularly from external developer experts within it
+
+- as much as I know about development, I know there are experts who know more. Most developers recognize this truth, and while the very best may come to a community or expert group in hopes of spreading their knowledge (and building their reputations), they realize that these outlets can also teach them and make them more successful
+
+### How to build a network of experts
+
+- your network should be a good mix of internal and external developer experts, ranging from specialists to generalists, who act as educators and role models. They are positive representative for your company and brand, but they aren't just cheerleaders. They're professionals who can teach and influence developers wh oare using your software. Morever, they're professionals whom the developers will actrively seek out for input and collaboration. Providing access to these experts will be seen as a valuable service to cmmunity members. It's also valuable to the company providing the community, as members can provide real-time feedback about the company's products in terms of what works and what doesn't
+- you must build something that gives a reason for developer experts to come. And participate. And stay. And return.
+
+### Finding experts within your company
+
+> One group will consistent of **Developer Evangelists** who are most likely to sit directly within your developer relations team. They are often (if not always) developers themserlves, and they possess first-hand experience with the broad range of solutions that outside developers use. Given their direct experience with diverse solutions, these evangelists can speak knowledgeably to developers about a variety of technical topics
+>
+> The second group comprises **Product Experts**. They are more specialized, yet still gifted at relating to develoeprs. Internally, they are your product managers and product engineers. Their contirbutions come from their deep know-how in their product areas; offering up information and insights to developers who focus on their products.
+
+### A developer program builds your exeternal network
+
+- you'll spot external experts speaking at events, participating in other communities, and generally establishing themselves as professionals who are knowledgeable about your technology
+- this is where your developer program comes into play. A program for evangelists, product managers, and other highly skilled and motivated develoerps - like a broader developer community - is a method for providing expert access
+- to break things down even further, our developer program concentrates heavily on three areas: awareness, engagement, and adoption
+- awareness, as the name implies, makes developers aware of products. Engagement educates developers more deeply about these offerings. Adoption includes tools and content that developers require to build and implement solutions
+- to encourage external experts to join your developer program, you should have a strong online presence, for example on social media. Use it to make a positive impression and highlight your community and your developer program. For example, in the online community, look for new members who have written their first bllog post or have taken a stab at answering questions. Encourage them. Give them positive reinforcement. You could promote their post through your social channels and within the community itself.
+- you want to be on the lookout for future talent too. No expert - even popular ones - started as an expert
+
+### The developer community
+
+- to help maintain order, we have established rules of engagement and moderation guidelines for our community site. On top of that, our seasoned members may kindly call out simple questions from new visitors (ones the rookies might have been able to answer themselves via a basic search).
+- the term `community` is actually an umbrella for smaller groups who are devoted to one or some of the topics within the community, not to the entire community itself. We discovered the layout logic of this strategy early on by building spaces that served as sub-communities, and approach taht eventually evolved into tagging content and topic areas.
+- most developers come to the community because they're stuck and they need questions answered quickly
+- with the right automated tools, you can easily identify experts in specific fields and connect peopel more quickly to the content that might apply best to them
+
+## Chapter 8: "Build It and They Will Come" May Not Work Investing Early in Developer Success
+
+> While developer marketing and developer relations are usually not part of a profit and loss calculation, the success of our commun iites often ties to revenue somewhere else in the company
+
+### The Journey
+
+- it pays to engage all types of developers, and in order to attract and retain smaller partners, indie develpoers, and even students, you ahve to show how your program helps them find success
+
+### Beyond Awards: Improving Sales
+
+- we looked for patterns as to which of their content did better than others, how strong the app/content descriptions were, the quality of the screenshots, and any reviews that existed. We also explored  how their content performed in different markets compared to the US
+- based on our analysis, we provided developers with feedback over email and phone consultations on how we thought they could grow their busienss. We advised on how to improve their screenshots. We helped people rewrite their content descriptions, which can make a big difference from those who don't speak English as a native lanugage
+
+### Pilot Programs
+
+- if you've been around developer relations long enough, you're probably familiar with the TTHW metric (which stands for 'time to hello world'). This is the amount of time it takes a brand new developer to get strated with your platform/API/SD and achieve the equivalent of `printf("Hello World!\n")`. We asked our third-party developers to focus on TTROI ("time to ROI") instead. How long did it take a small business to see real ROI after clicking on the "Get App Now" button in the app store?
+- to help develoeprs u nderstand and address these priorities of small businesses, we posted best practices in a series of blog posts, including tips in our monthly newsletter, and delivered advice at our regional QuickBooks Conenct conferences. For some of our top performing applications, we performed 1:1 consultants to give specific advice. We looked for apps that were already gaining some amount of traction with our customers and asked what we could do to help them be even more successful
+
+### Best Practices
+
+- you may need to take different steps to help your developers be successful
+- you need to understand what motivates them
+  - how do they define ROI? Revenue? Recognition? Learning new skills? Minimizing technical network?
+- don't just listen to your top partners
+  - call your top indie developers; find out what is working for them and what isn't
+  - personal connection leads to higher satisfaction for both your external developers and your employees
+  - use the feedback you get to change what your program offers and how other teams within your company oepration
+  - if developers aren't seeing ROI, they'l leave your ecosystem
+  - if they leave, your company loses out on future revenue and on cusomter satisfaction
+- find developers that are seeing quick wins on your platform and caoch them achieve even more
+  - then find ways to turn that 1:1 coaching into scabable tools and programs that can reach your entire ecosystem
+- one you figure out what works for your company, share it!
+  - it will take some trial and error, but once you learn how you can hep your developer community find success, tell that story
+  - show your community that you don't have to be a top 100 brand to succeed on your platform
+  - you aren't the only developer advocates for your platform, those you make successful will be even stronger advocates
