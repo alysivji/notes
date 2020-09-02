@@ -8,6 +8,11 @@ By Eric Freeman and Elisabeth Robson
 
 - [Resources](#resources)
 - [Introduction](#introduction)
+- [Object-Oriented Principles](#object-oriented-principles)
+  - [Abstraction](#abstraction)
+  - [Encapsulation](#encapsulation)
+  - [Inheritence](#inheritence)
+  - [Polymorphism](#polymorphism)
 - [Design Principles](#design-principles)
   - [General Notes](#general-notes)
   - [Identify the aspect of your application that vary and separate them from what stays the same](#identify-the-aspect-of-your-application-that-vary-and-separate-them-from-what-stays-the-same)
@@ -17,6 +22,8 @@ By Eric Freeman and Elisabeth Robson
   - [Classes should be open for extension, but closed for modification](#classes-should-be-open-for-extension-but-closed-for-modification)
   - [Dependency Inversion Principle](#dependency-inversion-principle)
   - [Principle of Least Knowledge](#principle-of-least-knowledge)
+  - [Hollywood Principle](#hollywood-principle)
+  - [Single Responsibility Principle](#single-responsibility-principle)
 - [Patterns](#patterns)
   - [Honourable Mentions](#honourable-mentions)
   - [Strategy Pattern](#strategy-pattern)
@@ -28,6 +35,10 @@ By Eric Freeman and Elisabeth Robson
   - [Command Pattern](#command-pattern)
   - [Adapter Pattern](#adapter-pattern)
   - [Facade Pattern](#facade-pattern)
+  - [Template Method Pattern](#template-method-pattern)
+  - [Iterator Pattern](#iterator-pattern)
+  - [Composite Pattern](#composite-pattern)
+  - [State Pattern](#state-pattern)
 
 <!-- /TOC -->
 
@@ -43,6 +54,13 @@ By Eric Freeman and Elisabeth Robson
 - talkign at the pattern level allows you to stay in the design longer; high-level discussions make design meetings easier to understand
 - shared vocabularies can turbo-charge your development team
 - design patterns don't go directly int your code, they first go into your brain. Once you've got a working knowledge of patterns, you can apply them to new designs and rework old code
+
+## Object-Oriented Principles
+
+### Abstraction
+### Encapsulation
+### Inheritence
+### Polymorphism
 
 ## Design Principles
 
@@ -106,6 +124,30 @@ By Eric Freeman and Elisabeth Robson
   - any object the method creates or instantiates
   - any components of the object
 
+### Hollywood Principle
+
+> Don't call us, we'll call you
+
+- prevents dependency rot, i.e. when high-level components depend on low-level components depending on high-level components and so on
+- allow low-level components to hook themselves into a sytem, but the high-level components determine when they are needed and how
+- high-level components give the low-level components a "don't call us, we'll call you" treatment
+- technique for building frameworks or components so that lower-level components can be hooked into the computation, but without creating dependencies between the lower-level components and the higher-level layers
+- goal is to decouple modules
+  - creates designs that allow low-level structures to interoperate while preventing other classes from becoming to dependent on them
+- a low-level component will often end up calling a method defined above it in the inheritance hierarchy purely through inheritance
+  - avoid creating explicit circular dependencies between the low-level component and the high-level ones
+
+### Single Responsibility Principle
+
+> A class should only have one reason to change
+
+- we know that modifying code provides all sort of opportunities for problems to creep in
+  - having two ways to change increases the probability the class will change in the future, and when it does, its going to affect two aspects of your design
+- this is not easy as our brains are too good at seeing behaviors and group them together even when there are actually two or more responsibilities
+  - the only way to succeed is to be dilligent in examining your design and to watch out for signals that a class is changing in more than one way as your system grows
+- **cohesion** is a measure of how closely a class or a module supports a single purpose or responsibility
+  - we say that a module or class has high cohesion when it is designed around a set of related functions, and we say it has low cohesion when it is designed around a set of unrelated functions
+
 ## Patterns
 
 ### Honourable Mentions
@@ -119,6 +161,7 @@ By Eric Freeman and Elisabeth Robson
 
 - Defines a familiy of algorithms, encapsulates each one, and makes them interchangeable.
 - Lets the algorithm vary independently from clients that use it.
+- offers clients a choice of algorithm implementation through object composition
 
 ### Observer Pattern
 
@@ -296,3 +339,111 @@ By Eric Freeman and Elisabeth Robson
 - intent of the adapter p
 - `intent` provide a simplified interface to a subsystem
 - allows us to avoid tight coupling between clients and subsytems
+
+### Template Method Pattern
+
+> Defines the skeleton of an algorithm in a method, deferring some steps to subclasses. Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure
+
+- ensures the algorithm's structure stays unchanged, while subclasses provide some part of the implementation
+  - defines the outline of an algorithm, but lets subclasses do some of the work
+  - allows for different implemtnations of an algorithm's individual steps, but keep control over the algorithm's structure
+- `template method` defines the steps of an algorithm, deferring to subclasses for its implementation of those steps
+- `hook method` is declared in the abstract class without a default implementation
+  - this gives subclasses the ability to "hook into" the algorithm at various points
+  - hooks give the subclass a chance to react to some step in the template method that is about to happen, or just happened
+  - provide a subclass with the ability to make a decision for the abstract class
+- use abstract methods when your subclass MUST provide an implementation of the method or step in the algorithm
+  - use hooks when that part of the algorithm is optional
+  - with hooks, a subclass may choose to implement that hook, but it doesn't have to
+- leverage the "Hollywood Principle" as the main class has control of the algorithm, but calls on subclasses only when they're needed for an implementation of a method
+- this pattern is a great design tool for creating frameworks where the framework controls how something gets done, but leaves you (the person using the framework to specify your own details about what is actually happening at each step of the framework's algorithm)
+- provides a fundamental method for code reuse that allows subclasses to specify behavior
+
+### Iterator Pattern
+
+> Provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation
+
+- we can implement iterators for any kind of collection of objects
+  - client does not need to know how collections are maintained or implemented, it just needs to use the iterator to step through the items in the menu
+  - iterators encapsulate the collection, i.e. it allows the implementation of the interator to live outside of the aggregate
+  - we can handle any collection of items polymorphically as long as it implements the Iterator protocol
+- gives us a way to step through the elements of an aggregate without forcing the aggregate to clutter its own interface with a bunch of methods to support traversal of its elements
+- once you have a uniform way of accessing the elements of all your aggregate objects, you can write polymorphic code that works with any of these methods
+- makes the responsiblility of traversing elements and giving that responsibility to the iterator object, not the aggregate object
+  - this skeeps the aggregate interface and impleme ntation simpler
+  - it removes the responsibility for iteration from the aggregate and keeps the aggregate focused on the things it should be focused on (managing a collection of objects), not on iteration
+- iterators do not imply ordering; make no assumption about ordering unless the Collection documentation indicates otherwise
+- an *external iterator* must maintain its position in the iteration so that an outside client can drive the iteration by calling `hasNext()` and `next()`
+  - our code also needs to maintain that position over a composite, recursive structure; this is why people use stacks
+- Can leverage the `Null Object` pattern with a `Null Iterator` that is a "no op"
+
+### Composite Pattern
+
+> Allows you to copose objets into tree structures to represent part-whole hierarchies. Composite lets clients treat individual objects and compositions of objects uniformly
+
+- by putting menus and items in the same structure, we create a part-whole hierarchy; that is, a tree of objects that is made of parts (menus and menu items) but that can be treated as a whole, like our big uber menu
+- allows us to build structures of objects in the form of trees that contain both compositions of objects and individual objects as nodes
+- use a composite structure, we can apply the same operations over both composites and individual objects; in most cases, we can ignore the differences between compositions of objects and individual objects
+- the **Client** uses the **Component** interface to maniuplate the objects in the **Composition**
+- the **Component** defines an interface all objects in the **Composition**: both the **Composite** and the **Leaf Nodes**
+- a **Leaf Node** defines the behavior for the elements in the **Composition**. It does this by implementing the operations the **Composite** supports
+  - a **Leaf Node** has no children
+- the **Composite**'s role is to define behavior of the **Components** having children and to store children components
+  - the **Composite** implements the **Leaf**-related operations. Note that some of these may not make sense on a **Composite** so in that case an exception might be generated
+
+> We could say that the Composite Pattern takes the Single Responsibility design principle and trades it for *transparency*. What's transparency? Well by allowing the Component interface to contain the child management operations and the leaf operations, a client can treat both componsites and leaf nodes uniformly; so whether an element is a composite or leaf node becomes transparent to the client
+>
+> Now given we have both types of operations in the Component class, we lose a bit of *safety* because a client might try to do something inappropriate or meaningless on an element (like try to add a menu to a menu item). This is a design decision; we could take the design in the other direction and separate out the responsibliities into interfaces. This would make our design safe, in the sense that any inappropriate calls on elements would be caught at compile time or runtime, but we'd lose transparency and our code would have to use conditionals and the `instanceof` operator
+>
+> So, to return to your qeustion, this is a classic case of tradeoff. We are guided by design principles, but we always need to observe the effect they have on our designs. Sometimes we purposely do things in a way that seems to violate the principle. In some cases, however, this is a matter of perspective; for instance, it might seem incorrect to have child management operations in the leaf node (like `add()`, `remove()`, and `getChild()`), but then again you can always shift your perspective and see a leaf as a node with zero children.
+
+- use this pattern when you have a collection of objects with whole-part relationships and you want to be able to treat those objects uniformly
+- GUI is a good real-world example: you tell the top level component to display and count on that component to display all its parts
+- **composite objects** - components that contain other components are called
+- **leaf objects** - components that do not contain other components
+- in order for the composite to work transparently to the client, you must implement the same interface for all objects in the composite; otherwise, the client has to worry about which interface each object is implementing, which kind of defeats the purpose
+  - some clients require separate interfaces for different objects, this is a safer version of the same pattern
+- if your composite needs to keep its children in a particular order, then you'll need a sophisticated management scheme for adding and removing children and how you traverse the hierarchy
+- composites simplify life for clients; don't have to worry about whether they're dealing with a composite object or a leaf object
+  - helps reduce conditionals as we can make one method call and execute an operation over an entire structure
+
+### State Pattern
+
+> Allows an object to alter its behavior when its internal state changes. The object will appear to change its class.
+
+- want to localize the behavior for each state so that if we make changes to one state, we don't mess up other code
+  - encapsulate what varies from what stays the same
+- define an interface for all states; the methods map directly to actions that could happen to the State Machine
+  - take each state in our design and encapsulate it in a class that implements the State interface
+  - implement the behaviors that are appropriate for the state we're in
+- encapsulate state objects in their own classes and then delegate to the current state when an action occurs
+  - this causes behavior to change along with the internal state
+- object appears to change class as it has completely changed its behavior
+  - we use composition to give the appearance of a class change by simply referencing different state objects
+- the **context** is the class that can have a number of internal states
+- the **state interface** defines a common interface for all concrete states, the states all implement the same interface so they are interchangeable
+- whenever the `request()` is made on the **context**, it is delegated to the state to handle
+- **ConcreteStates** handle requests from the **context**. Each ConcreteState provides its own implementation for a request. In this way, when the Context changes state, its behavior will change as well
+
+> With the State Pattern, we have a set of behaviors encapsulated in state objects; at any time the context is delegating to one of those states. Over time, the current state changes across the set of state objects to reflect the internal state of the context, so the context's behavior changes over time as well. The client usually knows very little, if anything, about the state objects.
+>
+> With Strategy, the client usually specifies the strategy object that the context is composed with. Now, while the pattern provides the flexibility to change the strategy object at runtime, often there is a strategy object that is more appropriate for a context object.
+>
+> In general, think of the Strategy Pattern as a flexible alternative to subclassing: if you use inheritance to define the behavior of a class, then you're stuck with that behavior even if you need to change it. With Strategy you can change the behavior by composing with a different object.
+>
+> Think of the State Pattern as an alternative to putting lots of conditions in your context; by encapsulating the behaviors within state objects, you can simply change the state object in context to change its behavior.
+
+- you can either let ConcreteStates decide what state to go to or let the Context decide on the flow of the state transitions
+  - when the state transitions are fixed they are appropriate for putting in the Context; however, when the transitions are more dynamic, they are typically placed in the state classes themselves.
+  - the disadvantage of having state transitions in the state classes is that we create dependencies between the state classes
+  - you have to make a decision as to which classes are closed for modification -- the context or the state classes -- as the system evolves
+- clients never interact directly with the states
+  - the states are used by the context to represent its internal state and behavior, so all requests to the states come from the Context. Clients don't directly change the state of the Context. It is the Context's job to oversee its state, and you don't usually want a client changing the state of a Context without the Context's knowledge
+- you can share state objects across many instnaces of the Context
+  - you will assign each state to a static instance variable
+  - if your state needs to make use of methods or instance variables in your Context, you'll also have to give it a reference to the Context in each handler() method
+- by encapsulating the state behavior into separate state classes, you'll always end up with more classes in your design. That's the price of flexibility
+  - alternatively you can have large conditional blocks which are hard to understand and maintain
+- state pattern helps classes exhibit different behaviors in different states
+  - when created, they have an initial state, but they change their own state over time
+  - while the class diagrams are the same, its intent is different than the Strategy Pattern
