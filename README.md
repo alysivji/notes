@@ -14,6 +14,7 @@ Notes from books I am reading.
 - [General](#general)
 - [Javascript](#javascript)
 - [Meetup](#meetup)
+- [Product](#product)
 - [Professional Development](#professional-development)
 - [Python](#python)
 - [Scala](#scala)
@@ -81,6 +82,9 @@ Notes from books I am reading.
 - [Pycon2018](meetup/pycon2018.md)
 - [React-Chicago](meetup/react-chicago.md)
 
+## Product
+
+- [Inspire](product/inspire.md)
 
 ## Professional Development
 
