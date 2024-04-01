@@ -64,6 +64,7 @@ Notes from books I am reading.
 
 ## General
 
+- [How to Read a Book](general/how_to_read_a_book.md)
 - [Learning Things Quickly](general/learning_things_quickly.md)
 - [Software Debugging Udacity](general/software_debugging_udacity.md)
 
