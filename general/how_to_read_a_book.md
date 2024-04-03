@@ -6,6 +6,8 @@ by Mortimer J. Adler and Charles Van Doren
 
 - [Part 1: Dimensions of Reading](#part-1-dimensions-of-reading)
   - [Chatper 1: The Activity and Art of Reading](#chatper-1-the-activity-and-art-of-reading)
+  - [Chapter 2: The Levels of Reading](#chapter-2-the-levels-of-reading)
+  - [Chapter 3: The First Level of Reading: Elementary Reading](#chapter-3-the-first-level-of-reading-elementary-reading)
 
 ## Part 1: Dimensions of Reading
 
@@ -42,3 +44,25 @@ by Mortimer J. Adler and Charles Van Doren
 - listening is learning from a teacher that is present vs reading is learning from one who is absent
 
 > Students in school often read difficult books with the help and guidance of teachers. But for those of us who are not in school, and indeed also for those of us who are when we try to read books that are not required or assigned, our continuing education depends mainly on books alone, read without a teacher's help. Therefore if we are disposed to go on learning and discovering, we must know how to make books teach us well. That, indeed, is the primary goal of this book.
+
+### Chapter 2: The Levels of Reading
+
+1. Elementary Reading
+  - going from nonliteracy to at least beginning literacy
+  - answer: What does the sentence say?
+2. Inspectional Reading
+  - aim is to get the most out of a book within a short amount of time
+  - skimming systematically
+  - aim is to exaime the surface of the book, to learn everything the surface alone can teach you
+  - answer: What is this book about? / What is the structure of the book?
+3. Analytical Reading
+  - thorough reading, complete reading, or good reading
+  - best and most compelte reading that is possible given unlimited time
+  - must ask many organized questions of what he is reading
+  - reading for the sake of understanding
+4. Syntopical Reading
+  - comparative reading
+  - read many books and place them in relation to one another and to a subject about which they all revolve
+  - with the hep of the books read, the reader is able to construct an analysis of the subject that may not be in any of the books read
+
+### Chapter 3: The First Level of Reading: Elementary Reading
