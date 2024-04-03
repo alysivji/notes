@@ -8,6 +8,7 @@ by Mortimer J. Adler and Charles Van Doren
   - [Chatper 1: The Activity and Art of Reading](#chatper-1-the-activity-and-art-of-reading)
   - [Chapter 2: The Levels of Reading](#chapter-2-the-levels-of-reading)
   - [Chapter 3: The First Level of Reading: Elementary Reading](#chapter-3-the-first-level-of-reading-elementary-reading)
+  - [Chapter 4:](#chapter-4)
 
 ## Part 1: Dimensions of Reading
 
@@ -66,3 +67,16 @@ by Mortimer J. Adler and Charles Van Doren
   - with the hep of the books read, the reader is able to construct an analysis of the subject that may not be in any of the books read
 
 ### Chapter 3: The First Level of Reading: Elementary Reading
+
+- 4 stages of learning how to read
+  - Reading readiness
+  - Read very simple materials
+  - Rapid progress in vocabulary building and by increasing skill in "unlocking" the meaning of unfamiliar words through context clues
+    - learn to read for different purposes
+    - learn reading is also something one can do on one's own for fun, to satisfy curiosity, or even to expan one's horizons
+  - Refinement and enhancement of the skills previously acquired
+    - being to assimilate reading experiences
+    - carry over concepts from one piece of writing to another
+    - compare the views of different writers on the same subject
+
+### Chapter 4:
