@@ -14,6 +14,7 @@ Notes from books I am reading.
 - [General](#general)
 - [Javascript](#javascript)
 - [Meetup](#meetup)
+- [People Management](#people-management)
 - [Product](#product)
 - [Professional Development](#professional-development)
 - [Python](#python)
@@ -82,6 +83,10 @@ Notes from books I am reading.
 - [Chicago-Startup-Community](meetup/chicago-startup-community.md)
 - [Pycon2018](meetup/pycon2018.md)
 - [React-Chicago](meetup/react-chicago.md)
+
+## People Management
+
+- [The Manager's Path](https://docs.google.com/document/d/1jqVebKsuvNMPE-Rn6pwTkMaO2jJjeSvhElE0uf0JvwY/edit?usp=sharing)
 
 ## Product
 
